@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Hotel extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
 
     protected $guarded=[];
 
@@ -30,5 +31,13 @@ class Hotel extends Model
 
     public function facilities(){
         return $this->belongsToMany(Facility::class);
+    }
+
+    public function images(){
+        return $this->hasMany(HotelImage::class);
+    }
+
+    public function createdBy(){
+        return $this->belongsTo(User::class,'created_by');
     }
 }

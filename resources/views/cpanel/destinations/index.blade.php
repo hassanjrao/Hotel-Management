@@ -62,9 +62,12 @@
                                     </td>
                                     <td>{!! substr(strip_tags($destination->main_text), 0, 10) . ' ...' !!}</td>
                                     <td class="text-center">
-                                        <i class="fa fa-home {{ $destination->home_page == 1 ? 'text-success' : '' }}"></i>
+
+                                        <x-home-page-badge :home_page="$destination->home_page"></x-home-page-badge>
                                     </td>
-                                    <td>{{ $destination->releaseStatus->name }}</td>
+                                    <td>
+                                        <x-release-status-badge :code="$destination->releaseStatus->code" :label="$destination->releaseStatus->name" />
+                                    </td>
                                     <td>{{ $destination->created_at }}</td>
                                     <td>{{ $destination->updated_at }}</td>
 
@@ -81,8 +84,9 @@
                                                 data-bs-placement="top" title="Publish">
                                                 <i class="fa fa-check"></i>
                                             </a>
-                                            <a href="{{ route('cpanel.destinations.release', ['release_status' => 'not_published', 'destination_id' => $destination->id]) }}" class="btn btn-xs btn-outline-warning"
-                                                data-bs-toggle="tooltip" data-bs-placement="top" title="Un Publish">
+                                            <a href="{{ route('cpanel.destinations.release', ['release_status' => 'not_published', 'destination_id' => $destination->id]) }}"
+                                                class="btn btn-xs btn-outline-warning" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Un Publish">
                                                 <i class="fa fa-ban"></i>
                                             </a>
                                             {{-- <a href="#" class="btn btn-xs btn-outline-secondary">

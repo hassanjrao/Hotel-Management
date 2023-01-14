@@ -1,17 +1,24 @@
 @props([
     'id' => 'facilities',
-    'name' => 'facility',
+    'name' => 'facilities',
     'placeholder' => 'Search & Select Facilities',
     'multiple' => false,
-    'selected' => '',
+    'selected' => [],
     'facilities' => collect(),
+    'required' => false,
 ])
 
+@if($multiple)
+    @php
+        $name = $name . '[]';
+    @endphp
+@endif
+
 <div>
-    <select required class="form-select js-select2" name="{{ $name }}" {{ $multiple ? "multiple" : "" }}  data-placeholder="{{ $placeholder }}" >
+    <select {{ $required }} class="form-select js-select2" name="{{ $name }}" {{ $multiple ? "multiple" : "" }}  data-placeholder="{{ $placeholder }}" >
 
         @foreach ($facilities as $facility)
-            <option {{ $facility->id == $selected ? 'selected' : '' }} value="{{ $facility->id }}">
+            <option {{ in_array($facility->id,$selected) ? "selected" : "" }} value="{{ $facility->id }}">
                 {{ $facility->name }}
             </option>
         @endforeach

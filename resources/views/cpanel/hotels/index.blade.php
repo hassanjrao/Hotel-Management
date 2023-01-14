@@ -32,9 +32,10 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Name</th>
-                                <th>Image</th>
-                                <th>Main Text</th>
+                                <th>Title</th>
+                                <th>Sub title</th>
+                                <th>Class</th>
+                                <th>Destination</th>
                                 <th>Home</th>
                                 <th>Status</th>
                                 <th>Created At</th>
@@ -50,21 +51,17 @@
                                 <tr>
 
                                     <td>{{ $ind + 1 }}</td>
-                                    <td>{{ $hotel->name }}</td>
-                                    <td class="text-center">
-                                        @if ($hotel->image)
-                                            <img src="{{ asset('storage/hotels/' . $hotel->image) }}"
-                                                alt="" width="100px" height="100px">
-                                        @else
-                                            -
-                                        @endif
+                                    <td>{{ $hotel->title }}</td>
 
-                                    </td>
-                                    <td>{!! substr(strip_tags($hotel->main_text), 0, 10) . ' ...' !!}</td>
+                                    <td>{{ $hotel->sub_title }}</td>
+                                    <td>{{ $hotel->hotelStar->name }}</td>
+                                    <td>{{ $hotel->destination->name }}</td>
                                     <td class="text-center">
-                                        <i class="fa fa-home {{ $hotel->home_page == 1 ? 'text-success' : '' }}"></i>
+                                        <x-home-page-badge :home_page="$hotel->home_page"></x-home-page-badge>
                                     </td>
-                                    <td>{{ $hotel->releaseStatus->name }}</td>
+                                    <td>
+                                        <x-release-status-badge :code="$hotel->releaseStatus->code" :label="$hotel->releaseStatus->name" />
+                                    </td>
                                     <td>{{ $hotel->created_at }}</td>
                                     <td>{{ $hotel->updated_at }}</td>
 
@@ -73,16 +70,14 @@
                                         <div class="btn-group me-2 mb-2" role="group"
                                             aria-label="Icons Outline Text group">
 
-                                            {{-- <button type="button" class="btn btn-primary w-100" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Top Tooltip">Top</button> --}}
-
                                             <a href="{{ route('cpanel.hotels.release', ['release_status' => 'published', 'hotel_id' => $hotel->id]) }}"
                                                 class="btn btn-xs btn-outline-success " data-bs-toggle="tooltip"
                                                 data-bs-placement="top" title="Publish">
                                                 <i class="fa fa-check"></i>
                                             </a>
-                                            <a href="{{ route('cpanel.hotels.release', ['release_status' => 'not_published', 'hotel_id' => $hotel->id]) }}" class="btn btn-xs btn-outline-warning"
-                                                data-bs-toggle="tooltip" data-bs-placement="top" title="Un Publish">
+                                            <a href="{{ route('cpanel.hotels.release', ['release_status' => 'not_published', 'hotel_id' => $hotel->id]) }}"
+                                                class="btn btn-xs btn-outline-warning" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Un Publish">
                                                 <i class="fa fa-ban"></i>
                                             </a>
                                             {{-- <a href="#" class="btn btn-xs btn-outline-secondary">
@@ -107,6 +102,7 @@
                                                 </a>
 
                                             </form>
+
 
                                         </div>
 

@@ -45,6 +45,12 @@
     <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
         rel="stylesheet" />
 
+        <link
+    href="https://unpkg.com/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css"
+    rel="stylesheet"
+/>
+
+
 
     <link rel="stylesheet" id="css-main" href="{{ asset('/css/oneui.css') }}">
 
@@ -402,6 +408,8 @@
 
 
     <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+
+    <script src="https://unpkg.com/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.js"></script>
 
     <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
 

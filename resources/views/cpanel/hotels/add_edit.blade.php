@@ -70,28 +70,54 @@
 
                         <div class="row mb-4">
 
-                            <div class="col-4">
+                            <div class="col-3">
 
                                 <label class="form-label" for="label">Facilities</label>
 
-                                <x-facilities :facilities=$facilities multiple></x-facilities>
+                                <x-facilities :selected="$hotelFacilities" :facilities=$facilities multiple></x-facilities>
 
                             </div>
 
 
-                            <div class="col-4">
+                            <div class="col-3">
 
                                 <label class="form-label" for="label">Destination</label>
 
-                                <x-destinations :destinations=$destinations></x-destinations>
+                                @php
+                                    if ($hotel) {
+                                        $selectedDest = $hotel->destination_id;
+                                    } else {
+                                        $selectedDest = '';
+                                    }
+                                @endphp
+
+                                <x-destinations :selected="[$selectedDest]" :destinations=$destinations></x-destinations>
 
                             </div>
 
-                            <div class="col-4">
+                            <div class="col-3">
 
                                 <label class="form-label" for="label">Class</label>
 
-                                <x-hotel-stars :hotelStars=$hotelStars></x-hotel-stars>
+                                @php
+                                    if ($hotel) {
+                                        $selectedClass = $hotel->hotel_star_id;
+                                    } else {
+                                        $selectedClass = '';
+                                    }
+                                @endphp
+
+                                <x-hotel-stars required='true' :selected="[$selectedClass]" :hotelStars=$hotelStars></x-hotel-stars>
+
+                            </div>
+
+
+                            <div class="col-3">
+
+                                <label class="form-label" for="label">Hotel User<span
+                                        class="text-danger">*</span></label>
+
+                                <x-users name="hotel_users" required multiple :selected="$hotelUsers" :users=$users></x-users>
 
                             </div>
 
@@ -153,9 +179,10 @@
 
 
                             <div class="col-6">
-                                <label class="form-label" for="label">Release <span class="text-danger">*</span></label>
+                                <label class="form-label" for="label">Release <span
+                                        class="text-danger">*</span></label>
                                 @if ($hotel)
-                                    <x-release-component :code="$hotel->release" />
+                                    <x-release-component :code="$hotel->release_status" />
                                 @else
                                     <x-release-component :code="null" />
                                 @endif
@@ -189,7 +216,9 @@
                                 {{-- <div class="dropzone"></div> --}}
                                 {{-- <div class="previews"></div> --}}
 
-                                <input type="file" />
+                                <input type="file" name="image" multiple data-allow-reorder="true"
+                                    data-max-file-size="3MB" data-max-files="3" />
+
 
                                 {{-- <form action="{{ }}" class="dropzone" id="my-great-dropzone"></form> --}}
                             </div>
@@ -236,17 +265,53 @@
         const inputElement = document.querySelector('input[type="file"]');
 
         // Create a FilePond instance
-        const pond = FilePond.create(inputElement);
+        const pond = FilePond.create(inputElement, {
+
+        });
 
 
         pond.setOptions({
             allowMultiple: true,
-            server:{
-                url: "/upload",
+
+            server: {
+                url: "/cpanel",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                process: {
+                    url: '/upload',
+                    method: 'POST',
+                    withCredentials: false,
+                    onload: (response) => {
+                        console.log(response);
+
+                        $('<input>').attr({
+                            type: 'hidden',
+                            id: 'foo',
+                            name: 'images[]',
+                            value: response
+                        }).appendTo('form');
+
+                    },
+                    onerror: null,
+                    ondata: null,
+                },
+                load: '/get-files/',
+
+            },
+
+
+        })
+
+
+        pond.files = [{
+            source: "1",
+            options: {
+                type: 'local',
+                metadata: {
+                    poster: 'http://127.0.0.1:5050/storage/hotels/16736987753_logo.png'
                 }
             }
-        })
+        }];
     </script>
 @endsection
