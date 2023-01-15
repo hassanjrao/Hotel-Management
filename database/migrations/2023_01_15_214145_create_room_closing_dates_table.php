@@ -13,10 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('hotel_images', function (Blueprint $table) {
+        Schema::create('room_closing_dates', function (Blueprint $table) {
+            $table->id();
 
-            // $table->dropColumn('hotel_id');
+            $table->foreignId('room_id')->constrained()->onDelete('cascade');
 
+            $table->date('start_date');
+            $table->date('end_date');
+
+            $table->integer("total_rooms");
+
+            $table->timestamps();
         });
     }
 
@@ -27,9 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('hotel_images', function (Blueprint $table) {
-
-            // $table->unsignedBigInteger('hotel_id');
-        });
+        Schema::dropIfExists('room_closing_dates');
     }
 };

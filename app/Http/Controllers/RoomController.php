@@ -6,6 +6,7 @@ use App\Models\Facility;
 use App\Models\Hotel;
 use App\Models\ReleaseStatus;
 use App\Models\Room;
+use App\Models\RoomClosingDate;
 use App\Models\RoomImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -37,7 +38,9 @@ class RoomController extends Controller
 
         $hotels = Hotel::latest()->get();
 
-        return view("cpanel.rooms.add_edit", compact("room", "facilities", "hotels"));
+        $closingDates=[];
+
+        return view("cpanel.rooms.add_edit", compact("room", "facilities", "hotels","closingDates"));
     }
 
     /**
@@ -63,6 +66,8 @@ class RoomController extends Controller
             "release_status" => "required|exists:release_statuses,code",
             "home_page" => "required",
             "images" => "nullable",
+            "start_date"=>"nullable|array",
+            "end_date"=>"nullable|array"
 
         ]);
 
@@ -112,6 +117,20 @@ class RoomController extends Controller
         }
         RoomImage::insert($roomImages);
 
+        $closingDateData=[];
+
+        foreach($request->start_dates as $ind=>$start_date){
+            $closingDateData[]=[
+                "room_id"=>$room->id,
+                "start_date"=>$start_date,
+                "end_date"=>$request->end_dates[$ind],
+                "created_at"=>now(),
+                "updated_at"=>now()
+            ];
+        }
+
+        RoomClosingDate::insert($closingDateData);
+
 
         return redirect()->route("cpanel.rooms.index")->with("success", "Room created successfully");
     }
@@ -145,7 +164,9 @@ class RoomController extends Controller
 
         $roomFacilities=$room->facilities->pluck("id")->toArray();
 
-        return view("cpanel.rooms.add_edit", compact("room", "facilities", "hotels","roomHotels","roomFacilities"));
+        $closingDates=$room->roomClosingDates;
+
+        return view("cpanel.rooms.add_edit", compact("room", "facilities", "hotels","roomHotels","roomFacilities","closingDates"));
     }
 
     /**
@@ -194,6 +215,24 @@ class RoomController extends Controller
         if ($request->has("facilities")) {
             $room->facilities()->sync($request->facilities);
         }
+
+        if($request->start_dates && count($request->start_dates)>0){
+            $room->roomClosingDates()->delete();
+        }
+
+        $closingDateData=[];
+
+        foreach($request->start_dates as $ind=>$start_date){
+            $closingDateData[]=[
+                "room_id"=>$room->id,
+                "start_date"=>$start_date,
+                "end_date"=>$request->end_dates[$ind],
+                "created_at"=>now(),
+                "updated_at"=>now()
+            ];
+        }
+
+        RoomClosingDate::insert($closingDateData);
 
         return redirect()->route("cpanel.rooms.index")->with("success", "Room updated successfully");
     }

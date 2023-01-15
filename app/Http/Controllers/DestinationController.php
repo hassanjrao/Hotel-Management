@@ -55,7 +55,7 @@ class DestinationController extends Controller
             "lng"=>"required",
             "description"=>"nullable",
             "release_status"=>"nullable|exists:release_statuses,code",
-            "home_page"=>"nullable|boolean",
+            "home_page"=>"nullable",
             "image"=>"nullable",
         ]);
 

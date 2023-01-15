@@ -264,4 +264,17 @@ class HotelController extends Controller
 
         return redirect()->route("cpanel.hotels.index")->withToastSuccess("Release status updated successfully");
     }
+
+    public function hotelFacilities(Request $request){
+
+        $request->validate([
+            "hotel_id"=>"required|exists:hotels,id",
+        ]);
+
+        $hotel=Hotel::findOrFail($request->hotel_id);
+
+        $facilities=$hotel->facilities;
+
+        return response()->json($facilities);
+    }
 }

@@ -15,7 +15,7 @@
 @endif
 
 <div>
-    <select {{ $required }} class="form-select js-select2" name="{{ $name }}" {{ $multiple ? "multiple" : "" }}  data-placeholder="{{ $placeholder }}" >
+    <select {{ $required }} id="facilitySelect" class="form-select js-select2" name="{{ $name }}" {{ $multiple ? "multiple" : "" }}  data-placeholder="{{ $placeholder }}" >
 
         @foreach ($facilities as $facility)
             <option {{ in_array($facility->id,$selected) ? "selected" : "" }} value="{{ $facility->id }}">

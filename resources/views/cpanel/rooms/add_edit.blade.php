@@ -49,7 +49,7 @@
                                     @endphp
                                 @endif
 
-                                <x-hotels name="hotel_id" :selected="$roomHotels" :hotels=$hotels ></x-hotels>
+                                <x-hotels name="hotel_id" :selected="$roomHotels" :hotels=$hotels></x-hotels>
 
                             </div>
 
@@ -77,30 +77,36 @@
 
                             <div class="col-lg-3 col-md-3 col-sm-12">
 
-                                <label class="form-label" for="label">Max Children<span class="text-danger">*</span></label>
+                                <label class="form-label" for="label">Max Children<span
+                                        class="text-danger">*</span></label>
                                 <input type="number" value="{{ $room ? $room->max_children : 0 }}" class="form-control"
                                     id="max_children" name="max_children" min="0">
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-12">
 
-                                <label class="form-label" for="label">Max Adults<span class="text-danger">*</span></label>
+                                <label class="form-label" for="label">Max Adults<span
+                                        class="text-danger">*</span></label>
                                 <input type="number" value="{{ $room ? $room->max_adults : 0 }}" class="form-control"
                                     id="max_adults" name="max_adults" min="0">
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-12">
 
-                                <label class="form-label" for="label">Max People<span class="text-danger">*</span></label>
+                                <label class="form-label" for="label">Max People<span
+                                        class="text-danger">*</span></label>
                                 <input type="number" value="{{ $room ? $room->max_people : 0 }}" class="form-control"
-                                    id="max_people" name="max_people" min="0">
+                                    id="max_people" name="max_people" min="0" onkeyup="maxPeople(this.value)">
+                                <span class="text-danger" id="max_people_error"></span>
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-12">
 
-                                <label class="form-label" for="label">Min People<span class="text-danger">*</span></label>
+                                <label class="form-label" for="label">Min People<span
+                                        class="text-danger">*</span></label>
                                 <input type="number" value="{{ $room ? $room->min_people : 0 }}" class="form-control"
-                                    id="min_people" name="min_people" min="0">
+                                    id="min_people" name="min_people" min="0" onkeyup="minPeople(this.value)">
+                                <span class="text-danger" id="min_people_error"></span>
                             </div>
 
 
@@ -138,7 +144,8 @@
 
                             <div class="col-lg-4 col-md-4 col-sm-12">
 
-                                <label class="form-label" for="label">Number of Rooms<span class="text-danger">*</span></label>
+                                <label class="form-label" for="label">Number of Rooms<span
+                                        class="text-danger">*</span></label>
                                 <input type="number" value="{{ $room ? $room->total_rooms : 1 }}" class="form-control"
                                     id="total_rooms" name="total_rooms" min="1">
 
@@ -146,9 +153,10 @@
 
                             <div class="col-lg-4 col-md-4 col-sm-12">
 
-                                <label class="form-label" for="label">Price Per Night<span class="text-danger">*</span></label>
-                                <input type="text" value="{{ $room ? $room->price_per_night : 0 }}" class="form-control"
-                                    id="price_per_night" name="price_per_night">
+                                <label class="form-label" for="label">Price Per Night<span
+                                        class="text-danger">*</span></label>
+                                <input type="text" value="{{ $room ? $room->price_per_night : 0 }}"
+                                    class="form-control" id="price_per_night" name="price_per_night">
 
                             </div>
 
@@ -157,13 +165,96 @@
                         </div>
 
 
+                        <div class="row mb-4">
+
+                            <label class="form-label" for="label">
+                                Closing Dates
+                                <a onclick="addCLosingDates()" class="btn btn-sm btn-outline-success "
+                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Add More">
+                                    <i class="fa fa-plus"></i>
+                                </a>
+                            </label>
+
+                            <div class="table-responsive">
+
+                                <table class="table table-bordered table-stripped">
+
+                                    <thead>
+                                        <tr>
+                                            <td>#</td>
+                                            <td>Start Date</td>
+                                            <td>End Date</td>
+                                            <td>Rooms</td>
+                                            <td>Action</td>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="closingDatesRows">
+
+                                        @forelse ($closingDates as $closingDate)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>
+                                                    <input type="date" class="form-control" name="start_dates[]"
+                                                        class="form-control" value="{{ $closingDate->start_date }}">
+
+
+                                                </td>
+                                                <td>
+                                                    <input type="date" class="form-control" name="end_dates[]"
+                                                        class="form-control" value="{{ $closingDate->end_date }}">
+                                                </td>
+                                                <td>
+                                                    <a onclick="removeClosingDates(this)"
+                                                        class="btn btn-sm btn-outline-danger " data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Remove">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+
+                                        @empty
+
+
+
+                                            <tr>
+                                                <td>1</td>
+                                                <td>
+                                                    <input type="date" class="form-control" name="start_dates[]">
+                                                </td>
+                                                <td>
+                                                    <input type="date" class="form-control" name="end_dates[]">
+                                                </td>
+                                                <td>
+                                                    <input type="number" min="0" name="total_rooms[]"
+                                                        class="form-control">
+                                                </td>
+                                                <td>
+                                                    <a onclick="removeClosingDates(this)"
+                                                        class="btn btn-sm btn-outline-danger " data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Remove">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+
+                        </div>
 
 
                         <div class="row mb-4">
 
 
                             <div class="col-lg-6 col-md-6 col-sm-12">
-                                <label class="form-label" for="label">Release <span class="text-danger">*</span></label>
+                                <label class="form-label" for="label">Release <span
+                                        class="text-danger">*</span></label>
                                 @if ($room)
                                     <x-release-component :code="$room->release_status" />
                                 @else
@@ -215,7 +306,7 @@
 
                 <div class="d-flex justify-content-end mb-4">
 
-                    <button type="submit" class="btn btn-primary  border">{{ $addUpdate }}</button>
+                    <button type="submit" id="submitBtn" class="btn btn-primary  border">{{ $addUpdate }}</button>
 
                 </div>
 
@@ -241,6 +332,86 @@
     <!-- Page JS Helpers (CKEditor 5 plugins) -->
     <script>
         One.helpersOnLoad(['js-ckeditor5']);
+
+
+        function addCLosingDates() {
+
+            var id = $("#closingDatesRows tr").length + 1;
+
+            var html = `<tr>
+                            <td>${id}</td>
+                            <td>
+                                <input type="date" class="form-control" name="start_dates[]">
+                            </td>
+                            <td>
+                                <input type="date" class="form-control" name="end_dates[]">
+                            </td>
+                            <td>
+                                <input type="number" min="0" class="form-control" name="total_rooms[]">
+                            </td>
+                            <td>
+                                <a onclick="removeClosingDates(this)"
+                                    class="btn btn-sm btn-outline-danger " data-bs-toggle="tooltip"
+                                    data-bs-placement="top" title="Remove">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>`;
+
+            $("#closingDatesRows").append(html);
+
+
+        }
+
+        function removeClosingDates(element) {
+
+            $(element).parent().parent().remove();
+
+            var id = 1;
+
+            $("#closingDatesRows tr").each(function() {
+
+                $(this).find("td:first").html(id);
+
+                id++;
+
+            })
+
+        }
+
+
+        function maxPeople(value) {
+
+            if (parseInt(value) <= parseInt($("#min_people").val())) {
+
+                $("#max_people_error").html("Max people should be greater than min people")
+
+                $("#submitBtn").attr("disabled", "disabled")
+            } else {
+                $("#max_people_error").html("")
+
+
+                $("#submitBtn").attr("disabled", false)
+            }
+
+        }
+
+        function minPeople(value) {
+
+            if (parseInt(value) >= parseInt($("#max_people").val())) {
+
+                $("#min_people_error").html("Min people should be less than max people")
+
+
+                $("#submitBtn").attr("disabled", "disabled")
+            } else {
+                $("#min_people_error").html("")
+
+
+                $("#submitBtn").attr("disabled", false)
+            }
+
+        }
 
         // new/
 
@@ -286,8 +457,5 @@
 
 
         })
-
-
-
     </script>
 @endsection

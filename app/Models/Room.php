@@ -35,4 +35,8 @@ class Room extends Model
     public function createdBy(){
         return $this->belongsTo(User::class,'created_by');
     }
+
+    public function roomClosingDates(){
+        return $this->hasMany(RoomClosingDate::class);
+    }
 }

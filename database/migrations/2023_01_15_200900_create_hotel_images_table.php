@@ -13,12 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        // Schema::table('hotel_images', function (Blueprint $table) {
+        Schema::create('hotel_images', function (Blueprint $table) {
+            $table->id();
 
-        //     $table->foreignId('hotel_id')->after("id")->nullable()->constrained('hotels')->nullOnDelete();
+            $table->foreignId('hotel_id')->constrained('hotels')->cascadeOnDelete();
 
+            $table->string('image');
 
-        // });
+            $table->timestamps();
+        });
     }
 
     /**
@@ -28,10 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        // Schema::table('hotel_images', function (Blueprint $table) {
-
-        //     $table->dropForeign(['hotel_id']);
-        //     $table->dropColumn('hotel_id');
-        // });
+        Schema::dropIfExists('hotel_images');
     }
 };

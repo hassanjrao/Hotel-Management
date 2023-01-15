@@ -42,6 +42,7 @@ Route::middleware(["auth"])->prefix("cpanel")->name("cpanel.")->group(function (
 
     // Route::post("hot")
     Route::get("hotels/{release_status}/{hotel_id}/release", [HotelController::class, "releaseStatusUpdate"])->name("hotels.release");
+    Route::get("hotel/facilities",[HotelController::class, "hotelFacilities"])->name('hotels.facilities');
     Route::resource("hotels", HotelController::class);
 
     Route::post("upload", [UploadFileController::class, "store"])->name("upload");

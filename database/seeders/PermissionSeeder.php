@@ -19,9 +19,9 @@ class PermissionSeeder extends Seeder
     {
 
 
-        // Role::firstOrCreate(["name" => "admin"]);
-        // Role::firstOrCreate(["name" => "hotel"]);
-        // Role::firstOrCreate(["name" => "client"]);
+        Role::firstOrCreate(["name" => "admin"]);
+        Role::firstOrCreate(["name" => "hotel"]);
+        Role::firstOrCreate(["name" => "client"]);
 
 
         $permission = Permission::firstOrCreate(["name" => "manage users"]);
