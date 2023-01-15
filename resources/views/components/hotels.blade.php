@@ -1,10 +1,10 @@
 @props([
-    'id' => 'users',
-    'name' => 'users',
-    'placeholder' => 'Search & Select users',
+    'id' => 'hotels',
+    'name' => 'hotels',
+    'placeholder' => 'Search & Select Hotel',
     'multiple' => false,
     'selected' => [],
-    'users' => collect(),
+    'hotels' => collect(),
     'required' => false,
 ])
 
@@ -18,9 +18,11 @@
 <div>
     <select {{ $required ? "required": "" }} class="form-select js-select2" name="{{ $name }}" {{ $multiple ? "multiple" : "" }}  data-placeholder="{{ $placeholder }}" >
 
-        @foreach ($users as $user)
-            <option {{ in_array($user->id,$selected) ? "selected" : "" }} value="{{ $user->id }}">
-                {{ $user->name }}
+        <option value="">Select Hotel</option>
+
+        @foreach ($hotels as $hotel)
+            <option {{ in_array($hotel->id,$selected) ? "selected" : "" }} value="{{ $hotel->id }}">
+                {{ $hotel->title }}
             </option>
         @endforeach
 

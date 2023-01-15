@@ -74,7 +74,11 @@
 
                                 <label class="form-label" for="label">Facilities</label>
 
-                                <x-facilities :selected="$hotelFacilities" :facilities=$facilities multiple></x-facilities>
+                                @if ($hotel)
+                                    <x-facilities :selected="$hotelFacilities" :facilities=$facilities multiple></x-facilities>
+                                @else
+                                    <x-facilities :facilities=$facilities multiple></x-facilities>
+                                @endif
 
                             </div>
 
@@ -117,7 +121,11 @@
                                 <label class="form-label" for="label">Hotel User<span
                                         class="text-danger">*</span></label>
 
-                                <x-users name="hotel_users" required multiple :selected="$hotelUsers" :users=$users></x-users>
+                                @if ($hotel)
+                                    <x-users name="hotel_users" required multiple :selected="$hotelUsers" :users=$users></x-users>
+                                @else
+                                    <x-users name="hotel_users" required multiple :users=$users></x-users>
+                                @endif
 
                             </div>
 
@@ -304,14 +312,6 @@
         })
 
 
-        pond.files = [{
-            source: "1",
-            options: {
-                type: 'local',
-                metadata: {
-                    poster: 'http://127.0.0.1:5050/storage/hotels/16736987753_logo.png'
-                }
-            }
-        }];
+     
     </script>
 @endsection

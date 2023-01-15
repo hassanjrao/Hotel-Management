@@ -3,6 +3,7 @@
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\HotelController;
+use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UploadFileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -44,8 +45,12 @@ Route::middleware(["auth"])->prefix("cpanel")->name("cpanel.")->group(function (
     Route::resource("hotels", HotelController::class);
 
     Route::post("upload", [UploadFileController::class, "store"])->name("upload");
-
     Route::get("get-files/{id}", [UploadFileController::class, "files"])->name("files");
+
+
+    Route::get("rooms/{release_status}/{room_id}/release", [RoomController::class, "releaseStatusUpdate"])->name("rooms.release");
+    Route::resource("rooms", RoomController::class);
+
 
 
 });
