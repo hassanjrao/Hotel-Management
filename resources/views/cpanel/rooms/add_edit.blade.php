@@ -49,7 +49,7 @@
                                     @endphp
                                 @endif
 
-                                <x-hotels name="hotel_id" :selected="$roomHotels" :hotels=$hotels></x-hotels>
+                                <x-hotels name="hotel_id" required :selected="$roomHotels" :hotels=$hotels></x-hotels>
 
                             </div>
 
@@ -184,7 +184,7 @@
                                             <td>#</td>
                                             <td>Start Date</td>
                                             <td>End Date</td>
-                                            <td>Rooms</td>
+                                            <td>Rooms <span class="text-danger" id="max_room_error"></span></td>
                                             <td>Action</td>
                                         </tr>
                                     </thead>
@@ -205,6 +205,12 @@
                                                         class="form-control" value="{{ $closingDate->end_date }}">
                                                 </td>
                                                 <td>
+                                                    <input required type="number" min="0"
+                                                        onkeyup="maxRoomsAllowed(this,{{ $loop->index }})" class="form-control"
+                                                        name="total_closing_rooms[]" value="{{ $closingDate->total_rooms }}">
+
+                                                </td>
+                                                <td>
                                                     <a onclick="removeClosingDates(this)"
                                                         class="btn btn-sm btn-outline-danger " data-bs-toggle="tooltip"
                                                         data-bs-placement="top" title="Remove">
@@ -217,7 +223,7 @@
 
 
 
-                                            <tr>
+                                            {{-- <tr>
                                                 <td>1</td>
                                                 <td>
                                                     <input type="date" class="form-control" name="start_dates[]">
@@ -236,7 +242,7 @@
                                                         <i class="fa fa-trash"></i>
                                                     </a>
                                                 </td>
-                                            </tr>
+                                            </tr> --}}
                                         @endforelse
 
                                     </tbody>
@@ -338,16 +344,18 @@
 
             var id = $("#closingDatesRows tr").length + 1;
 
+
             var html = `<tr>
                             <td>${id}</td>
                             <td>
-                                <input type="date" class="form-control" name="start_dates[]">
+                                <input required type="date" class="form-control" name="start_dates[]">
                             </td>
                             <td>
-                                <input type="date" class="form-control" name="end_dates[]">
+                                <input required type="date" class="form-control" name="end_dates[]">
                             </td>
                             <td>
-                                <input type="number" min="0" class="form-control" name="total_rooms[]">
+                                <input required type="number" value="0" min="0" onkeyup="maxRoomsAllowed(this,${id})" class="form-control" name="total_closing_rooms[]">
+
                             </td>
                             <td>
                                 <a onclick="removeClosingDates(this)"
@@ -361,6 +369,33 @@
             $("#closingDatesRows").append(html);
 
 
+        }
+
+        function maxRoomsAllowed(element, index) {
+            var maxRooms = $("#total_rooms").val();
+            var value = $(element).val();
+
+            $("#closingDatesRows tr").each(function() {
+
+                if ($(this).find("td:first").html() != index) {
+                    value = parseInt(value) + parseInt($(this).find("input[name='total_closing_rooms[]']").val())
+                }
+
+            })
+
+            console.log(maxRooms, value)
+
+            if (parseInt(value) > parseInt(maxRooms)) {
+
+                $("#max_room_error").html(`Total Closing rooms should not exceed to total room: ${maxRooms}`)
+
+                $("#submitBtn").attr("disabled", "disabled")
+            } else {
+
+                $("#max_room_error").html("")
+
+                $("#submitBtn").attr("disabled", false)
+            }
         }
 
         function removeClosingDates(element) {

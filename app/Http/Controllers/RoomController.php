@@ -20,7 +20,7 @@ class RoomController extends Controller
      */
     public function index()
     {
-        $rooms = Room::latest()->with("hotel", "roomImages", "facilities", "createdBy","releaseStatus")->get();
+        $rooms = Room::latest()->with("hotel", "roomImages", "facilities", "createdBy", "releaseStatus")->get();
 
         return view("cpanel.rooms.index", compact("rooms"));
     }
@@ -38,9 +38,9 @@ class RoomController extends Controller
 
         $hotels = Hotel::latest()->get();
 
-        $closingDates=[];
+        $closingDates = [];
 
-        return view("cpanel.rooms.add_edit", compact("room", "facilities", "hotels","closingDates"));
+        return view("cpanel.rooms.add_edit", compact("room", "facilities", "hotels", "closingDates"));
     }
 
     /**
@@ -51,23 +51,25 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             "title" => "required",
             "sub_title" => "required",
             "hotel_id" => "required|exists:hotels,id",
             "max_children" => "required",
             "max_adults" => "required",
-            "max_people" => "required",
-            "min_people" => "required",
+            "max_people" => "required|gt:min_people",
+            "min_people" => "required|lt:max_people",
             "description" => "nullable",
             "facilities" => "nullable",
             "total_rooms" => "required",
             "price_per_night" => "required",
             "release_status" => "required|exists:release_statuses,code",
-            "home_page" => "required",
+            "home_page" => "nullable",
             "images" => "nullable",
-            "start_date"=>"nullable|array",
-            "end_date"=>"nullable|array"
+            "start_date" => "nullable|array",
+            "end_date" => "nullable|array",
+            "total_closing_rooms" => "nullable|array"
 
         ]);
 
@@ -83,7 +85,7 @@ class RoomController extends Controller
             "total_rooms" => $request->total_rooms,
             "price_per_night" => $request->price_per_night,
             "release_status" => $request->release_status,
-            "home_page" => $request->home_page =="on" ? true : false,
+            "home_page" => $request->home_page == "on" ? true : false,
             "created_by" => auth()->user()->id,
         ]);
 
@@ -117,20 +119,23 @@ class RoomController extends Controller
         }
         RoomImage::insert($roomImages);
 
-        $closingDateData=[];
+        $closingDateData = [];
 
-        foreach($request->start_dates as $ind=>$start_date){
-            $closingDateData[]=[
-                "room_id"=>$room->id,
-                "start_date"=>$start_date,
-                "end_date"=>$request->end_dates[$ind],
-                "created_at"=>now(),
-                "updated_at"=>now()
-            ];
+        if ($$request->start_dates) {
+
+            foreach ($request->start_dates as $ind => $start_date) {
+                $closingDateData[] = [
+                    "room_id" => $room->id,
+                    "start_date" => $start_date,
+                    "end_date" => $request->end_dates[$ind],
+                    "total_rooms" => $request->total_closing_rooms[$ind],
+                    "created_at" => now(),
+                    "updated_at" => now()
+                ];
+            }
+
+            RoomClosingDate::insert($closingDateData);
         }
-
-        RoomClosingDate::insert($closingDateData);
-
 
         return redirect()->route("cpanel.rooms.index")->with("success", "Room created successfully");
     }
@@ -160,13 +165,13 @@ class RoomController extends Controller
 
         $hotels = Hotel::latest()->get();
 
-        $roomHotels=[$room->hotel_id];
+        $roomHotels = [$room->hotel_id];
 
-        $roomFacilities=$room->facilities->pluck("id")->toArray();
+        $roomFacilities = $room->facilities->pluck("id")->toArray();
 
-        $closingDates=$room->roomClosingDates;
+        $closingDates = $room->roomClosingDates;
 
-        return view("cpanel.rooms.add_edit", compact("room", "facilities", "hotels","roomHotels","roomFacilities","closingDates"));
+        return view("cpanel.rooms.add_edit", compact("room", "facilities", "hotels", "roomHotels", "roomFacilities", "closingDates"));
     }
 
     /**
@@ -186,8 +191,8 @@ class RoomController extends Controller
             "hotel_id" => "required|exists:hotels,id",
             "max_children" => "required",
             "max_adults" => "required",
-            "max_people" => "required",
-            "min_people" => "required",
+            "max_people" => "required|gt:min_people",
+            "min_people" => "required|lt:max_people",
             "description" => "nullable",
             "facilities" => "nullable",
             "total_rooms" => "required",
@@ -195,6 +200,9 @@ class RoomController extends Controller
             "release_status" => "required|exists:release_statuses,code",
             "home_page" => "nullable",
             "images" => "nullable",
+            "start_date" => "nullable|array",
+            "end_date" => "nullable|array",
+            "total_closing_rooms" => "nullable|array"
         ]);
 
         $room->update([
@@ -209,32 +217,33 @@ class RoomController extends Controller
             "total_rooms" => $request->total_rooms,
             "price_per_night" => $request->price_per_night,
             "release_status" => $request->release_status,
-            "home_page" => $request->home_page =="on" ? true : false,
+            "home_page" => $request->home_page == "on" ? true : false,
         ]);
 
         if ($request->has("facilities")) {
             $room->facilities()->sync($request->facilities);
         }
 
-        if($request->start_dates && count($request->start_dates)>0){
+        if ($request->start_dates && count($request->start_dates) > 0) {
             $room->roomClosingDates()->delete();
         }
 
-        $closingDateData=[];
+        $closingDateData = [];
 
-        foreach($request->start_dates as $ind=>$start_date){
-            $closingDateData[]=[
-                "room_id"=>$room->id,
-                "start_date"=>$start_date,
-                "end_date"=>$request->end_dates[$ind],
-                "created_at"=>now(),
-                "updated_at"=>now()
+        foreach ($request->start_dates as $ind => $start_date) {
+            $closingDateData[] = [
+                "room_id" => $room->id,
+                "start_date" => $start_date,
+                "end_date" => $request->end_dates[$ind],
+                "total_rooms" => $request->total_closing_rooms[$ind],
+                "created_at" => now(),
+                "updated_at" => now()
             ];
         }
 
         RoomClosingDate::insert($closingDateData);
 
-        return redirect()->route("cpanel.rooms.index")->with("success", "Room updated successfully");
+        return redirect()->route("cpanel.rooms.index")->withToastSuccess("success", "Room updated successfully");
     }
 
     /**
@@ -251,23 +260,23 @@ class RoomController extends Controller
         $room->delete();
 
         return redirect()->route("cpanel.rooms.index")->with("success", "Room deleted successfully");
-
     }
 
 
 
-    public function releaseStatusUpdate($release_status,$room_id){
+    public function releaseStatusUpdate($release_status, $room_id)
+    {
 
-        $room=Room::findOrFail($room_id);
+        $room = Room::findOrFail($room_id);
 
-        $releaseStatus=ReleaseStatus::where("code",$release_status)->first();
+        $releaseStatus = ReleaseStatus::where("code", $release_status)->first();
 
-        if(!$releaseStatus){
+        if (!$releaseStatus) {
             return redirect()->route("cpanel.rooms.index")->withToastError("Release status not found");
         }
 
         $room->update([
-            "release_status"=>$releaseStatus->code
+            "release_status" => $releaseStatus->code
         ]);
 
         return redirect()->route("cpanel.rooms.index")->withToastSuccess("Release status updated successfully");
