@@ -18,11 +18,11 @@ return new class extends Migration
 
             $table->string("name");
 
-            $table->enum('check_in_day',["mon",'tue',"wed","thu","fri","sat","sun"]);
-            $table->enum('check_out_day',["mon",'tue',"wed","thu","fri","sat","sun"]);
+            $table->enum('check_in_day',["mon",'tue',"wed","thu","fri","sat","sun"])->nullable();
+            $table->enum('check_out_day',["mon",'tue',"wed","thu","fri","sat","sun"])->nullable();
 
-            $table->integer("min_nights")->default(0);
-            $table->integer("max_nights")->default(0);
+            $table->integer("min_nights")->nullable();
+            $table->integer("max_nights")->nullable();
 
             $table->foreignId("created_by")->constrained("users")->cascadeOnDelete();
 
