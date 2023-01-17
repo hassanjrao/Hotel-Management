@@ -45,37 +45,37 @@
                         </thead>
 
                         <tbody>
-                            @foreach ($packages as $ind => $room)
+                            @foreach ($packages as $ind => $package)
                                 <tr>
 
                                     <td>{{ $ind + 1 }}</td>
-                                    <td>{{ $room->name }}</td>
-                                    <td>{{ $room->days }}</td>
+                                    <td>{{ $package->name }}</td>
+                                    <td>{{ $package->packageDays->pluck('day')->implode(', ') }}</td>
 
-                                    <td>{{ $room->min_nights }}</td>
-                                    <td>{{ $room->max_nights }}</td>
-                                    <td>{{ $room->created_at }}</td>
-                                    <td>{{ $room->updated_at }}</td>
+                                    <td>{{ $package->min_nights }}</td>
+                                    <td>{{ $package->max_nights }}</td>
+                                    <td>{{ $package->created_at }}</td>
+                                    <td>{{ $package->updated_at }}</td>
 
                                     <td>
 
                                         <div class="btn-group me-2 mb-2" role="group"
                                             aria-label="Icons Outline Text group">
 
-                                           
-                                            <a href={{ route('cpanel.packages.edit', ['room' => $room]) }}
+
+                                            <a href={{ route('cpanel.packages.edit', ['package' => $package]) }}
                                                 class="btn btn-xs btn-outline-primary" data-bs-toggle="tooltip"
                                                 data-bs-placement="top" title="Edit">
                                                 <i class="fa fa-edit"></i>
                                             </a>
 
-                                            <form id="form-{{ $room->id }}"
-                                                action="{{ route('cpanel.packages.destroy', $room->id) }}"
+                                            <form id="form-{{ $package->id }}"
+                                                action="{{ route('cpanel.packages.destroy', $package->id) }}"
                                                 method="POST">
                                                 @method('DELETE')
                                                 @csrf
 
-                                                <a onclick="confirmDelete({{ $room->id }})"
+                                                <a onclick="confirmDelete({{ $package->id }})"
                                                     class="btn btn-xs btn-outline-danger" data-bs-toggle="tooltip"
                                                     data-bs-placement="top" title="Delete">
                                                     <i class="fa fa-trash-alt"></i>
