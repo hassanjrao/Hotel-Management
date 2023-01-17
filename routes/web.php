@@ -3,6 +3,7 @@
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\HotelController;
+use App\Http\Controllers\PackageController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UploadFileController;
 use App\Http\Controllers\UserController;
@@ -53,6 +54,7 @@ Route::middleware(["auth"])->prefix("cpanel")->name("cpanel.")->group(function (
     Route::resource("rooms", RoomController::class);
 
 
+    Route::resource('packages', PackageController::class);
 
 });
 
