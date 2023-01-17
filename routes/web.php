@@ -5,6 +5,7 @@ use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\HotelController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\TaxController;
 use App\Http\Controllers\UploadFileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,9 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
+Auth::routes();
 
 
 
@@ -56,6 +60,7 @@ Route::middleware(["auth"])->prefix("cpanel")->name("cpanel.")->group(function (
 
     Route::resource('packages', PackageController::class);
 
-});
+    Route::get("taxes/{release_status}/{tax_id}/release", [TaxController::class, "releaseStatusUpdate"])->name("taxes.release");
+    Route::resource("taxes", TaxController::class);
 
-Auth::routes();
+});
