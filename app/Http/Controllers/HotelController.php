@@ -8,6 +8,7 @@ use App\Models\Hotel;
 use App\Models\HotelImage;
 use App\Models\HotelStar;
 use App\Models\ReleaseStatus;
+use App\Models\Room;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -276,5 +277,18 @@ class HotelController extends Controller
         $facilities=$hotel->facilities;
 
         return response()->json($facilities);
+    }
+
+    public function hotelRooms(Request $request){
+
+        $request->validate([
+            "hotel_id"=>"required|exists:hotels,id",
+        ]);
+
+        $rooms=Room::where("hotel_id",$request->hotel_id)->get(["id","title"]);
+
+
+        return response()->json($rooms);
+
     }
 }

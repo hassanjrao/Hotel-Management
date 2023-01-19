@@ -40,4 +40,8 @@ class Hotel extends Model
     public function createdBy(){
         return $this->belongsTo(User::class,'created_by');
     }
+
+    public function rooms(){
+        return $this->hasMany(Room::class);
+    }
 }

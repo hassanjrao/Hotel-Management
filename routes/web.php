@@ -4,6 +4,7 @@ use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\HotelController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\RateController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\TaxController;
 use App\Http\Controllers\UploadFileController;
@@ -47,7 +48,8 @@ Route::middleware(["auth"])->prefix("cpanel")->name("cpanel.")->group(function (
 
     // Route::post("hot")
     Route::get("hotels/{release_status}/{hotel_id}/release", [HotelController::class, "releaseStatusUpdate"])->name("hotels.release");
-    Route::get("hotel/facilities",[HotelController::class, "hotelFacilities"])->name('hotels.facilities');
+    Route::get("hotel/facilities", [HotelController::class, "hotelFacilities"])->name('hotels.facilities');
+    Route::get("hotel/rooms", [HotelController::class, "hotelRooms"])->name('hotels.rooms');
     Route::resource("hotels", HotelController::class);
 
     Route::post("upload", [UploadFileController::class, "store"])->name("upload");
@@ -63,4 +65,6 @@ Route::middleware(["auth"])->prefix("cpanel")->name("cpanel.")->group(function (
     Route::get("taxes/{release_status}/{tax_id}/release", [TaxController::class, "releaseStatusUpdate"])->name("taxes.release");
     Route::resource("taxes", TaxController::class);
 
+
+    Route::resource("rates", RateController::class);
 });
