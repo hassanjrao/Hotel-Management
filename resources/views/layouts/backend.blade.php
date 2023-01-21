@@ -272,6 +272,14 @@
                             </a>
                         </li>
 
+                          <li class="nav-main-item">
+                            <a class="nav-main-link{{ request()->is('cpanel/coupons') ? ' active' : '' }}"
+                                href="{{ route('cpanel.coupons.index') }}">
+                                <i class="nav-main-link-icon si si-magic-wand"></i>
+                                <span class="nav-main-link-name">Coupons</span>
+                            </a>
+                        </li>
+
 
 
 

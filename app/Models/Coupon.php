@@ -16,4 +16,9 @@ class Coupon extends Model
         return $this->belongsToMany(Room::class);
     }
 
+    public function releaseStatus(){
+        return $this->belongsTo(ReleaseStatus::class,'release_status','code');
+    }
+
+
 }

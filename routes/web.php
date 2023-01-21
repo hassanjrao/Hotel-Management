@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\HotelController;
@@ -67,4 +68,7 @@ Route::middleware(["auth"])->prefix("cpanel")->name("cpanel.")->group(function (
 
 
     Route::resource("rates", RateController::class);
+
+    Route::get("coupons/{release_status}/{coupon_id}/release", [CouponController::class, "releaseStatusUpdate"])->name("coupons.release");
+    Route::resource("coupons", CouponController::class);
 });
