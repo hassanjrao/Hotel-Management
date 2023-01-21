@@ -100,7 +100,6 @@
                                     @php
                                         $ratePackages = [];
                                     @endphp
-
                                 @else
                                     @php
                                         $ratePackages = [$rate->package_id];
@@ -178,14 +177,14 @@
                                 <label class="form-label" for="label">Discount Type</label>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="discount_type"
-                                        id="fixedDiscount" value="fixed" checked>
+                                        id="fixedDiscount" value="fixed" {{ $rate ? $rate->discount_type=="fixed" ? "checked" : "" : "" }}>
                                     <label class="form-check-label" for="fixedDiscount">
                                         Fixed
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="discount_type" id="perDiscount"
-                                        value="percentage">
+                                        value="percentage" {{ $rate ? $rate->discount_type=="percentage" ? "checked" : "" : "" }}>
                                     <label class="form-check-label" for="perDiscount">
                                         Percentage
                                     </label>
@@ -211,12 +210,10 @@
                                     @php
                                         $includedTax = [];
                                     @endphp
-
                                 @else
                                     @php
                                         $includedTax = [$rate->included_tax_id];
                                     @endphp
-
                                 @endif
 
                                 <x-taxes name="included_tax_id" required id="includedTax" :selected="$includedTax" :taxes=$taxes>
@@ -248,11 +245,11 @@
                         </div>
 
 
-                        {{-- <div class="row mb-4">
+                        <div class="row mb-4">
 
                             <label class="form-label" for="label">
-                                Closing Dates
-                                <a onclick="addCLosingDates()" class="btn btn-sm btn-outline-success "
+                                Children's Rates
+                                <a onclick="addChildrenRates()" class="btn btn-sm btn-outline-success "
                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Add More">
                                     <i class="fa fa-plus"></i>
                                 </a>
@@ -265,37 +262,36 @@
                                     <thead>
                                         <tr>
                                             <td>#</td>
-                                            <td>Start Date</td>
-                                            <td>End Date</td>
-                                            <td>rates <span class="text-danger" id="max_rate_error"></span></td>
+                                            <td>Age Min</td>
+                                            <td>Age Max</td>
+                                            <td>Price</td>
                                             <td>Action</td>
                                         </tr>
                                     </thead>
 
-                                    <tbody id="closingDatesRows">
+                                    <tbody id="childrenRatesRows">
 
-                                        @forelse ($closingDates as $closingDate)
+                                        @forelse ($childrenRates as $childrenRate)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>
-                                                    <input type="date" class="form-control" name="start_dates[]"
-                                                        class="form-control" value="{{ $closingDate->start_date }}">
+                                                    <input type="number" class="form-control" name="min_ages[]"
+                                                        class="form-control" value="{{ $childrenRate->age_min }}">
 
 
                                                 </td>
                                                 <td>
-                                                    <input type="date" class="form-control" name="end_dates[]"
-                                                        class="form-control" value="{{ $closingDate->end_date }}">
+                                                    <input type="number" class="form-control" name="max_ages[]"
+                                                        class="form-control" value="{{ $childrenRate->age_max }}">
                                                 </td>
                                                 <td>
-                                                    <input required type="number" min="0"
-                                                        onkeyup="maxratesAllowed(this,{{ $loop->index }})"
-                                                        class="form-control" name="total_closing_rates[]"
-                                                        value="{{ $closingDate->total_rates }}">
+                                                    <input required type="number" min="0" step=".01"
+                                                        class="form-control" name="child_prices[]"
+                                                        value="{{ $childrenRate->price }}">
 
                                                 </td>
                                                 <td>
-                                                    <a onclick="removeClosingDates(this)"
+                                                    <a onclick="removeChildrenRates(this)"
                                                         class="btn btn-sm btn-outline-danger " data-bs-toggle="tooltip"
                                                         data-bs-placement="top" title="Remove">
                                                         <i class="fa fa-trash"></i>
@@ -313,7 +309,7 @@
                             </div>
 
 
-                        </div> --}}
+                        </div>
 
 
 
@@ -350,28 +346,25 @@
 
     <!-- Page JS Helpers (CKEditor 5 plugins) -->
     <script>
-        One.helpersOnLoad(['js-ckeditor5']);
+        function addChildrenRates() {
 
-
-        function addCLosingDates() {
-
-            var id = $("#closingDatesRows tr").length + 1;
+            var id = $("#childrenRatesRows tr").length + 1;
 
 
             var html = `<tr>
                             <td>${id}</td>
                             <td>
-                                <input required type="date" class="form-control" name="start_dates[]">
+                                <input required type="number" class="form-control" name="min_ages[]">
                             </td>
                             <td>
-                                <input required type="date" class="form-control" name="end_dates[]">
+                                <input required type="number" class="form-control" name="max_ages[]">
                             </td>
                             <td>
-                                <input required type="number" value="0" min="0" onkeyup="maxratesAllowed(this,${id})" class="form-control" name="total_closing_rates[]">
+                                <input required step=".01" type="number" value="0" min="0" class="form-control" name="child_prices[]">
 
                             </td>
                             <td>
-                                <a onclick="removeClosingDates(this)"
+                                <a onclick="removeChildrenRates(this)"
                                     class="btn btn-sm btn-outline-danger " data-bs-toggle="tooltip"
                                     data-bs-placement="top" title="Remove">
                                     <i class="fa fa-trash"></i>
@@ -379,45 +372,19 @@
                             </td>
                         </tr>`;
 
-            $("#closingDatesRows").append(html);
+            $("#childrenRatesRows").append(html);
 
 
         }
 
-        function maxratesAllowed(element, index) {
-            var maxrates = $("#total_rates").val();
-            var value = $(element).val();
 
-            $("#closingDatesRows tr").each(function() {
-
-                if ($(this).find("td:first").html() != index) {
-                    value = parseInt(value) + parseInt($(this).find("input[name='total_closing_rates[]']").val())
-                }
-
-            })
-
-            console.log(maxrates, value)
-
-            if (parseInt(value) > parseInt(maxrates)) {
-
-                $("#max_rate_error").html(`Total Closing rates should not exceed to total rate: ${maxrates}`)
-
-                $("#submitBtn").attr("disabled", "disabled")
-            } else {
-
-                $("#max_rate_error").html("")
-
-                $("#submitBtn").attr("disabled", false)
-            }
-        }
-
-        function removeClosingDates(element) {
+        function removeChildrenRates(element) {
 
             $(element).parent().parent().remove();
 
             var id = 1;
 
-            $("#closingDatesRows tr").each(function() {
+            $("#childrenRatesRows tr").each(function() {
 
                 $(this).find("td:first").html(id);
 
@@ -426,84 +393,5 @@
             })
 
         }
-
-
-        function maxPeople(value) {
-
-            if (parseInt(value) <= parseInt($("#min_people").val())) {
-
-                $("#max_people_error").html("Max people should be greater than min people")
-
-                $("#submitBtn").attr("disabled", "disabled")
-            } else {
-                $("#max_people_error").html("")
-
-
-                $("#submitBtn").attr("disabled", false)
-            }
-
-        }
-
-        function minPeople(value) {
-
-            if (parseInt(value) >= parseInt($("#max_people").val())) {
-
-                $("#min_people_error").html("Min people should be less than max people")
-
-
-                $("#submitBtn").attr("disabled", "disabled")
-            } else {
-                $("#min_people_error").html("")
-
-
-                $("#submitBtn").attr("disabled", false)
-            }
-
-        }
-
-        // new/
-
-        // Get a reference to the file input element
-        const inputElement = document.querySelector('input[type="file"]');
-
-        // Create a FilePond instance
-        const pond = FilePond.create(inputElement, {
-
-        });
-
-
-
-        pond.setOptions({
-            allowMultiple: true,
-
-            server: {
-                url: "/cpanel",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                process: {
-                    url: '/upload',
-                    method: 'POST',
-                    withCredentials: false,
-                    onload: (response) => {
-                        console.log(response);
-
-                        $('<input>').attr({
-                            type: 'hidden',
-                            id: 'foo',
-                            name: 'images[]',
-                            value: response
-                        }).appendTo('form');
-
-                    },
-                    onerror: null,
-                    ondata: null,
-                },
-                load: '/get-files/',
-
-            },
-
-
-        })
     </script>
 @endsection

@@ -36,4 +36,9 @@ class Rate extends Model
     {
         return $this->belongsToMany(Tax::class, 'rate_tax');
     }
+
+    public function childrenRates()
+    {
+        return $this->hasMany(ChildrenRate::class);
+    }
 }

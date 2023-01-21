@@ -39,4 +39,8 @@ class Room extends Model
     public function roomClosingDates(){
         return $this->hasMany(RoomClosingDate::class);
     }
+
+    public function coupons(){
+        return $this->belongsToMany(Coupon::class);
+    }
 }
