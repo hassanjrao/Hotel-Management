@@ -156,7 +156,11 @@ class CouponController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $coupon=Coupon::findOrFail($id);
+
+        $coupon->delete();
+
+        return redirect()->route("cpanel.coupons.index")->withToastSuccess("Coupon deleted successfully");
     }
 
     public function releaseStatusUpdate($release_status, $coupon_id)

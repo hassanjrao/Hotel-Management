@@ -121,7 +121,7 @@ class RoomController extends Controller
 
         $closingDateData = [];
 
-        if ($$request->start_dates) {
+        if ($request->start_dates) {
 
             foreach ($request->start_dates as $ind => $start_date) {
                 $closingDateData[] = [

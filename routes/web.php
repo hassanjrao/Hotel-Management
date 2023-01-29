@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AcitivityController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\FacilityController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\HotelController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\RateController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TaxController;
 use App\Http\Controllers\UploadFileController;
 use App\Http\Controllers\UserController;
@@ -71,4 +73,15 @@ Route::middleware(["auth"])->prefix("cpanel")->name("cpanel.")->group(function (
 
     Route::get("coupons/{release_status}/{coupon_id}/release", [CouponController::class, "releaseStatusUpdate"])->name("coupons.release");
     Route::resource("coupons", CouponController::class);
+
+
+
+    Route::get("activities/{release_status}/{activity_id}/release", [AcitivityController::class, "releaseStatusUpdate"])->name("activities.release");
+    Route::resource("activities", AcitivityController::class);
+
+
+
+    Route::get("services/{release_status}/{service_id}/release", [ServiceController::class, "releaseStatusUpdate"])->name("services.release");
+    Route::resource("services", ServiceController::class);
+
 });

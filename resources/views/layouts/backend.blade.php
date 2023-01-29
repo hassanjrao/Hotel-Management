@@ -45,10 +45,7 @@
     <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
         rel="stylesheet" />
 
-        <link
-    href="https://unpkg.com/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css"
-    rel="stylesheet"
-/>
+    <link href="https://unpkg.com/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css" rel="stylesheet" />
 
 
 
@@ -199,65 +196,65 @@
                         <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->is('cpanel') || request()->is('cpanel/dashboard') || request()->is('dashboard') ? ' active' : '' }}"
                                 href="{{ route('cpanel.dashboard') }}">
-                                <i class="nav-main-link-icon si si-cursor"></i>
+                                <i class="nav-main-link-icon fas fa-fw fa-tachometer-alt"></i>
                                 <span class="nav-main-link-name">Dashboard</span>
                             </a>
                         </li>
 
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('cpanel/hotels') ? ' active' : '' }}"
+                            <a class="nav-main-link{{ request()->segment(2)=='hotels' ? ' active' : '' }}"
                                 href="{{ route('cpanel.hotels.index') }}">
-                                <i class="nav-main-link-icon si si-magic-wand"></i>
+                                <i class="nav-main-link-icon fa fa-hotel"></i>
                                 <span class="nav-main-link-name">Hotels</span>
                             </a>
                         </li>
 
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('cpanel/rooms') ? ' active' : '' }}"
+                            <a class="nav-main-link{{ request()->segment(2)=='rooms' ? ' active' : '' }}"
                                 href="{{ route('cpanel.rooms.index') }}">
-                                <i class="nav-main-link-icon si si-magic-wand"></i>
+                                <i class="nav-main-link-icon fa fa-bed"></i>
                                 <span class="nav-main-link-name">Rooms</span>
                             </a>
                         </li>
 
 
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('cpanel/users') ? ' active' : '' }}"
+                            <a class="nav-main-link{{ request()->segment(2)=='users' ? ' active' : '' }}"
                                 href="{{ route('cpanel.users.index') }}">
-                                <i class="nav-main-link-icon si si-magic-wand"></i>
+                                <i class="nav-main-link-icon fa fa-users"></i>
                                 <span class="nav-main-link-name">Users</span>
                             </a>
                         </li>
 
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('cpanel/facilities') ? ' active' : '' }}"
+                            <a class="nav-main-link{{ request()->segment(2)=='facilities' ? ' active' : '' }}"
                                 href="{{ route('cpanel.facilities.index') }}">
-                                <i class="nav-main-link-icon si si-magic-wand"></i>
+                                <i class="nav-main-link-icon si si-settings"></i>
                                 <span class="nav-main-link-name">Facilities</span>
                             </a>
                         </li>
 
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('cpanel/destinations') ? ' active' : '' }}"
+                            <a class="nav-main-link{{ request()->segment(2)=='destinations' ? ' active' : '' }}"
                                 href="{{ route('cpanel.destinations.index') }}">
-                                <i class="nav-main-link-icon si si-magic-wand"></i>
+                                <i class="nav-main-link-icon fa fa-plane"></i>
                                 <span class="nav-main-link-name">Destiantions</span>
                             </a>
                         </li>
 
 
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('cpanel/packages') ? ' active' : '' }}"
+                            <a class="nav-main-link{{ request()->segment(2)=='packages' ? ' active' : '' }}"
                                 href="{{ route('cpanel.packages.index') }}">
-                                <i class="nav-main-link-icon si si-magic-wand"></i>
+                                <i class="nav-main-link-icon fas fa-fw fa-suitcase"></i>
                                 <span class="nav-main-link-name">Packages</span>
                             </a>
                         </li>
 
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('cpanel/taxes') ? ' active' : '' }}"
+                            <a class="nav-main-link{{ request()->segment(2)=='taxes' ? ' active' : '' }}"
                                 href="{{ route('cpanel.taxes.index') }}">
-                                <i class="nav-main-link-icon si si-magic-wand"></i>
+                                <i class="nav-main-link-icon fa fa-percent"></i>
                                 <span class="nav-main-link-name">Taxes</span>
                             </a>
                         </li>
@@ -265,18 +262,35 @@
 
 
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('cpanel/rates') ? ' active' : '' }}"
+                            <a class="nav-main-link{{ request()->segment(2)=='rates' ? ' active' : '' }}"
                                 href="{{ route('cpanel.rates.index') }}">
-                                <i class="nav-main-link-icon si si-magic-wand"></i>
+                                <i class="nav-main-link-icon fas fa-fw fa-calendar"></i>
                                 <span class="nav-main-link-name">Rates</span>
                             </a>
                         </li>
 
-                          <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('cpanel/coupons') ? ' active' : '' }}"
+                        <li class="nav-main-item">
+                            <a class="nav-main-link{{ request()->segment(2)=='coupons' ? ' active' : '' }}"
                                 href="{{ route('cpanel.coupons.index') }}">
-                                <i class="nav-main-link-icon si si-magic-wand"></i>
+                                <i class="nav-main-link-icon fa fa-tags"></i>
                                 <span class="nav-main-link-name">Coupons</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-main-item">
+                            <a class="nav-main-link{{ request()->segment(2)=='activities' ? ' active' : '' }}"
+                                href="{{ route('cpanel.activities.index') }}">
+                                <i class="nav-main-link-icon fas fa-fw fa-ticket-alt"></i>
+                                <span class="nav-main-link-name">Activities</span>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-main-item">
+                            <a class="nav-main-link{{ request()->segment(2)=='services' ? ' active' : '' }}"
+                                href="{{ route('cpanel.services.index') }}">
+                                <i class="nav-main-link-icon fas fa-fw fa-thumbs-up"></i>
+                                <span class="nav-main-link-name">Services</span>
                             </a>
                         </li>
 
@@ -402,7 +416,7 @@
                 <div class="row fs-sm">
 
                     <div class="col-sm-6 order-sm-1 py-1 text-center text-sm-start">
-                        <a class="fw-semibold" href="#" target="_blank">Sim App</a>
+                        <a class="fw-semibold" href="#" target="_blank">Hotel Booking</a>
                         &copy;
                         <span data-toggle="year-copy"></span>
                     </div>
@@ -466,7 +480,6 @@
         //     dropdownParent: $(".modal")
         // });
         FilePond.registerPlugin(FilePondPluginImagePreview);
-
     </script>
 
 
