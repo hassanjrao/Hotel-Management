@@ -22,7 +22,12 @@ class HotelController extends Controller
      */
     public function index()
     {
-        $hotels = Hotel::latest()->with("destination", "hotelStar", "releaseStatus", "facilities", "users","createdBy")->get();
+        if (auth()->user()->hasRole("admin")) {
+
+            $hotels = Hotel::latest()->with("destination", "hotelStar", "releaseStatus", "facilities", "users", "createdBy")->get();
+        } else {
+            $hotels = Hotel::latest()->with("destination", "hotelStar", "releaseStatus", "facilities", "users", "createdBy")->where("created_by", auth()->user()->id)->get();
+        }
 
         return view("cpanel.hotels.index", compact("hotels"));
     }
@@ -42,7 +47,11 @@ class HotelController extends Controller
 
         $hotelStars = HotelStar::latest()->get();
 
-        $users = User::latest()->get();
+        if (auth()->user()->hasRole("admin")) {
+            $users = User::latest()->get();
+        } else {
+            $users = [];
+        }
 
         return view("cpanel.hotels.add_edit", compact("hotel", "facilities", "destinations", "hotelStars", "users"));
     }
@@ -149,7 +158,11 @@ class HotelController extends Controller
     public function edit($id)
     {
 
-        $hotel = Hotel::findOrFail($id);
+        $hotel = Hotel::where("id",$id)->where("created_by",auth()->user()->id)->first();
+
+        if (!$hotel) {
+            return redirect()->route("cpanel.hotels.index")->withToastError("Hotel not found");
+        }
 
         $facilities = Facility::latest()->get();
 
@@ -169,7 +182,7 @@ class HotelController extends Controller
 
         $hotelImages = $hotelImages->toArray();
 
-    // dd($hotelImages);
+        // dd($hotelImages);
 
         return view("cpanel.hotels.add_edit", compact("hotel", "facilities", "destinations", "hotelStars", "users", "hotelFacilities", "hotelUsers", "hotelImages"));
     }
@@ -227,10 +240,6 @@ class HotelController extends Controller
 
 
         return redirect()->route("cpanel.hotels.index")->withToastSuccess("Hotel updated successfully");
-
-
-
-
     }
 
     /**
@@ -242,53 +251,63 @@ class HotelController extends Controller
     public function destroy($id)
     {
 
-        $hotel = Hotel::findOrFail($id);
+        $hotel = Hotel::where("id",$id)->where("created_by",auth()->user()->id)->first();
+
+        if (!$hotel) {
+            return redirect()->route("cpanel.hotels.index")->withToastError("Hotel not found");
+        }
 
         $hotel->delete();
 
         return redirect()->route("cpanel.hotels.index")->withToastSuccess("Hotel deleted successfully");
     }
 
-    public function releaseStatusUpdate($release_status,$hotel_id){
+    public function releaseStatusUpdate($release_status, $hotel_id)
+    {
 
-        $hotel=Hotel::findOrFail($hotel_id);
+        if (auth()->user()->hasRole("admin")) {
+            $hotel = Hotel::findOrFail($hotel_id);
 
-        $releaseStatus=ReleaseStatus::where("code",$release_status)->first();
+            $releaseStatus = ReleaseStatus::where("code", $release_status)->first();
 
-        if(!$releaseStatus){
-            return redirect()->route("cpanel.hotels.index")->withToastError("Release status not found");
+            if (!$releaseStatus) {
+                return redirect()->route("cpanel.hotels.index")->withToastError("Release status not found");
+            }
+
+            $hotel->update([
+                "release_status" => $releaseStatus->code
+            ]);
+
+            return redirect()->route("cpanel.hotels.index")->withToastSuccess("Release status updated successfully");
+        } else {
+            return redirect()->route("cpanel.hotels.index")->withToastError("You are not authorized to do this action");
         }
-
-        $hotel->update([
-            "release_status"=>$releaseStatus->code
-        ]);
-
-        return redirect()->route("cpanel.hotels.index")->withToastSuccess("Release status updated successfully");
     }
 
-    public function hotelFacilities(Request $request){
+    public function hotelFacilities(Request $request)
+    {
 
         $request->validate([
-            "hotel_id"=>"required|exists:hotels,id",
+            "hotel_id" => "required|exists:hotels,id",
         ]);
 
-        $hotel=Hotel::findOrFail($request->hotel_id);
+        $hotel = Hotel::findOrFail($request->hotel_id);
 
-        $facilities=$hotel->facilities;
+        $facilities = $hotel->facilities;
 
         return response()->json($facilities);
     }
 
-    public function hotelRooms(Request $request){
+    public function hotelRooms(Request $request)
+    {
 
         $request->validate([
-            "hotel_id"=>"required|exists:hotels,id",
+            "hotel_id" => "required|exists:hotels,id",
         ]);
 
-        $rooms=Room::where("hotel_id",$request->hotel_id)->get(["id","title"]);
+        $rooms = Room::where("hotel_id", $request->hotel_id)->get(["id", "title"]);
 
 
         return response()->json($rooms);
-
     }
 }

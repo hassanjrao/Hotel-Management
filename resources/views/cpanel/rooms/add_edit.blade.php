@@ -206,8 +206,9 @@
                                                 </td>
                                                 <td>
                                                     <input required type="number" min="0"
-                                                        onkeyup="maxRoomsAllowed(this,{{ $loop->index }})" class="form-control"
-                                                        name="total_closing_rooms[]" value="{{ $closingDate->total_rooms }}">
+                                                        onkeyup="maxRoomsAllowed(this,{{ $loop->index }})"
+                                                        class="form-control" name="total_closing_rooms[]"
+                                                        value="{{ $closingDate->total_rooms }}">
 
                                                 </td>
                                                 <td>
@@ -255,37 +256,45 @@
                         </div>
 
 
-                        <div class="row mb-4">
+                        @if (auth()->user()->hasRole('admin'))
 
 
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <label class="form-label" for="label">Release <span
-                                        class="text-danger">*</span></label>
-                                @if ($room)
-                                    <x-release-component :code="$room->release_status" />
-                                @else
-                                    <x-release-component :code="null" />
-                                @endif
+                            <div class="row mb-4">
+
+
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <label class="form-label" for="label">Release <span
+                                            class="text-danger">*</span></label>
+                                    @if ($room)
+                                        <x-release-component :code="$room->release_status" />
+                                    @else
+                                        <x-release-component :code="null" />
+                                    @endif
+
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-12 mt-4">
+
+                                    @php
+                                        $checked = '';
+                                        if ($room) {
+                                            $checked = $room->home_page == 1 ? 'checked' : '';
+                                        }
+                                    @endphp
+
+                                    <x-home-page :checked=$checked></x-home-page>
+                                </div>
+
 
                             </div>
 
-                            <div class="col-lg-6 col-md-6 col-sm-12 mt-4">
+                            @else
 
-                                @php
-                                    $checked = '';
-                                    if ($room) {
-                                        $checked = $room->home_page == 1 ? 'checked' : '';
-                                    }
-                                @endphp
+                            <input type="hidden" name="release_status" value="awaiting">
+                            <input type="hidden" name="home_page" value="0">
 
-                                <x-home-page :checked=$checked></x-home-page>
+                        @endif
 
-
-                            </div>
-
-
-
-                        </div>
 
                         <div class="row mb-4">
                             <div class="col-12">

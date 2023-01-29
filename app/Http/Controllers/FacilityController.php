@@ -53,7 +53,8 @@ class FacilityController extends Controller
 
         Facility::create([
             "name"=>$request->name,
-            "image"=>$imageName
+            "image"=>$imageName,
+            "created_by"=>auth()->user()->id
         ]);
 
         return redirect()->back()->with("success","Facility created successfully");

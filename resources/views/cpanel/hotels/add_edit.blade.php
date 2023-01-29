@@ -116,19 +116,26 @@
                             </div>
 
 
-                            <div class="col-3">
+                            @if (auth()->user()->hasRole('admin'))
 
-                                <label class="form-label" for="label">Hotel User<span
-                                        class="text-danger">*</span></label>
+                                <div class="col-3">
 
-                                @if ($hotel)
-                                    <x-users name="hotel_users" required multiple :selected="$hotelUsers" :users=$users></x-users>
-                                @else
-                                    <x-users name="hotel_users" required multiple :users=$users></x-users>
-                                @endif
+                                    <label class="form-label" for="label">Hotel User<span
+                                            class="text-danger">*</span></label>
 
-                            </div>
+                                    @if ($hotel)
+                                        <x-users name="hotel_users" required multiple :selected="$hotelUsers" :users=$users>
+                                        </x-users>
+                                    @else
+                                        <x-users name="hotel_users" required multiple :users=$users></x-users>
+                                    @endif
 
+                                </div>
+                            @else
+                                <input type="hidden" name="hotel_users[]" value="{{ auth()->user()->id }}">
+
+
+                            @endif
 
 
 
@@ -175,8 +182,8 @@
 
                                 <label class="form-label" for="label">Longtitude<span
                                         class="text-danger">*</span></label>
-                                <input required type="text" value="{{ $hotel ? $hotel->lng : '' }}" class="form-control"
-                                    id="lng" name="lng">
+                                <input required type="text" value="{{ $hotel ? $hotel->lng : '' }}"
+                                    class="form-control" id="lng" name="lng">
 
                             </div>
 
@@ -186,32 +193,40 @@
                         <div class="row mb-4">
 
 
-                            <div class="col-6">
-                                <label class="form-label" for="label">Release <span
-                                        class="text-danger">*</span></label>
-                                @if ($hotel)
-                                    <x-release-component :code="$hotel->release_status" />
-                                @else
-                                    <x-release-component :code="null" />
-                                @endif
+                            @if (auth()->user()->hasRole('admin'))
 
-                            </div>
+                                <div class="col-6">
+                                    <label class="form-label" for="label">Release <span
+                                            class="text-danger">*</span></label>
+                                    @if ($hotel)
+                                        <x-release-component :code="$hotel->release_status" />
+                                    @else
+                                        <x-release-component :code="null" />
+                                    @endif
 
-                            <div class="col-6 mt-4">
+                                </div>
+                            @else
+                                <input type="hidden" name="release_status" value="awaiting">
 
-                                @php
-                                    $checked = '';
-                                    if ($hotel) {
-                                        $checked = $hotel->home_page == 1 ? 'checked' : '';
-                                    }
-                                @endphp
+                            @endif
 
-                                <x-home-page :checked=$checked></x-home-page>
+                            @if (auth()->user()->hasRole('admin'))
+                                <div class="col-6 mt-4">
+
+                                    @php
+                                        $checked = '';
+                                        if ($hotel) {
+                                            $checked = $hotel->home_page == 1 ? 'checked' : '';
+                                        }
+                                    @endphp
+
+                                    <x-home-page :checked=$checked></x-home-page>
 
 
-                            </div>
-
-
+                                </div>
+                            @else
+                                <input type="hidden" name="home_page" value="0">
+                            @endif
 
                         </div>
 
@@ -310,8 +325,5 @@
 
 
         })
-
-
-     
     </script>
 @endsection

@@ -89,6 +89,7 @@ class DestinationController extends Controller
             "release_status"=>$request->release_status,
             "home_page"=>$request->home_page,
             "image"=>$imageName,
+            "created_by"=>auth()->user()->id
         ]);
 
         return redirect()->route("cpanel.destinations.index")->withToastSuccess("Destination created successfully");

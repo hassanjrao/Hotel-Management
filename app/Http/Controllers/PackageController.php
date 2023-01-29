@@ -15,7 +15,7 @@ class PackageController extends Controller
 
     public function __construct()
     {
-        $this->weekDays=$this->weekDays();
+        $this->weekDays = $this->weekDays();
     }
 
     /**
@@ -25,8 +25,15 @@ class PackageController extends Controller
      */
     public function index()
     {
+        $userHotels=auth()->user()->hotels->pluck("id")->toArray();
 
-        $packages=Package::latest()->with("packageDays")->get();
+        if (auth()->user()->hasRole("admin")) {
+            $packages = Package::latest()->with("packageDays")->get();
+        } else {
+            $packages = Package::latest()->with("packageDays")->whereHas("hotels", function ($q) use ($userHotels){
+                $q->whereIN("hotel_id", $userHotels);
+            })->get();
+        }
 
         return view("cpanel.packages.index", compact("packages"));
     }
@@ -38,14 +45,15 @@ class PackageController extends Controller
      */
     public function create()
     {
-        $hotels=Hotel::latest()->get();
+        $hotels = Hotel::latest()->get();
 
-        $package=null;
+        $package = null;
 
-        $days=$this->weekDays;
+        $days = $this->weekDays;
 
+        // $hotel_id=auth()->user()->hotels->pluck("id")->toArray();
 
-        return view("cpanel.packages.add_edit", compact("package", "hotels","days"));
+        return view("cpanel.packages.add_edit", compact("package", "hotels", "days"));
     }
 
     /**
@@ -57,35 +65,35 @@ class PackageController extends Controller
     public function store(Request $request)
     {
 
-        $weekDaysCodes=array_column($this->weekDays, "code");
+        $weekDaysCodes = array_column($this->weekDays, "code");
 
         $request->validate([
-            "name"=>"required",
-            "hotel_ids"=>"required",
-            "days"=>"required|array",
-            "check_in_day"=>"nullable|in:".implode(",", $weekDaysCodes),
-            "check_out_day"=>"nullable|in:".implode(",", $weekDaysCodes),
-            "max_nights"=>"nullable|gt:min_nights",
-            "min_nights"=>"nullable|lt:max_nights",
+            "name" => "required",
+            "hotel_ids" => "required",
+            "days" => "required|array",
+            "check_in_day" => "nullable|in:" . implode(",", $weekDaysCodes),
+            "check_out_day" => "nullable|in:" . implode(",", $weekDaysCodes),
+            "max_nights" => "nullable|gt:min_nights",
+            "min_nights" => "nullable|lt:max_nights",
         ]);
 
 
 
-        $package=Package::create([
-            "name"=>$request->name,
-            "check_in_day"=>$request->check_in_day,
-            "check_out_day"=>$request->check_out_day,
-            "min_nights"=>$request->min_nights,
-            "max_nights"=>$request->max_nights,
-            "created_by"=>auth()->user()->id,
+        $package = Package::create([
+            "name" => $request->name,
+            "check_in_day" => $request->check_in_day,
+            "check_out_day" => $request->check_out_day,
+            "min_nights" => $request->min_nights,
+            "max_nights" => $request->max_nights,
+            "created_by" => auth()->user()->id,
         ]);
 
-        $packageDaysData=[];
+        $packageDaysData = [];
 
-        foreach($request->days as $day){
-            $packageDaysData[]=[
-                "package_id"=>$package->id,
-                "day"=>$day,
+        foreach ($request->days as $day) {
+            $packageDaysData[] = [
+                "package_id" => $package->id,
+                "day" => $day,
             ];
         }
 
@@ -94,7 +102,6 @@ class PackageController extends Controller
         $package->hotels()->attach($request->hotel_ids);
 
         return redirect()->route("cpanel.packages.index")->withToastSuccess("success", "Package created successfully");
-
     }
 
     /**
@@ -116,15 +123,15 @@ class PackageController extends Controller
      */
     public function edit($id)
     {
-        $hotels=Hotel::latest()->get();
+        $hotels = Hotel::latest()->get();
 
-        $days=$this->weekDays;
+        $days = $this->weekDays;
 
-        $package=Package::with("packageDays")->findOrFail($id);
-        $packageHotels=$package->hotels->pluck("id")->toArray();
-        $selectedDays=$package->packageDays->pluck("day")->toArray();
+        $package = Package::with("packageDays")->findOrFail($id);
+        $packageHotels = $package->hotels->pluck("id")->toArray();
+        $selectedDays = $package->packageDays->pluck("day")->toArray();
 
-        return view("cpanel.packages.add_edit", compact("package", "hotels","days", "packageHotels", "selectedDays"));
+        return view("cpanel.packages.add_edit", compact("package", "hotels", "days", "packageHotels", "selectedDays"));
     }
 
     /**
@@ -136,34 +143,34 @@ class PackageController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $package=Package::findOrFail($id);
+        $package = Package::findOrFail($id);
 
-        $weekDaysCodes=array_column($this->weekDays, "code");
+        $weekDaysCodes = array_column($this->weekDays, "code");
 
         $request->validate([
-            "name"=>"required",
-            "hotel_ids"=>"required",
-            "days"=>"required|array",
-            "check_in_day"=>"nullable|in:".implode(",", $weekDaysCodes),
-            "check_out_day"=>"nullable|in:".implode(",", $weekDaysCodes),
-            "max_nights"=>"nullable|gt:min_nights",
-            "min_nights"=>"nullable|lt:max_nights",
+            "name" => "required",
+            "hotel_ids" => "required",
+            "days" => "required|array",
+            "check_in_day" => "nullable|in:" . implode(",", $weekDaysCodes),
+            "check_out_day" => "nullable|in:" . implode(",", $weekDaysCodes),
+            "max_nights" => "nullable|gt:min_nights",
+            "min_nights" => "nullable|lt:max_nights",
         ]);
 
         $package->update([
-            "name"=>$request->name,
-            "check_in_day"=>$request->check_in_day,
-            "check_out_day"=>$request->check_out_day,
-            "min_nights"=>$request->min_nights,
-            "max_nights"=>$request->max_nights,
-            "created_by"=>auth()->user()->id,
+            "name" => $request->name,
+            "check_in_day" => $request->check_in_day,
+            "check_out_day" => $request->check_out_day,
+            "min_nights" => $request->min_nights,
+            "max_nights" => $request->max_nights,
+            "created_by" => auth()->user()->id,
         ]);
 
-        $packageDaysData=[];
-        foreach($request->days as $day){
-            $packageDaysData[]=[
-                "package_id"=>$package->id,
-                "day"=>$day,
+        $packageDaysData = [];
+        foreach ($request->days as $day) {
+            $packageDaysData[] = [
+                "package_id" => $package->id,
+                "day" => $day,
             ];
         }
 
@@ -174,7 +181,6 @@ class PackageController extends Controller
         $package->hotels()->sync($request->hotel_ids);
 
         return redirect()->route("cpanel.packages.index")->withToastSuccess("success", "Package updated successfully");
-
     }
 
     /**
@@ -185,7 +191,7 @@ class PackageController extends Controller
      */
     public function destroy($id)
     {
-        $package=Package::findOrFail($id);
+        $package = Package::findOrFail($id);
 
         $package->delete();
 

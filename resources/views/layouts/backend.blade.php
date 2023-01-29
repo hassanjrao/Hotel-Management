@@ -5,10 +5,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-    <title>@yield('page-title', 'Admin Panel Hotel Management')</title>
+    @php
+        $userRole = ucWords(
+            Auth::user()
+                ->getRoleNames()
+                ->first(),
+        );
+
+    @endphp
+
+    <title>@yield('page-title', '{{ $userRole }} Panel Hotel Management')</title>
 
     <meta name="description"
-        content="OneUI - Bootstrap 5 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
+        content="OneUI - Bootstrap 5 {{ $userRole }} Template &amp; UI Framework created by pixelcave and published on Themeforest">
     <meta name="author" content="pixelcave">
     <meta name="robots" content="noindex, nofollow">
 
@@ -163,7 +172,8 @@
                     <span class="smini-visible">
                         <i class="fa fa-circle-notch text-primary"></i>
                     </span>
-                    <span class="smini-hide fs-5 tracking-wider">Admin<span class="fw-normal"> Panel</span></span>
+                    <span class="smini-hide fs-5 tracking-wider">{{ $userRole }}<span class="fw-normal">
+                            Panel</span></span>
                 </a>
                 <!-- END Logo -->
 
@@ -202,7 +212,7 @@
                         </li>
 
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->segment(2)=='hotels' ? ' active' : '' }}"
+                            <a class="nav-main-link{{ request()->segment(2) == 'hotels' ? ' active' : '' }}"
                                 href="{{ route('cpanel.hotels.index') }}">
                                 <i class="nav-main-link-icon fa fa-hotel"></i>
                                 <span class="nav-main-link-name">Hotels</span>
@@ -210,7 +220,7 @@
                         </li>
 
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->segment(2)=='rooms' ? ' active' : '' }}"
+                            <a class="nav-main-link{{ request()->segment(2) == 'rooms' ? ' active' : '' }}"
                                 href="{{ route('cpanel.rooms.index') }}">
                                 <i class="nav-main-link-icon fa fa-bed"></i>
                                 <span class="nav-main-link-name">Rooms</span>
@@ -218,16 +228,18 @@
                         </li>
 
 
-                        <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->segment(2)=='users' ? ' active' : '' }}"
-                                href="{{ route('cpanel.users.index') }}">
-                                <i class="nav-main-link-icon fa fa-users"></i>
-                                <span class="nav-main-link-name">Users</span>
-                            </a>
-                        </li>
 
+                        @if (auth()->user()->hasRole('admin'))
+                            <li class="nav-main-item">
+                                <a class="nav-main-link{{ request()->segment(2) == 'users' ? ' active' : '' }}"
+                                    href="{{ route('cpanel.users.index') }}">
+                                    <i class="nav-main-link-icon fa fa-users"></i>
+                                    <span class="nav-main-link-name">Users</span>
+                                </a>
+                            </li>
+                        @endif
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->segment(2)=='facilities' ? ' active' : '' }}"
+                            <a class="nav-main-link{{ request()->segment(2) == 'facilities' ? ' active' : '' }}"
                                 href="{{ route('cpanel.facilities.index') }}">
                                 <i class="nav-main-link-icon si si-settings"></i>
                                 <span class="nav-main-link-name">Facilities</span>
@@ -235,7 +247,7 @@
                         </li>
 
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->segment(2)=='destinations' ? ' active' : '' }}"
+                            <a class="nav-main-link{{ request()->segment(2) == 'destinations' ? ' active' : '' }}"
                                 href="{{ route('cpanel.destinations.index') }}">
                                 <i class="nav-main-link-icon fa fa-plane"></i>
                                 <span class="nav-main-link-name">Destiantions</span>
@@ -244,7 +256,7 @@
 
 
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->segment(2)=='packages' ? ' active' : '' }}"
+                            <a class="nav-main-link{{ request()->segment(2) == 'packages' ? ' active' : '' }}"
                                 href="{{ route('cpanel.packages.index') }}">
                                 <i class="nav-main-link-icon fas fa-fw fa-suitcase"></i>
                                 <span class="nav-main-link-name">Packages</span>
@@ -252,7 +264,7 @@
                         </li>
 
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->segment(2)=='taxes' ? ' active' : '' }}"
+                            <a class="nav-main-link{{ request()->segment(2) == 'taxes' ? ' active' : '' }}"
                                 href="{{ route('cpanel.taxes.index') }}">
                                 <i class="nav-main-link-icon fa fa-percent"></i>
                                 <span class="nav-main-link-name">Taxes</span>
@@ -262,7 +274,7 @@
 
 
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->segment(2)=='rates' ? ' active' : '' }}"
+                            <a class="nav-main-link{{ request()->segment(2) == 'rates' ? ' active' : '' }}"
                                 href="{{ route('cpanel.rates.index') }}">
                                 <i class="nav-main-link-icon fas fa-fw fa-calendar"></i>
                                 <span class="nav-main-link-name">Rates</span>
@@ -270,7 +282,7 @@
                         </li>
 
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->segment(2)=='coupons' ? ' active' : '' }}"
+                            <a class="nav-main-link{{ request()->segment(2) == 'coupons' ? ' active' : '' }}"
                                 href="{{ route('cpanel.coupons.index') }}">
                                 <i class="nav-main-link-icon fa fa-tags"></i>
                                 <span class="nav-main-link-name">Coupons</span>
@@ -278,7 +290,7 @@
                         </li>
 
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->segment(2)=='activities' ? ' active' : '' }}"
+                            <a class="nav-main-link{{ request()->segment(2) == 'activities' ? ' active' : '' }}"
                                 href="{{ route('cpanel.activities.index') }}">
                                 <i class="nav-main-link-icon fas fa-fw fa-ticket-alt"></i>
                                 <span class="nav-main-link-name">Activities</span>
@@ -287,7 +299,7 @@
 
 
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->segment(2)=='services' ? ' active' : '' }}"
+                            <a class="nav-main-link{{ request()->segment(2) == 'services' ? ' active' : '' }}"
                                 href="{{ route('cpanel.services.index') }}">
                                 <i class="nav-main-link-icon fas fa-fw fa-thumbs-up"></i>
                                 <span class="nav-main-link-name">Services</span>

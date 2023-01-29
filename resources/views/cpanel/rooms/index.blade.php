@@ -70,16 +70,20 @@
                                         <div class="btn-group me-2 mb-2" role="group"
                                             aria-label="Icons Outline Text group">
 
-                                            <a href="{{ route('cpanel.rooms.release', ['release_status' => 'published', 'room_id' => $room->id]) }}"
-                                                class="btn btn-xs btn-outline-success " data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Publish">
-                                                <i class="fa fa-check"></i>
-                                            </a>
-                                            <a href="{{ route('cpanel.rooms.release', ['release_status' => 'not_published', 'room_id' => $room->id]) }}"
-                                                class="btn btn-xs btn-outline-warning" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Un Publish">
-                                                <i class="fa fa-ban"></i>
-                                            </a>
+
+                                            @if (auth()->user()->hasRole('admin'))
+                                                <a href="{{ route('cpanel.rooms.release', ['release_status' => 'published', 'room_id' => $room->id]) }}"
+                                                    class="btn btn-xs btn-outline-success " data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" title="Publish">
+                                                    <i class="fa fa-check"></i>
+                                                </a>
+                                                <a href="{{ route('cpanel.rooms.release', ['release_status' => 'not_published', 'room_id' => $room->id]) }}"
+                                                    class="btn btn-xs btn-outline-warning" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" title="Un Publish">
+                                                    <i class="fa fa-ban"></i>
+                                                </a>
+                                            @endif
+
                                             {{-- <a href="#" class="btn btn-xs btn-outline-secondary">
                                                 <i class="fa fa-archive"></i>
                                             </a> --}}
@@ -90,8 +94,7 @@
                                             </a>
 
                                             <form id="form-{{ $room->id }}"
-                                                action="{{ route('cpanel.rooms.destroy', $room->id) }}"
-                                                method="POST">
+                                                action="{{ route('cpanel.rooms.destroy', $room->id) }}" method="POST">
                                                 @method('DELETE')
                                                 @csrf
 

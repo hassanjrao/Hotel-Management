@@ -20,7 +20,12 @@ class RoomController extends Controller
      */
     public function index()
     {
-        $rooms = Room::latest()->with("hotel", "roomImages", "facilities", "createdBy", "releaseStatus")->get();
+        if (auth()->user()->hasRole("admin")) {
+
+            $rooms = Room::latest()->with("hotel", "roomImages", "facilities", "createdBy", "releaseStatus")->get();
+        } else {
+            $rooms = Room::latest()->with("hotel", "roomImages", "facilities", "createdBy", "releaseStatus")->where("created_by", auth()->user()->id)->get();
+        }
 
         return view("cpanel.rooms.index", compact("rooms"));
     }
@@ -36,9 +41,16 @@ class RoomController extends Controller
 
         $facilities = Facility::latest()->get();
 
-        $hotels = Hotel::latest()->get();
+        if (auth()->user()->hasRole("admin")) {
 
+            $hotels = Hotel::latest()->get();
+        } else {
+            $hotels = Hotel::whereHas("users", function ($q) {
+                $q->where("user_id", auth()->user()->id);
+            })->latest()->get();
+        }
         $closingDates = [];
+
 
         return view("cpanel.rooms.add_edit", compact("room", "facilities", "hotels", "closingDates"));
     }
@@ -267,18 +279,23 @@ class RoomController extends Controller
     public function releaseStatusUpdate($release_status, $room_id)
     {
 
-        $room = Room::findOrFail($room_id);
 
-        $releaseStatus = ReleaseStatus::where("code", $release_status)->first();
+        if (auth()->user()->hasRole("admin")) {
+            $room = Room::findOrFail($room_id);
 
-        if (!$releaseStatus) {
-            return redirect()->route("cpanel.rooms.index")->withToastError("Release status not found");
+            $releaseStatus = ReleaseStatus::where("code", $release_status)->first();
+
+            if (!$releaseStatus) {
+                return redirect()->route("cpanel.rooms.index")->withToastError("Release status not found");
+            }
+
+            $room->update([
+                "release_status" => $releaseStatus->code
+            ]);
+
+            return redirect()->route("cpanel.rooms.index")->withToastSuccess("Release status updated successfully");
+        } else {
+            return redirect()->route("cpanel.rooms.index")->withToastError("You are not authorized to perform this action");
         }
-
-        $room->update([
-            "release_status" => $releaseStatus->code
-        ]);
-
-        return redirect()->route("cpanel.rooms.index")->withToastSuccess("Release status updated successfully");
     }
 }

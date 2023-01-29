@@ -43,23 +43,31 @@
                             <div class="col-lg-4 col-md-4 col-sm-12">
 
                                 <label class="form-label" for="label">Name<span class="text-danger">*</span></label>
-                                <input required type="text" value="{{ $package ? $package->name : '' }}" class="form-control"
-                                    id="name" name="name">
+                                <input required type="text" value="{{ $package ? $package->name : '' }}"
+                                    class="form-control" id="name" name="name">
                             </div>
 
-                            <div class="col-lg-4 col-md-4 col-sm-12">
 
-                                <label class="form-label" for="label">Hotel<span class="text-danger">*</span></label>
+                            @if (auth()->user()->hasRole('admin'))
+                                <div class="col-lg-4 col-md-4 col-sm-12">
 
-                                @if (!$package)
-                                    @php
-                                        $packageHotels = [];
-                                    @endphp
-                                @endif
+                                    <label class="form-label" for="label">Hotel<span class="text-danger">*</span></label>
 
-                                <x-hotels name="hotel_ids" required :selected="$packageHotels" multiple :hotels=$hotels></x-hotels>
+                                    @if (!$package)
+                                        @php
+                                            $packageHotels = [];
+                                        @endphp
+                                    @endif
 
-                            </div>
+                                    <x-hotels name="hotel_ids" required :selected="$packageHotels" multiple :hotels=$hotels>
+                                    </x-hotels>
+
+                                </div>
+
+                            @else
+                                <input type="hidden" name="hotel_ids[]" value="{{ auth()->user()->hotels()->pluck('id') }}">
+
+                            @endif
 
                             <div class="col-lg-4 col-md-4 col-sm-12">
 
@@ -95,7 +103,7 @@
                                     @php
                                         $selectedCheckInDay = [];
                                     @endphp
-                                    @else
+                                @else
                                     @php
                                         $selectedCheckInDay = [$package->check_in_day];
                                     @endphp
@@ -113,7 +121,7 @@
                                     @php
                                         $selectedCheckOutDay = [];
                                     @endphp
-                                    @else
+                                @else
                                     @php
                                         $selectedCheckOutDay = [$package->check_out_day];
                                     @endphp
@@ -177,9 +185,6 @@
 
     <!-- Page JS Helpers (CKEditor 5 plugins) -->
     <script>
-
-
-
         function maxNights(value) {
 
             if (parseInt(value) <= parseInt($("#min_nights").val())) {
@@ -212,10 +217,5 @@
             }
 
         }
-
-
-
-
-
     </script>
 @endsection
