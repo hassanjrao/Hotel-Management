@@ -31,6 +31,9 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 
+Route::get('/', function () {
+    return view('client.home');
+});
 
 
 Route::middleware(["auth"])->prefix("cpanel")->name("cpanel.")->group(function () {
