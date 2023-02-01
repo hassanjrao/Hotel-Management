@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AcitivityController;
 use App\Http\Controllers\CouponController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\HotelController;
@@ -34,13 +35,8 @@ Auth::routes();
 
 Route::middleware(["auth"])->prefix("cpanel")->name("cpanel.")->group(function () {
 
-    Route::get("dashboard", function () {
-        return view("cpanel.dashboard");
-    })->name("dashboard");
+    Route::resource("dashboard", DashboardController::class);
 
-    Route::get("/", function () {
-        return view("cpanel.dashboard");
-    });
 
     Route::resource("users", UserController::class);
 

@@ -2,7 +2,7 @@
 
 @php
     $addEdit = isset($destination) ? 'Edit' : 'Add';
-    $addUpdate= isset($destination) ? 'Update' : 'Add';
+    $addUpdate = isset($destination) ? 'Update' : 'Add';
 @endphp
 @section('page-title', $addEdit . ' destination')
 @section('content')
@@ -28,8 +28,8 @@
                         @csrf
                         @method('PUT')
                     @else
-
-                        <form action="{{ route('cpanel.destinations.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('cpanel.destinations.store') }}" method="POST"
+                            enctype="multipart/form-data">
 
                             @csrf
                 @endif
@@ -86,7 +86,7 @@
                             <div class="col-12">
 
                                 <label class="form-label" for="label">Video URL</label>
-                                <input  type="url" value="{{ $destination ? $destination->video_url : '' }}"
+                                <input type="url" value="{{ $destination ? $destination->video_url : '' }}"
                                     class="form-control" id="video_url" name="video_url">
 
                             </div>
@@ -102,7 +102,8 @@
 
                             <div class="col-6">
 
-                                <label class="form-label" for="label">Longtitude<span class="text-danger">*</span></label>
+                                <label class="form-label" for="label">Longtitude<span
+                                        class="text-danger">*</span></label>
                                 <input required type="text" value="{{ $destination ? $destination->lng : '' }}"
                                     class="form-control" id="lng" name="lng">
 
@@ -114,20 +115,26 @@
                         <div class="row mb-4">
                             <div class="col-6">
                                 <label class="form-label" for="label">Description</label>
-                                <textarea  type="text" class="form-control" id="description" name="description">{{ $destination ? $destination->description : '' }}</textarea>
+                                <textarea type="text" class="form-control" id="description" name="description">{{ $destination ? $destination->description : '' }}</textarea>
                             </div>
 
 
-                            <div class="col-6 mt-4">
-                                <label class="form-label" for="label">Release <span class="text-danger">*</span></label>
-                                @if ($destination)
-                                    <x-release-component :code="$destination->release" />
-                                @else
-                                    <x-release-component :code="null" />
-                                @endif
+                            @if (auth()->user()->hasRole('admin'))
 
-                            </div>
+                                <div class="col-6 mt-4">
+                                    <label class="form-label" for="label">Release <span
+                                            class="text-danger">*</span></label>
+                                    @if ($destination)
+                                        <x-release-component :code="$destination->release" />
+                                    @else
+                                        <x-release-component :code="null" />
+                                    @endif
 
+                                </div>
+                            @else
+                                <input type="hidden" name="release_status" value="awaiting">
+
+                            @endif
 
 
                         </div>
@@ -141,24 +148,27 @@
                             </div>
 
 
-                            <div class="col-6 mt-4">
+                            @if (auth()->user()->hasRole('admin'))
+                                <div class="col-6 mt-4">
 
-                                <div class="form-check">
-                                    @php
-                                        $checked = '';
-                                        if ($destination) {
-                                            $checked = $destination->home_page == 1 ?  'checked' : '';
-                                        }
-                                    @endphp
-                                    <input class="form-check-input" type="checkbox"
-                                         {{ $checked }}
-                                        id="homePage" name="home_page">
-                                    <label class="form-check-label" for="homePage">
-                                        Home Page
-                                    </label>
+                                    <div class="form-check">
+                                        @php
+                                            $checked = '';
+                                            if ($destination) {
+                                                $checked = $destination->home_page == 1 ? 'checked' : '';
+                                            }
+                                        @endphp
+                                        <input class="form-check-input" type="checkbox" {{ $checked }}
+                                            id="homePage" name="home_page">
+                                        <label class="form-check-label" for="homePage">
+                                            Home Page
+                                        </label>
+                                    </div>
+
                                 </div>
-
-                            </div>
+                            @else
+                                <input type="hidden" name="home_page" value="0">
+                            @endif
 
 
 

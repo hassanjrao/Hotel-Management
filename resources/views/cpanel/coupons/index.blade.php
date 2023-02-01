@@ -65,17 +65,18 @@
 
                                         <div class="btn-group me-2 mb-2" role="group"
                                             aria-label="Icons Outline Text group">
-
-                                            <a href="{{ route('cpanel.coupons.release', ['release_status' => 'published', 'coupon_id' => $coupon->id]) }}"
-                                                class="btn btn-xs btn-outline-success " data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Publish">
-                                                <i class="fa fa-check"></i>
-                                            </a>
-                                            <a href="{{ route('cpanel.coupons.release', ['release_status' => 'not_published', 'coupon_id' => $coupon->id]) }}"
-                                                class="btn btn-xs btn-outline-warning" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Un Publish">
-                                                <i class="fa fa-ban"></i>
-                                            </a>
+                                            @if (auth()->user()->hasRole('admin'))
+                                                <a href="{{ route('cpanel.coupons.release', ['release_status' => 'published', 'coupon_id' => $coupon->id]) }}"
+                                                    class="btn btn-xs btn-outline-success " data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" title="Publish">
+                                                    <i class="fa fa-check"></i>
+                                                </a>
+                                                <a href="{{ route('cpanel.coupons.release', ['release_status' => 'not_published', 'coupon_id' => $coupon->id]) }}"
+                                                    class="btn btn-xs btn-outline-warning" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" title="Un Publish">
+                                                    <i class="fa fa-ban"></i>
+                                                </a>
+                                            @endif
                                             {{-- <a href="#" class="btn btn-xs btn-outline-secondary">
                                                 <i class="fa fa-archive"></i>
                                             </a> --}}

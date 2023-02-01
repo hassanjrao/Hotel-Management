@@ -15,9 +15,9 @@ class FacilityController extends Controller
      */
     public function index()
     {
-        $facilities=Facility::latest()->get();
+        $facilities = Facility::latest()->get();
 
-        return view("cpanel.facilities.index",compact("facilities"));
+        return view("cpanel.facilities.index", compact("facilities"));
     }
 
     /**
@@ -39,25 +39,25 @@ class FacilityController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            "name"=>"required",
-            "image"=>"nullable|image"
+            "name" => "required",
+            "image" => "nullable|image"
         ]);
 
-        $imageName=null;
+        $imageName = null;
 
-        if($request->hasFile("image")){
-            $image=$request->file("image")->store("facilities");
+        if ($request->hasFile("image")) {
+            $image = $request->file("image")->store("facilities");
 
-            $imageName=basename($image);
+            $imageName = basename($image);
         }
 
         Facility::create([
-            "name"=>$request->name,
-            "image"=>$imageName,
-            "created_by"=>auth()->user()->id
+            "name" => $request->name,
+            "image" => $imageName,
+            "created_by" => auth()->user()->id
         ]);
 
-        return redirect()->back()->with("success","Facility created successfully");
+        return redirect()->back()->with("success", "Facility created successfully");
     }
 
     /**
@@ -80,10 +80,18 @@ class FacilityController extends Controller
     public function edit($id)
     {
 
-        $facility=Facility::findOrFail($id);
 
-        return view("cpanel.facilities.edit",compact("facility"));
 
+        $facility = Facility::findOrFail($id);
+
+        if (
+            $facility->created_by == auth()->user()->id ||
+            auth()->user()->hasRole('admin')
+        ) {
+            return view("cpanel.facilities.edit", compact("facility"));
+        } else {
+            return redirect()->route("cpanel.facilities.index")->with("error", "You are not authorized to edit this facility");
+        }
     }
 
     /**
@@ -96,37 +104,34 @@ class FacilityController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            "name"=>"required",
-            "image"=>"nullable|image"
+            "name" => "required",
+            "image" => "nullable|image"
         ]);
 
-        $facility=Facility::findOrFail($id);
+        $facility = Facility::findOrFail($id);
 
 
 
-        if($request->hasFile("image")){
+        if ($request->hasFile("image")) {
 
-            if($facility->image){
-                Storage::delete("facilities/".$facility->image);
+            if ($facility->image) {
+                Storage::delete("facilities/" . $facility->image);
             }
 
-            $image=$request->file("image")->store("facilities");
+            $image = $request->file("image")->store("facilities");
 
-            $imageName=basename($image);
+            $imageName = basename($image);
 
             $facility->update([
-                "image"=>$imageName
+                "image" => $imageName
             ]);
-
         }
 
         $facility->update([
-            "name"=>$request->name
+            "name" => $request->name
         ]);
 
-        return redirect()->route("cpanel.facilities.index")->with("success","Facility updated successfully");
-
-
+        return redirect()->route("cpanel.facilities.index")->with("success", "Facility updated successfully");
     }
 
     /**
@@ -137,14 +142,14 @@ class FacilityController extends Controller
      */
     public function destroy($id)
     {
-        $facility=Facility::findOrFail($id);
+        $facility = Facility::findOrFail($id);
 
-        if($facility->image){
-            Storage::delete("facilities/".$facility->image);
+        if ($facility->image) {
+            Storage::delete("facilities/" . $facility->image);
         }
 
         $facility->delete();
 
-        return redirect()->back()->with("success","Facility deleted successfully");
+        return redirect()->back()->with("success", "Facility deleted successfully");
     }
 }

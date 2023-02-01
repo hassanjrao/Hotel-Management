@@ -12,9 +12,10 @@
                 ->first(),
         );
 
+
     @endphp
 
-    <title>@yield('page-title', '{{ $userRole }} Panel Hotel Management')</title>
+    <title>@yield('page-title', "{{ $userRole }} Panel Hotel Management")</title>
 
     <meta name="description"
         content="OneUI - Bootstrap 5 {{ $userRole }} Template &amp; UI Framework created by pixelcave and published on Themeforest">
@@ -204,8 +205,8 @@
                 <div class="content-side">
                     <ul class="nav-main">
                         <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('cpanel') || request()->is('cpanel/dashboard') || request()->is('dashboard') ? ' active' : '' }}"
-                                href="{{ route('cpanel.dashboard') }}">
+                            <a class="nav-main-link{{ request()->segment(2)=='dashboard' ? ' active' : '' }}"
+                                href="{{ route('cpanel.dashboard.index') }}">
                                 <i class="nav-main-link-icon fas fa-fw fa-tachometer-alt"></i>
                                 <span class="nav-main-link-name">Dashboard</span>
                             </a>
@@ -241,7 +242,7 @@
                         <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->segment(2) == 'facilities' ? ' active' : '' }}"
                                 href="{{ route('cpanel.facilities.index') }}">
-                                <i class="nav-main-link-icon si si-settings"></i>
+                                <i class="nav-main-link-icon fas fa-fw fa-wrench"></i>
                                 <span class="nav-main-link-name">Facilities</span>
                             </a>
                         </li>
@@ -263,14 +264,15 @@
                             </a>
                         </li>
 
-                        <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->segment(2) == 'taxes' ? ' active' : '' }}"
-                                href="{{ route('cpanel.taxes.index') }}">
-                                <i class="nav-main-link-icon fa fa-percent"></i>
-                                <span class="nav-main-link-name">Taxes</span>
-                            </a>
-                        </li>
-
+                        @if (auth()->user()->hasRole('admin'))
+                            <li class="nav-main-item">
+                                <a class="nav-main-link{{ request()->segment(2) == 'taxes' ? ' active' : '' }}"
+                                    href="{{ route('cpanel.taxes.index') }}">
+                                    <i class="nav-main-link-icon fa fa-percent"></i>
+                                    <span class="nav-main-link-name">Taxes</span>
+                                </a>
+                            </li>
+                        @endif
 
 
                         <li class="nav-main-item">
@@ -289,22 +291,22 @@
                             </a>
                         </li>
 
-                        <li class="nav-main-item">
+                        {{-- <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->segment(2) == 'activities' ? ' active' : '' }}"
                                 href="{{ route('cpanel.activities.index') }}">
                                 <i class="nav-main-link-icon fas fa-fw fa-ticket-alt"></i>
                                 <span class="nav-main-link-name">Activities</span>
                             </a>
-                        </li>
+                        </li> --}}
 
 
-                        <li class="nav-main-item">
+                        {{-- <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->segment(2) == 'services' ? ' active' : '' }}"
                                 href="{{ route('cpanel.services.index') }}">
                                 <i class="nav-main-link-icon fas fa-fw fa-thumbs-up"></i>
                                 <span class="nav-main-link-name">Services</span>
                             </a>
-                        </li>
+                        </li> --}}
 
 
 

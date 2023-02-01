@@ -50,26 +50,32 @@
                                     <td>{{ $ind + 1 }}</td>
                                     <td>{{ $facility->name }}</td>
                                     <td>
-                                        <img src="{{ asset('storage/facilities/' . $facility->image) }}" alt="" width="100px"
-                                            height="100px">
+                                        <img src="{{ asset('storage/facilities/' . $facility->image) }}" alt=""
+                                            width="100px" height="100px">
                                     </td>
                                     <td>{{ $facility->created_at }}</td>
                                     <td>{{ $facility->updated_at }}</td>
 
                                     <td>
-                                        <div class="btn-group" role="group" aria-label="Horizontal Primary">
 
-                                            <a href="{{ route('cpanel.facilities.edit', $facility->id) }}"
-                                                class="btn btn-sm btn-alt-primary">Edit</a>
-                                            <form id="form-{{ $facility->id }}"
-                                                action="{{ route('cpanel.facilities.destroy', $facility->id) }}" method="POST">
-                                                @method('DELETE')
-                                                @csrf
-                                                <input type="button" onclick="confirmDelete({{ $facility->id }})"
-                                                    class="btn btn-sm btn-alt-danger" value="Delete">
+                                        @if (
+                                            $facility->created_by == auth()->user()->id ||
+                                                auth()->user()->hasRole('admin'))
+                                            <div class="btn-group" role="group" aria-label="Horizontal Primary">
 
-                                            </form>
-                                        </div>
+                                                <a href="{{ route('cpanel.facilities.edit', $facility->id) }}"
+                                                    class="btn btn-sm btn-alt-primary">Edit</a>
+                                                <form id="form-{{ $facility->id }}"
+                                                    action="{{ route('cpanel.facilities.destroy', $facility->id) }}"
+                                                    method="POST">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <input type="button" onclick="confirmDelete({{ $facility->id }})"
+                                                        class="btn btn-sm btn-alt-danger" value="Delete">
+
+                                                </form>
+                                            </div>
+                                        @endif
                                     </td>
 
                                 </tr>

@@ -148,7 +148,7 @@
                                                 <div class="col-6">
                                                     <label class="form-label" for="label">Role</label>
 
-                                                    <select class="form-select" name="role" id="role_id">
+                                                    <select required class="form-select" name="role" id="role_id">
                                                         <option value="">Select Role</option>
                                                         @foreach ($roles as $role)
                                                             <option value="{{ $role->name }}">{{ $role->name }}

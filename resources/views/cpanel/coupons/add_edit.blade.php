@@ -158,15 +158,23 @@
 
                             </div>
 
-                            <div class="col-lg-3 col-md-3 col-sm-12">
+                            @if (auth()->user()->hasRole('admin'))
 
-                                <label class="form-label" for="label">Release <span class="text-danger">*</span></label>
-                                @if ($coupon)
-                                    <x-release-component :code="$coupon->release_status" />
-                                @else
-                                    <x-release-component :code="null" />
-                                @endif
-                            </div>
+                                <div class="col-lg-3 col-md-3 col-sm-12">
+
+                                    <label class="form-label" for="label">Release <span
+                                            class="text-danger">*</span></label>
+                                    @if ($coupon)
+                                        <x-release-component :code="$coupon->release_status" />
+                                    @else
+                                        <x-release-component :code="null" />
+                                    @endif
+                                </div>
+                            @else
+
+                                <input type="hidden" name="release_status" value="awaiting">
+
+                            @endif
 
                         </div>
 

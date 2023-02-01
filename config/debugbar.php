@@ -4,7 +4,7 @@ return [
 
     /*
      |--------------------------------------------------------------------------
-     | Debugbar Settings
+    | Debugbar Settings
      |--------------------------------------------------------------------------
      |
      | Debugbar is enabled by default, when debug is set to true in app.php.
@@ -18,6 +18,7 @@ return [
     'except' => [
         'telescope*',
         'horizon*',
+        'upload*',
     ],
 
     /*

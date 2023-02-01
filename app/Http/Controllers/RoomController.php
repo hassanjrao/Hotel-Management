@@ -24,7 +24,12 @@ class RoomController extends Controller
 
             $rooms = Room::latest()->with("hotel", "roomImages", "facilities", "createdBy", "releaseStatus")->get();
         } else {
-            $rooms = Room::latest()->with("hotel", "roomImages", "facilities", "createdBy", "releaseStatus")->where("created_by", auth()->user()->id)->get();
+
+            $userHotels = auth()->user()->hotels->pluck("id")->toArray();
+
+            $rooms = Room::latest()->whereHas("hotel", function ($q) use ($userHotels) {
+                $q->whereIN("hotel_id", $userHotels);
+            })->with("hotel", "roomImages", "facilities", "createdBy", "releaseStatus")->get();
         }
 
         return view("cpanel.rooms.index", compact("rooms"));
@@ -242,15 +247,19 @@ class RoomController extends Controller
 
         $closingDateData = [];
 
-        foreach ($request->start_dates as $ind => $start_date) {
-            $closingDateData[] = [
-                "room_id" => $room->id,
-                "start_date" => $start_date,
-                "end_date" => $request->end_dates[$ind],
-                "total_rooms" => $request->total_closing_rooms[$ind],
-                "created_at" => now(),
-                "updated_at" => now()
-            ];
+
+        if ($request->start_dates) {
+
+            foreach ($request->start_dates as $ind => $start_date) {
+                $closingDateData[] = [
+                    "room_id" => $room->id,
+                    "start_date" => $start_date,
+                    "end_date" => $request->end_dates[$ind],
+                    "total_rooms" => $request->total_closing_rooms[$ind],
+                    "created_at" => now(),
+                    "updated_at" => now()
+                ];
+            }
         }
 
         RoomClosingDate::insert($closingDateData);

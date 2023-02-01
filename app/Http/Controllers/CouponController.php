@@ -16,7 +16,24 @@ class CouponController extends Controller
      */
     public function index()
     {
-        $coupons=Coupon::latest()->with(["releaseStatus"])->get();
+        if (auth()->user()->hasRole("admin")) {
+
+            $coupons = Coupon::latest()->with(["releaseStatus"])->get();
+        } else {
+
+            $userHotels = auth()->user()->hotels->pluck("id")->toArray();
+
+            $hotelRooms = Room::latest()->whereHas("hotel", function ($q) use ($userHotels) {
+                $q->whereIN("hotel_id", $userHotels);
+            })->get();
+
+            $roomIds = $hotelRooms->pluck("id")->toArray();
+
+            $coupons = Coupon::latest()->with(["releaseStatus"])->whereHas("rooms", function ($q) use ($roomIds) {
+                $q->whereIN("room_id", $roomIds);
+            })->get();
+        }
+
 
         return view("cpanel.coupons.index", compact("coupons"));
     }
@@ -29,9 +46,18 @@ class CouponController extends Controller
     public function create()
     {
 
-        $coupon=null;
+        $coupon = null;
 
-        $rooms=Room::latest()->get();
+        if (auth()->user()->hasRole("admin")) {
+            $rooms = Room::latest()->get();
+        } else {
+
+            $userHotels = auth()->user()->hotels->pluck("id")->toArray();
+
+            $rooms = Room::latest()->whereHas("hotel", function ($q) use ($userHotels) {
+                $q->whereIN("hotel_id", $userHotels);
+            })->get();
+        }
 
         return view("cpanel.coupons.add_edit", compact("coupon", "rooms"));
     }
@@ -62,7 +88,7 @@ class CouponController extends Controller
             "code" => $request->code,
             "discount" => $request->discount,
             "discount_type" => $request->discount_type,
-            "one_time" => $request->one_time== "on" ? 1 : 0,
+            "one_time" => $request->one_time == "on" ? 1 : 0,
             "valid_from" => $request->valid_from ? date("Y-m-d : H:i:s", strtotime($request->valid_from)) : NULL,
             "valid_to" => $request->valid_to ? date("Y-m-d : H:i:s", strtotime($request->valid_to)) : NULL,
             "release_status" => $request->release_status,
@@ -95,14 +121,13 @@ class CouponController extends Controller
      */
     public function edit($id)
     {
-        $coupon=Coupon::findOrFail($id);
+        $coupon = Coupon::findOrFail($id);
 
-        $couponRooms=$coupon->rooms->pluck("id")->toArray();
+        $couponRooms = $coupon->rooms->pluck("id")->toArray();
 
-        $rooms=Room::latest()->get();
+        $rooms = Room::latest()->get();
 
         return view("cpanel.coupons.add_edit", compact("coupon", "rooms", "couponRooms"));
-
     }
 
     /**
@@ -117,7 +142,7 @@ class CouponController extends Controller
 
         $request->validate([
             "title" => "required",
-            "code" => "required|unique:coupons,code,".$id,
+            "code" => "required|unique:coupons,code," . $id,
             "discount" => "nullable|numeric",
             "discount_type" => "nullable|in:fixed,percentage",
             "one_time" => "nullable",
@@ -134,7 +159,7 @@ class CouponController extends Controller
             "code" => $request->code,
             "discount" => $request->discount,
             "discount_type" => $request->discount_type,
-            "one_time" => $request->one_time== "on" ? 1 : 0,
+            "one_time" => $request->one_time == "on" ? 1 : 0,
             "valid_from" => $request->valid_from ? date("Y-m-d : H:i:s", strtotime($request->valid_from)) : NULL,
             "valid_to" => $request->valid_to ? date("Y-m-d : H:i:s", strtotime($request->valid_to)) : NULL,
             "release_status" => $request->release_status,
@@ -145,7 +170,6 @@ class CouponController extends Controller
         }
 
         return redirect()->route("cpanel.coupons.index")->withToastSuccess("Coupon updated successfully");
-
     }
 
     /**
@@ -156,7 +180,7 @@ class CouponController extends Controller
      */
     public function destroy($id)
     {
-        $coupon=Coupon::findOrFail($id);
+        $coupon = Coupon::findOrFail($id);
 
         $coupon->delete();
 
@@ -166,18 +190,23 @@ class CouponController extends Controller
     public function releaseStatusUpdate($release_status, $coupon_id)
     {
 
-        $coupon = Coupon::findOrFail($coupon_id);
 
-        $releaseStatus = ReleaseStatus::where("code", $release_status)->first();
+        if (auth()->user()->hasRole("admin")) {
+            $coupon = Coupon::findOrFail($coupon_id);
 
-        if (!$releaseStatus) {
-            return redirect()->route("cpanel.coupons.index")->withToastError("Release status not found");
+            $releaseStatus = ReleaseStatus::where("code", $release_status)->first();
+
+            if (!$releaseStatus) {
+                return redirect()->route("cpanel.coupons.index")->withToastError("Release status not found");
+            }
+
+            $coupon->update([
+                "release_status" => $releaseStatus->code
+            ]);
+
+            return redirect()->route("cpanel.coupons.index")->withToastSuccess("Release status updated successfully");
+        } else {
+            return redirect()->route("cpanel.coupons.index")->withToastError("You are not authorized to perform this action");
         }
-
-        $coupon->update([
-            "release_status" => $releaseStatus->code
-        ]);
-
-        return redirect()->route("cpanel.coupons.index")->withToastSuccess("Release status updated successfully");
     }
 }

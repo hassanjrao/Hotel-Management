@@ -16,9 +16,9 @@ class DestinationController extends Controller
      */
     public function index()
     {
-        $destinations=Destination::latest()->get();
+        $destinations = Destination::latest()->get();
 
-        return view("cpanel.destinations.index",compact("destinations"));
+        return view("cpanel.destinations.index", compact("destinations"));
     }
 
     /**
@@ -28,9 +28,9 @@ class DestinationController extends Controller
      */
     public function create()
     {
-        $destination=null;
+        $destination = null;
 
-        return view("cpanel.destinations.add_edit",compact("destination"));
+        return view("cpanel.destinations.add_edit", compact("destination"));
     }
 
     /**
@@ -45,55 +45,54 @@ class DestinationController extends Controller
         // dd($request->all());
 
         $request->validate([
-            "name"=>"required",
-            "title"=>"required",
-            "sub_title"=>"nullable",
-            "title_tag"=>"required",
-            "main_text"=>"nullable",
-            "video_url"=>"nullable|url",
-            "lat"=>"required",
-            "lng"=>"required",
-            "description"=>"nullable",
-            "release_status"=>"nullable|exists:release_statuses,code",
-            "home_page"=>"nullable",
-            "image"=>"nullable",
+            "name" => "required",
+            "title" => "required",
+            "sub_title" => "nullable",
+            "title_tag" => "required",
+            "main_text" => "nullable",
+            "video_url" => "nullable|url",
+            "lat" => "required",
+            "lng" => "required",
+            "description" => "nullable",
+            "release_status" => "nullable|exists:release_statuses,code",
+            "home_page" => "nullable",
+            "image" => "nullable",
         ]);
 
 
-        $request->home_page=$request->home_page =="on" ? 1 : 0;
+        $request->home_page = $request->home_page == "on" ? 1 : 0;
 
-        $imageName=NULL;
+        $imageName = NULL;
 
 
-        if($request->hasFile("image")){
+        if ($request->hasFile("image")) {
             $request->validate([
-                "image"=>"image|mimes:jpg,jpeg,png|max:2048"
+                "image" => "image|mimes:jpg,jpeg,png|max:2048"
             ]);
 
-            $image=$request->file("image")->store("destinations");
+            $image = $request->file("image")->store("destinations");
 
-            $imageName=basename($image);
+            $imageName = basename($image);
         }
 
 
         Destination::create([
-            "name"=>$request->name,
-            "title"=>$request->title,
-            "sub_title"=>$request->sub_title,
-            "title_tag"=>$request->title_tag,
-            "main_text"=>$request->main_text,
-            "video_url"=>$request->video_url,
-            "lat"=>$request->lat,
-            "lng"=>$request->lng,
-            "description"=>$request->description,
-            "release_status"=>$request->release_status,
-            "home_page"=>$request->home_page,
-            "image"=>$imageName,
-            "created_by"=>auth()->user()->id
+            "name" => $request->name,
+            "title" => $request->title,
+            "sub_title" => $request->sub_title,
+            "title_tag" => $request->title_tag,
+            "main_text" => $request->main_text,
+            "video_url" => $request->video_url,
+            "lat" => $request->lat,
+            "lng" => $request->lng,
+            "description" => $request->description,
+            "release_status" => $request->release_status,
+            "home_page" => $request->home_page,
+            "image" => $imageName,
+            "created_by" => auth()->user()->id
         ]);
 
         return redirect()->route("cpanel.destinations.index")->withToastSuccess("Destination created successfully");
-
     }
 
     /**
@@ -114,7 +113,15 @@ class DestinationController extends Controller
      */
     public function edit(Destination $destination)
     {
-        return view("cpanel.destinations.add_edit",compact("destination"));
+        if (
+            $destination->created_by == auth()->user()->id ||
+            auth()->user()->hasRole('admin')
+        ) {
+
+            return view("cpanel.destinations.add_edit", compact("destination"));
+        } else {
+            return redirect()->route("cpanel.destinations.index")->withToastError("You are not authorized to edit this destination");
+        }
     }
 
     /**
@@ -128,56 +135,55 @@ class DestinationController extends Controller
     {
 
         $request->validate([
-            "name"=>"required",
-            "title"=>"required",
-            "sub_title"=>"nullable",
-            "title_tag"=>"required",
-            "main_text"=>"nullable",
-            "video_url"=>"nullable|url",
-            "lat"=>"required",
-            "lng"=>"required",
-            "description"=>"nullable",
-            "release_status"=>"nullable|exists:release_statuses,code",
-            "home_page"=>"nullable",
-            "image"=>"nullable",
+            "name" => "required",
+            "title" => "required",
+            "sub_title" => "nullable",
+            "title_tag" => "required",
+            "main_text" => "nullable",
+            "video_url" => "nullable|url",
+            "lat" => "required",
+            "lng" => "required",
+            "description" => "nullable",
+            "release_status" => "nullable|exists:release_statuses,code",
+            "home_page" => "nullable",
+            "image" => "nullable",
         ]);
 
-        $imageName=$destination->image;
+        $imageName = $destination->image;
 
-        $request->home_page=$request->home_page =="on" ? 1 : 0;
+        $request->home_page = $request->home_page == "on" ? 1 : 0;
 
-        if($request->hasFile("image")){
+        if ($request->hasFile("image")) {
 
-            if($destination->image){
-                Storage::delete("destinations/".$destination->image);
+            if ($destination->image) {
+                Storage::delete("destinations/" . $destination->image);
             }
 
             $request->validate([
-                "image"=>"image|mimes:jpg,jpeg,png|max:2048"
+                "image" => "image|mimes:jpg,jpeg,png|max:2048"
             ]);
 
-            $image=$request->file("image")->store("destinations");
+            $image = $request->file("image")->store("destinations");
 
-            $imageName=basename($image);
+            $imageName = basename($image);
         }
 
         $destination->update([
-            "name"=>$request->name,
-            "title"=>$request->title,
-            "sub_title"=>$request->sub_title,
-            "title_tag"=>$request->title_tag,
-            "main_text"=>$request->main_text,
-            "video_url"=>$request->video_url,
-            "lat"=>$request->lat,
-            "lng"=>$request->lng,
-            "description"=>$request->description,
-            "release_status"=>$request->release_status,
-            "home_page"=>$request->home_page ?? 0,
-            "image"=>$imageName,
+            "name" => $request->name,
+            "title" => $request->title,
+            "sub_title" => $request->sub_title,
+            "title_tag" => $request->title_tag,
+            "main_text" => $request->main_text,
+            "video_url" => $request->video_url,
+            "lat" => $request->lat,
+            "lng" => $request->lng,
+            "description" => $request->description,
+            "release_status" => $request->release_status,
+            "home_page" => $request->home_page ?? 0,
+            "image" => $imageName,
         ]);
 
         return redirect()->route("cpanel.destinations.index")->withToastSuccess("Destination updated successfully");
-
     }
 
     /**
@@ -188,8 +194,8 @@ class DestinationController extends Controller
      */
     public function destroy(Destination $destination)
     {
-        if($destination->image){
-            Storage::delete("destinations/".$destination->image);
+        if ($destination->image) {
+            Storage::delete("destinations/" . $destination->image);
         }
 
         $destination->delete();
@@ -198,20 +204,25 @@ class DestinationController extends Controller
     }
 
 
-    public function releaseStatusUpdate($release_status,$destination_id){
+    public function releaseStatusUpdate($release_status, $destination_id)
+    {
 
-        $destination=Destination::findOrFail($destination_id);
+        if (auth()->user()->hasRole("admin")) {
+            $destination = Destination::findOrFail($destination_id);
 
-        $releaseStatus=ReleaseStatus::where("code",$release_status)->first();
+            $releaseStatus = ReleaseStatus::where("code", $release_status)->first();
 
-        if(!$releaseStatus){
-            return redirect()->route("cpanel.destinations.index")->withToastError("Release status not found");
+            if (!$releaseStatus) {
+                return redirect()->route("cpanel.destinations.index")->withToastError("Release status not found");
+            }
+
+            $destination->update([
+                "release_status" => $releaseStatus->code
+            ]);
+
+            return redirect()->route("cpanel.destinations.index")->withToastSuccess("Destination release status updated successfully");
+        } else {
+            return redirect()->route("cpanel.destinations.index")->withToastError("You are not authorized to perform this action");
         }
-
-        $destination->update([
-            "release_status"=>$releaseStatus->code
-        ]);
-
-        return redirect()->route("cpanel.destinations.index")->withToastSuccess("Destination release status updated successfully");
     }
 }

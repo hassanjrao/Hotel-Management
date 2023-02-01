@@ -63,9 +63,11 @@
                                     </x-hotels>
 
                                 </div>
-
                             @else
-                                <input type="hidden" name="hotel_ids[]" value="{{ auth()->user()->hotels()->pluck('id') }}">
+                                @foreach (auth()->user()->hotels->pluck('id')->toArray() as $hotel_id)
+                                    <input type="hidden" name="hotel_ids[]" value="{{ $hotel_id }}">
+                                @endforeach
+
 
                             @endif
 

@@ -17,7 +17,12 @@ class RateController extends Controller
      */
     public function index()
     {
-        $rates = Rate::latest()->With(["room", "package"])->get();
+        if (auth()->user()->hasRole("admin")) {
+
+            $rates = Rate::latest()->With(["room", "package"])->get();
+        } else {
+            $rates = Rate::latest()->With(["room", "package"])->whereIn("hotel_id", auth()->user()->hotels->pluck("id")->toArray())->get();
+        }
 
         return view('cpanel.rates.index', compact('rates'));
     }
@@ -30,9 +35,17 @@ class RateController extends Controller
     public function create()
     {
         $rate = null;
-        $hotels = Hotel::latest()->get();
+        $hotels = Hotel::latest()->whereHas("users", function ($q) {
+            $q->where("user_id", auth()->user()->id);
+        })->get();
 
-        $packages = Package::latest()->get();
+
+        $userHotels=auth()->user()->hotels->pluck("id")->toArray();
+
+
+        $packages = Package::latest()->whereHas("hotels", function ($q) use ($userHotels){
+            $q->whereIN("hotel_id", $userHotels);
+        })->get();
 
         $rooms = [];
 
@@ -113,7 +126,7 @@ class RateController extends Controller
         }
 
 
-        return redirect()->route('cpanel.rates.index')->withToastSuccess( 'Rate created successfully');
+        return redirect()->route('cpanel.rates.index')->withToastSuccess('Rate created successfully');
     }
 
     /**
@@ -137,7 +150,7 @@ class RateController extends Controller
     {
         $rate = Rate::findOrFail($id);
 
-        $childrenRates= $rate->childrenRates()->get();
+        $childrenRates = $rate->childrenRates()->get();
 
         $rateHotels = [$rate->hotel_id];
 
@@ -230,7 +243,7 @@ class RateController extends Controller
             $rate->childrenRates()->createMany($dataForChildrenRates);
         }
 
-        return redirect()->route('cpanel.rates.index')->withToastSuccess( 'Rate updated successfully');
+        return redirect()->route('cpanel.rates.index')->withToastSuccess('Rate updated successfully');
     }
 
     /**
@@ -246,7 +259,6 @@ class RateController extends Controller
 
         $rate->delete();
 
-        return redirect()->route('cpanel.rates.index')->withToastSuccess( 'Rate deleted successfully');
-
+        return redirect()->route('cpanel.rates.index')->withToastSuccess('Rate deleted successfully');
     }
 }

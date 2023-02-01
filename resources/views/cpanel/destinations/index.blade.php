@@ -78,39 +78,45 @@
 
                                             {{-- <button type="button" class="btn btn-primary w-100" data-bs-toggle="tooltip"
                                                 data-bs-placement="top" title="Top Tooltip">Top</button> --}}
-
-                                            <a href="{{ route('cpanel.destinations.release', ['release_status' => 'published', 'destination_id' => $destination->id]) }}"
-                                                class="btn btn-xs btn-outline-success " data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Publish">
-                                                <i class="fa fa-check"></i>
-                                            </a>
-                                            <a href="{{ route('cpanel.destinations.release', ['release_status' => 'not_published', 'destination_id' => $destination->id]) }}"
-                                                class="btn btn-xs btn-outline-warning" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Un Publish">
-                                                <i class="fa fa-ban"></i>
-                                            </a>
+                                            @if (auth()->user()->hasRole('admin'))
+                                                <a href="{{ route('cpanel.destinations.release', ['release_status' => 'published', 'destination_id' => $destination->id]) }}"
+                                                    class="btn btn-xs btn-outline-success " data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" title="Publish">
+                                                    <i class="fa fa-check"></i>
+                                                </a>
+                                                <a href="{{ route('cpanel.destinations.release', ['release_status' => 'not_published', 'destination_id' => $destination->id]) }}"
+                                                    class="btn btn-xs btn-outline-warning" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" title="Un Publish">
+                                                    <i class="fa fa-ban"></i>
+                                                </a>
+                                            @endif
                                             {{-- <a href="#" class="btn btn-xs btn-outline-secondary">
                                                 <i class="fa fa-archive"></i>
                                             </a> --}}
+
+                                            @if (
+                                                $destination->created_by == auth()->user()->id ||
+                                                    auth()->user()->hasRole('admin'))
                                             <a href={{ route('cpanel.destinations.edit', ['destination' => $destination]) }}
                                                 class="btn btn-xs btn-outline-primary" data-bs-toggle="tooltip"
                                                 data-bs-placement="top" title="Edit">
                                                 <i class="fa fa-edit"></i>
                                             </a>
 
-                                            <form id="form-{{ $destination->id }}"
-                                                action="{{ route('cpanel.destinations.destroy', $destination->id) }}"
-                                                method="POST">
-                                                @method('DELETE')
-                                                @csrf
+                                                <form id="form-{{ $destination->id }}"
+                                                    action="{{ route('cpanel.destinations.destroy', $destination->id) }}"
+                                                    method="POST">
+                                                    @method('DELETE')
+                                                    @csrf
 
-                                                <a onclick="confirmDelete({{ $destination->id }})"
-                                                    class="btn btn-xs btn-outline-danger" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" title="Delete">
-                                                    <i class="fa fa-trash-alt"></i>
-                                                </a>
+                                                    <a onclick="confirmDelete({{ $destination->id }})"
+                                                        class="btn btn-xs btn-outline-danger" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Delete">
+                                                        <i class="fa fa-trash-alt"></i>
+                                                    </a>
 
-                                            </form>
+                                                </form>
+                                            @endif
 
                                         </div>
 
