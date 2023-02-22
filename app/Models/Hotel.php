@@ -44,4 +44,16 @@ class Hotel extends Model
     public function rooms(){
         return $this->hasMany(Room::class);
     }
+
+    public function rates(){
+        return $this->hasMany(Rate::class);
+    }
+
+    public static function publishedHotels(){
+        return self::where("release_status","PUBLISHED")->get();
+    }
+
+    public static function topHotels(){
+        return self::where("home_page",1)->where("release_status","published")->latest()->take(6)->get();
+    }
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\CouponController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\FacilityController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HotelController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\RateController;
@@ -31,9 +32,7 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 
-Route::get('/', function () {
-    return view('client.home');
-});
+Route::get('/', [HomeController::class,"index"] )->name('home');
 
 
 Route::middleware(["auth"])->prefix("cpanel")->name("cpanel.")->group(function () {

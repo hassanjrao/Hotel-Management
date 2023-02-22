@@ -1,373 +1,229 @@
-(function($) {
-    'use strict';
-
-    // Mean Menu JS
-    jQuery('.mean-menu').meanmenu({ 
-        meanScreenWidth: "991"
-    });
-
-    // Navbar Area
-    $(window).on('scroll', function() {
-        if ($(this).scrollTop() >150){  
-            $('.navbar-area').addClass("sticky-nav");
-        }
-        else{
-            $('.navbar-area').removeClass("sticky-nav");
-        }
-    });
-
-    // Sidebar Modal JS
-	$(".burger-menu").on('click',  function() {
-		$('.sidebar-modal').toggleClass('active');
+var pms_isMobile = false;
+var pms_isDesktop = false;
+function screenSize(){
+	//mobile detection
+	if(Modernizr.mq('only all and(max-width: 991px)'))
+		pms_isMobile = true;
+	else
+		pms_isMobile = false;
+	
+	//tablette and mobile detection
+	if(Modernizr.mq('only all and(max-width: 1024px)'))
+		pms_isDesktop = false;
+	else
+		pms_isDesktop = true;
+}
+function pms_getNumericInput(input){
+	var val = parseFloat(input.val().replace(/[^\d.-]/g, ''));
+	return (val > 0) ? val : 0;
+}
+function pms_setNumericInput(input, val){
+	if(val > 0) input.val(Math.round(val*100)/100); else input.val(0);
+}
+/* =====================================================================
+ * DOCUMENT READY
+ * =====================================================================
+ */
+$(document).ready(function(){
+	'use strict';
+	//RESIZE EVENTS
+	$(window).resize(function(){
+		screenSize();
+		Modernizr.addTest('ipad', function(){
+			return !!navigator.userAgent.match(/iPad/i);
+		});
 	});
-	$(".sidebar-modal-close-btn").on('click',  function() {
-		$('.sidebar-modal').removeClass('active');
-    });
-
-    // Others Option For Responsive JS
-	$(".side-nav-responsive .dot-menu").on("click", function(){
-		$(".side-nav-responsive .container .container").toggleClass("active");
-    });
+	screenSize();
     
-    // Services Slider 
-    $('.services-slider').owlCarousel({
-        loop: true,
-        margin: 30,
-        nav: true,
-        dots: false,
-        autoplay: true,
-        autoplayHoverPause: true,
-        responsive:{
-            0:{
-                items: 1
-            },
-            768:{
-                items: 2
-            },
-            1000:{
-                items: 3
-            }
-        },
-        navText: [
-            "<i class='bx bx-chevron-left'></i>",
-            "<i class='bx bx-chevron-right'></i>"
-        ],
-    })
-
-    // Room Slider 
-    $('.room-slider').owlCarousel({
-        loop: true,
-        margin: 30,
-        nav: false,
-        dots: true,
-        autoplay: true,
-        autoplayHoverPause: true,
-        responsive:{
-            0:{
-                items: 1
-            },
-            768:{
-                items: 2
-            },
-            1000:{
-                items: 3
-            }
-        },
-    })
-
-    // Testimonials Slider 
-    $('.testimonials-slider').owlCarousel({
-        loop: true,
-        margin: 30,
-        nav: true,
-        dots: false,
-        autoplay: true,
-        autoplayHoverPause: true,
-        responsive:{
-            0:{
-                items: 1
-            },
-            768:{
-                items: 2
-            },
-            1000:{
-                items: 3
-            }
-        },
-        navText: [
-            "<i class='bx bx-chevron-left'></i>",
-            "<i class='bx bx-chevron-right'></i>"
-        ],
-    })
-
-    
-    // Testimonials Slider Two
-    $('.testimonials-slider-two').owlCarousel({
-        loop: true,
-        items: 1,
-        margin: 30,
-        nav: false,
-        dots: true,
-        autoplay: true,
-        autoplayHoverPause: true,
-    })
-
-    // Testimonials Slider Three
-    $('.testimonials-slider-three').owlCarousel({
-        loop: true,
-        margin: 30,
-        nav: false,
-        dots: true,
-        autoplay: true,
-        autoplayHoverPause: true,
-        responsive:{
-            0:{
-                items: 1
-            },
-            768:{
-                items: 2
-            },
-            1000:{
-                items: 3
-            }
-        },
-    })
-
-    // Testimonials Slider Area
-    $('.testimonials-slider-area').owlCarousel({
-        loop: true,
-        items: 1,
-        margin: 30,
-        nav: false,
-        dots: true,
-        autoplay: true,
-        autoplayHoverPause: true,
-    })
-
-    // Team Slider 
-    $('.team-slider').owlCarousel({
-        loop: true,
-        margin: 30,
-        nav: true,
-        dots: false,
-        autoplay: true,
-        autoplayHoverPause: true,
-        responsive:{
-            0:{
-                items: 1
-            },
-            768:{
-                items: 2
-            },
-            1000:{
-                items: 3
-            }
-        },
-        navText: [
-            "<i class='bx bx-chevron-left'></i>",
-            "<i class='bx bx-chevron-right'></i>"
-        ],
-    })
-   
-    // Team Slider Two
-    $('.team-slider-two').owlCarousel({
-        loop: true,
-        margin: 30,
-        nav: false,
-        dots: true,
-        autoplay: true,
-        autoplayHoverPause: true,
-        responsive:{
-            0:{
-                items: 1
-            },
-            768:{
-                items: 2
-            },
-            1000:{
-                items: 3
-            }
-        },
-    })
-
-    // Room Details Slider 
-    $('.room-details-slider').owlCarousel({
-        loop: true,
-        margin: 30,
-        items: 1,
-        nav: true,
-        dots: false,
-        autoplay: true,
-        autoplayHoverPause: true,
-        navText: [
-            "<i class='bx bx-chevron-left'></i>",
-            "<i class='bx bx-chevron-right'></i>"
-        ],
-    })
-
-    // Popup Gallery 
-    $('.gallery-view').magnificPopup({
-        delegate: 'a',
-        type: 'image',
-        tLoading: 'Loading image #%curr%...',
-        mainClass: 'mfp-img-mobile',
-        gallery: {
-            enabled: true,
-            navigateByImgClick: true,
-            preload: [0,1] 
-        }
-    });
-
-    // Tabs Single Page
-    $('.tab ul.tabs').addClass('active').find('> li:eq(0)').addClass('current');
-    $('.tab ul.tabs li a').on('click', function (g) {
-         var tab = $(this).closest('.tab'), 
-         index = $(this).closest('li').index();
-         tab.find('ul.tabs > li').removeClass('current');
-         $(this).closest('li').addClass('current');
-         tab.find('.tab_content').find('div.tabs_item').not('div.tabs_item:eq(' + index + ')').slideUp();
-         tab.find('.tab_content').find('div.tabs_item:eq(' + index + ')').slideDown();
-         g.preventDefault();
-    });
-
-    // FAQ Accordion JS
-	$('.accordion').find('.accordion-title').on('click', function(){
-		// Adds Active Class
-		$(this).toggleClass('active');
-		// Expand or Collapse This Panel
-		$(this).next().slideToggle('fast');
-		// Hide The Other Panels
-		$('.accordion-content').not($(this).next()).slideUp('fast');
-		// Removes Active Class From Other Titles
-		$('.accordion-title').not($(this)).removeClass('active');		
-    });
-
-    // Datetimepicker
-    $('#datetimepicker').datepicker();
-
-    // Datetimepicker
-    $('#datetimepicker-check').datepicker();
-
-    // WOW JS
-    new WOW().init();
-
-    // Nice Select JS
-    $('select').niceSelect();
-
-    // Back To Top Js
-    $('body').append('<div id="toTop" class="top-btn"><i class="bx bx-chevrons-up"></i></div>');
-    $(window).on('scroll',function () {
-         if ($(this).scrollTop() != 0) {
-             $('#toTop').fadeIn();
-         } else {
-             $('#toTop').fadeOut();
-         }
-    }); 
-    $('#toTop').on('click',function(){
-        $("html, body").animate({ scrollTop: 0 }, 1000);
-        return false;
-    });
-
-    // Count Time JS
-	function makeTimer() {
-		var endTime = new Date("October 30, 2022 17:00:00 PDT");			
-		var endTime = (Date.parse(endTime)) / 1000;
-		var now = new Date();
-		var now = (Date.parse(now) / 1000);
-		var timeLeft = endTime - now;
-		var days = Math.floor(timeLeft / 86400); 
-		var hours = Math.floor((timeLeft - (days * 86400)) / 3600);
-		var minutes = Math.floor((timeLeft - (days * 86400) - (hours * 3600 )) / 60);
-		var seconds = Math.floor((timeLeft - (days * 86400) - (hours * 3600) - (minutes * 60)));
-		if (hours < "10") { hours = "0" + hours; }
-		if (minutes < "10") { minutes = "0" + minutes; }
-		if (seconds < "10") { seconds = "0" + seconds; }
-		$("#days").html(days + "<span>Days</span>");
-		$("#hours").html(hours + "<span>Hours</span>");
-		$("#minutes").html(minutes + "<span>Minutes</span>");
-		$("#seconds").html(seconds + "<span>Seconds</span>");
+    /* =================================================================
+     * form placeholder for IE
+     * =================================================================
+     */
+	if(!Modernizr.input.placeholder){
+		$('[placeholder]').on('change',function(){
+			var input = $(this);
+			if(input.val() == input.attr('placeholder')){
+				input.val('');
+				input.removeClass('placeholder');
+			}
+		}).on('blur', function(){
+			var input = $(this);
+			if(input.val() == '' || input.val() == input.attr('placeholder')){
+				input.addClass('placeholder');
+				input.val(input.attr('placeholder'));
+			}
+		}).trigger('blur');
+		$('[placeholder]').parents('form').on('submit',function(){
+			$(this).find('[placeholder]').each(function(){
+				var input = $(this);
+				if(input.val() == input.attr('placeholder')){
+					input.val('');
+				}
+			})
+		});
 	}
-    setInterval(function() { makeTimer(); }, 300);
+    /* =================================================================
+     * MAGNIFIC POPUP
+     * =================================================================
+     */
+	if($('a.image-link').length){
+        $('a.image-link').magnificPopup({
+            type:'image',
+            mainClass: 'mfp-with-zoom',
+            gallery:{
+                enabled: true 
+            },
+            zoom: {
+                enabled: true
+            }
+        });
+	}
+    if($('.ajax-popup-link').length){
+        $('.ajax-popup-link').each(function(){
+            $(this).magnificPopup({
+                type: 'ajax',
+                ajax: {
+                    settings: {
+                        method: 'POST',
+                        data: $(this).data('params')
+                    }
+                }
+            });
+        });
+    }
+    /* =================================================================
+     * TOOLTIP
+     * =================================================================
+     */
+	$('.tips').tooltip({placement:'auto'});
+    
+    /* =================================================================
+     * ALERT
+     * =================================================================
+     */ 
+	$('.alert').delegate('button', 'click', function(){
+		$(this).parent().fadeOut('fast');
+	});
+	
+	/* =================================================================
+     * AJAX / FORM
+     * =================================================================
+     */
+    if($('form.ajax-form').length){
+        $.fn.clear = function(){
+            $(this)
+                .find('input').not('.noreset')
+                    .filter(':text, :password, :file, :hidden').val('').end()
+                    .filter(':checkbox, :radio').prop('checked', false).removeAttr('checked').end()
+                .end()
+                .find('textarea').not('.noreset').val('').end()
+                .find('select').not('.noreset').prop('selectedIndex', -1).prop('selected', false)
+                    .find('option:selected').removeAttr('selected');
 
-    // Subscribe form
-    $(".newsletter-form").validator().on("submit", function (event) {
-        if (event.isDefaultPrevented()) {
-            // Handle The Invalid Form...
-            formErrorSub();
-            submitMSGSub(false, "Please enter your email correctly");
-        } else {
-            // Everything Looks Good!
-            event.preventDefault();
+            return this;
+        };
+        function pms_sendAjaxForm(form, action, targetCont, refresh, clear, extraTarget, onload){
+            var posQuery = action.indexOf('?');
+            var extraData = '';
+            if(posQuery != -1){
+                extraData = action.substr(posQuery+1);
+                if(extraData != '') extraData = '&'+extraData;
+                action = action.substr(0, posQuery);
+            }
+            $.ajax({
+                url: action,
+                type: form.attr('method'),
+                data: form.serialize()+extraData,
+                success: function(response){
+                    if(onload != 1){
+						$('.field-notice',form).html('').hide().parent().removeClass('alert alert-danger');
+						$('.alert.alert-danger').html('').hide();
+						$('.alert.alert-success').html('').hide();
+                    }
+                    
+                    var response = $.parseJSON(response);
+                    
+                    if(targetCont != '') $(targetCont).removeClass('loading-ajax');
+                    
+                    if(response.error != '') $('.alert.alert-danger', form).html(response.error).slideDown();
+                    else if(response.redirect != '' && response.redirect != undefined) window.location.href = response.redirect;
+                    else if(refresh === true){
+                        var href = window.location.href;
+                        window.location = href.substr(0, href.lastIndexOf('#'));
+                     }
+                    if(response.success != ''){
+                        $('.alert.alert-success', form).html(response.success).slideDown();
+                        if(clear && response.error == '' && response.notices.length == 0)
+                            form.clear();
+                    }
+                    
+                    if(!$.isEmptyObject(response.notices)){
+                        if(targetCont != "") $(targetCont).hide();
+                        $.each(response.notices, function(field,notice){
+                            var elm = $('.field-notice[rel="'+field+'"]', form);
+                            if(elm.get(0) !== undefined) elm.html(notice).fadeIn('slow').parent().addClass('alert alert-danger');
+                        });
+                        $('.captcha_refresh', form).trigger('click');
+                    }else{
+                        if(targetCont != ''){
+                            $(targetCont).html(response.html);
+                            $('.open-popup-link').magnificPopup({
+                                type:'inline',
+                                midClick: true
+                            });
+                            $('.selectpicker').selectpicker('refresh');
+                        }
+                        if(extraTarget != '')
+                            $(extraTarget).html(response.extraHtml);
+                    }
+                    
+                    if($('.alert:visible', form).length){
+                        
+                        var scroll_1 = $('html, body').scrollTop();
+                        var scroll_2 = $('body').scrollTop();
+                        var scrolltop = scroll_1;
+                        if(scroll_1 == 0) scrolltop = scroll_2;
+                        
+                        var scrolltop2 = $('.alert:visible:first', form).offset().top - 80;
+                        if(scrolltop2 < scrolltop) $('html, body').animate({scrollTop: scrolltop2+'px'});
+                    }
+                } 
+            });
         }
-    });
-    function callbackFunction (resp) {
-        if (resp.result === "success") {
-            formSuccessSub();
-        }
-        else {
-            formErrorSub();
-        }
+        $('form.ajax-form').on('click change', '.sendAjaxForm', function(e){
+            e.defaultPrevented;
+            var elm = $(this);
+            var onload = elm.attr('data-sendOnload');
+            var tagName = elm.prop('tagName');
+            if((e.type == 'click' && ((tagName == 'INPUT' && (elm.attr('type') == 'submit' || elm.attr('type') == 'image')) || tagName == 'A' || tagName == 'BUTTON')) || e.type == 'change'){
+                var targetCont = elm.data('target');
+                var refresh = elm.data('refresh');
+                var clear = elm.data('clear');
+                if(targetCont != "") $(targetCont).html('').addClass('loading-ajax').show();
+                if(elm.data('action') !== undefined)
+                    pms_sendAjaxForm(elm.parents('form.ajax-form'), elm.data('action'), targetCont, refresh, clear, elm.data('extratarget'), onload);
+            }
+        });
+        $('.submitOnClick').on('click', function(e){
+            e.defaultPrevented;
+            $(this).parents('form').trigger('submit');
+            return false;
+        });
+        $('.sendAjaxForm[data-sendOnload="1"]').trigger('change');
     }
-    function formSuccessSub(){
-        $(".newsletter-form")[0].reset();
-        submitMSGSub(true, "Thank you for subscribing!");
-        setTimeout(function() {
-            $("#validator-newsletter").addClass('hide');
-        }, 4000)
+    if($('a.ajax-link').length){
+        $('a.ajax-link').on('click', function(e){
+            e.defaultPrevented;
+            var elm = $(this);
+            var href = elm.attr('href');
+            $.ajax({
+                url: elm.data('action'),
+                type: 'get',
+                success: function(response){
+                    if(href != '' && href != '#') $(location).attr('href', href);
+                } 
+            });
+            return false;
+        });
     }
-    function formErrorSub(){
-        $(".newsletter-form").addClass("animated shake");
-        setTimeout(function() {
-            $(".newsletter-form").removeClass("animated shake");
-        }, 1000)
-    }
-    function submitMSGSub(valid, msg){
-        if(valid){
-            var msgClasses = "validation-success";
-        } else {
-            var msgClasses = "validation-danger";
-        }
-        $("#validator-newsletter").removeClass().addClass(msgClasses).text(msg);
-    }
-        
-    // AJAX MailChimp
-    $(".newsletter-form").ajaxChimp({
-        url: "https://envyTheme.us20.list-manage.com/subscribe/post?u=60e1ffe2e8a68ce1204cd39a5&amp;id=42d6d188d9", // Your url MailChimp
-        callback: callbackFunction
-    });
-
-    // Preloader JS
-    jQuery(window).on('load',function(){
-        jQuery(".preloader").fadeOut(500);
-    });
-
-     // Switch Btn
-     $('body').append("<div class='switch-box'><label id='switch' class='switch'><input type='checkbox' onchange='toggleTheme()' id='slider'><span class='slider round'></span></label></div>");
-
-})(jQuery);
-
-// function to set a given theme/color-scheme
-function setTheme(themeName) {
-    localStorage.setItem('theme', themeName);
-    document.documentElement.className = themeName;
-}
-
-// function to toggle between light and dark theme
-function toggleTheme() {
-    if (localStorage.getItem('theme') === 'theme-dark') {
-        setTheme('theme-light');
-    } else {
-        setTheme('theme-dark');
-    }
-}
-
-// Immediately invoked function to set the theme on initial load
-(function () {
-    if (localStorage.getItem('theme') === 'theme-dark') {
-        setTheme('theme-dark');
-        document.getElementById('slider').checked = false;
-    } else {
-        setTheme('theme-light');
-      document.getElementById('slider').checked = true;
-    }
-})();
+});
