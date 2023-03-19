@@ -21,6 +21,14 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'first_name',
+        'last_name',
+        'address',
+        'post_code',
+        'city',
+        'country',
+        'mobile',
+
     ];
 
     /**
@@ -45,5 +53,11 @@ class User extends Authenticatable
     public function hotels()
     {
         return $this->belongsToMany(Hotel::class);
+    }
+
+
+    public function getMemberShipNumberAttribute()
+    {
+        return "M".str_pad($this->id, 5, "0", STR_PAD_LEFT);
     }
 }

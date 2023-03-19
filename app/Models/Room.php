@@ -43,4 +43,8 @@ class Room extends Model
     public function coupons(){
         return $this->belongsToMany(Coupon::class);
     }
+
+    public function rate(){
+        return $this->hasOne(Rate::class);
+    }
 }

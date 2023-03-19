@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AcitivityController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DestinationController;
@@ -32,10 +33,19 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 
-Route::get('/', [HomeController::class,"index"] )->name('home');
+Route::middleware(["auth"])->group(function () {
 
+    Route::get('/', [HomeController::class, "index"])->name('home');
 
-Route::middleware(["auth"])->prefix("cpanel")->name("cpanel.")->group(function () {
+    Route::get("booking", [BookingController::class, "index"])->name("booking.index");
+
+    Route::post("booking/store", [BookingController::class, "store"])->name("booking.store");
+
+    Route::post("booking/rooms", [BookingController::class, "getRoom"])->name("booking.getRoom");
+
+});
+
+Route::middleware(["auth","role:admin|hotel"])->prefix("cpanel")->name("cpanel.")->group(function () {
 
     Route::resource("dashboard", DashboardController::class);
 
@@ -81,5 +91,4 @@ Route::middleware(["auth"])->prefix("cpanel")->name("cpanel.")->group(function (
 
     Route::get("services/{release_status}/{service_id}/release", [ServiceController::class, "releaseStatusUpdate"])->name("services.release");
     Route::resource("services", ServiceController::class);
-
 });

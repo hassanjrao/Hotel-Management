@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ReaseStatusSeeder::class,
             HotelStartSeeder::class,
+            BookingStatusSeeder::class,
         ]);
     }
 }

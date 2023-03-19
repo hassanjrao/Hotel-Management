@@ -7,13 +7,14 @@
     <div id="search-home-wrapper">
         <div id="search-home" class="container">
 
-            <form action="/booking" method="post" class="booking-search">
+
+            <form action="{{ route("booking.index") }}" method="GET" class="booking-search">
                 <div class="row">
                     <div class="col-md-3 col-sm-6 col-xs-12">
-                        <div class="input-wrapper form-inline">
-                            <i class="fas fa-fw fa-map-marker"></i>
+                        <div class="form-group">
                             <div class="input-group">
-                                <select name="destination_id" class="form-control js-select2">
+                                <div class="input-group-addon">Destination</div>
+                                <select name="destination" id="" class="form-control">
                                     <option value="">Select Destination</option>
                                     @foreach ($destinations as $destination)
                                         <option value="{{ $destination->id }}">{{ $destination->name }}</option>
@@ -24,15 +25,21 @@
                     </div>
                     <div class="col-md-4 col-sm-6 col-xs-12">
                         <div class="input-wrapper datepicker-wrapper form-inline">
-                            <i class="fas fa-fw fa-calendar hidden-xs"></i>
                             <div class="input-group from-date">
-                                <input type="date" class="form-control text-right" id="from_picker" name="from_date"
-                                    value="" placeholder="Check in">
+                                <input type="date" class="form-control text-right" id="from_picker"
+                                    name="from_date" value="{{ date("Y-m-d") }}" min="{{ date("Y-m-d") }}" placeholder="Check in">
                             </div>
-                            <i class="fas fa-fw fa-long-arrow-alt-right"></i>
+                            <svg class="svg-inline--fa fa-long-arrow-alt-right fa-w-14 fa-fw" aria-hidden="true"
+                                focusable="false" data-prefix="fas" data-icon="long-arrow-alt-right" role="img"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
+                                <path fill="currentColor"
+                                    d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z">
+                                </path>
+                            </svg>
+                            <!-- <i class="fas fa-fw fa-long-arrow-alt-right"></i> Font Awesome fontawesome.com -->
                             <div class="input-group to-date">
-                                <input type="date" class="form-control" id="to_picker" name="to_date" value=""
-                                    placeholder="Check out">
+                                <input type="date" class="form-control hasDatepicker" id="to_picker" name="to_date"
+                                value="{{ date('Y-m-d', strtotime(' +1 day'))}}" min="{{ date('Y-m-d', strtotime(' +1 day'))}}" placeholder="Check out">
                             </div>
                         </div>
                         <div class="field-notice" rel="dates"></div>
@@ -41,8 +48,8 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon">Adults</div>
-                                <input type="number" name="num_adults" class="form-control">
-
+                                <input type="number" name="total_adults" id="" class="form-control" value="0"
+                                    min="0">
                             </div>
                         </div>
                     </div>
@@ -50,18 +57,19 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon">Children</div>
-                                <input type="number" name="num_children" class="form-control">
-
+                                <input type="number" name="total_children" id="" class="form-control" value="0"
+                                    min="0">
                             </div>
                         </div>
                     </div>
                     <div class="col-md-1 col-sm-12 col-xs-12">
                         <div class="form-group">
-                            <button class="btn btn-block btn-primary" type="submit" name="check_availabilities">GO</button>
+                            <button class="btn btn-block btn-primary" type="submit">GO</button>
                         </div>
                     </div>
                 </div>
             </form>
+
         </div>
     </div>
 
@@ -88,7 +96,8 @@
 
             <div class="rsContent">
                 <img class="rsImg" src="{{ asset('front-assets/media/slide/big/4/slide2.jpg') }}" alt="">
-                <div class="infoBlock" data-fade-effect="" data-move-offset="10" data-move-effect="bottom" data-speed="200">
+                <div class="infoBlock" data-fade-effect="" data-move-offset="10" data-move-effect="bottom"
+                    data-speed="200">
                     <h1>A dream stay at the best price</h1>
 
                     <h2>Best price guarantee</h2>
@@ -125,11 +134,10 @@
                                     {{-- @dump($hotel->images->first()) --}}
 
                                     @if ($hotel->images->first())
-
-                                    {{-- @dump("yes") --}}
+                                        {{-- @dump("yes") --}}
                                         <img alt=""
-                                            src="{{ asset('storage/hotels/' .$hotel->images->first()->image) }}"
-                                             width="300" height="170">
+                                            src="{{ asset('storage/hotels/' . $hotel->images->first()->image) }}"
+                                            width="300" height="170">
                                     @endif
 
                                 </div>

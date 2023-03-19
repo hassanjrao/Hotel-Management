@@ -27,9 +27,9 @@ class HotelController extends Controller
             $hotels = Hotel::latest()->with("destination", "hotelStar", "releaseStatus", "facilities", "users", "createdBy")->get();
         } else {
             $hotels = Hotel::latest()->with("destination", "hotelStar", "releaseStatus", "facilities", "users", "createdBy")
-            ->whereHas("users", function ($q) {
-                $q->where("user_id", auth()->user()->id);
-            })->get();
+                ->whereHas("users", function ($q) {
+                    $q->where("user_id", auth()->user()->id);
+                })->get();
         }
 
         return view("cpanel.hotels.index", compact("hotels"));
@@ -161,9 +161,12 @@ class HotelController extends Controller
     public function edit($id)
     {
 
-        $hotel = Hotel::where("id",$id)->whereHas("users", function ($q) {
-            $q->where("user_id", auth()->user()->id);
-        })->first();
+        $hotel = Hotel::where("id", $id)
+            ->when(!auth()->user()->hasRole('admin'), function ($q) {
+                $q->whereHas("users", function ($q) {
+                    $q->where("user_id", auth()->user()->id);
+                });
+            })->first();
 
         if (!$hotel) {
             return redirect()->route("cpanel.hotels.index")->withToastError("Hotel not found");
@@ -257,7 +260,7 @@ class HotelController extends Controller
     {
 
 
-        $hotel = Hotel::where("id",$id)->whereHas("users", function ($q) {
+        $hotel = Hotel::where("id", $id)->whereHas("users", function ($q) {
             $q->where("user_id", auth()->user()->id);
         })->first();
 

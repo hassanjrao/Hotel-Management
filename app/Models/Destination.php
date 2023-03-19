@@ -22,4 +22,10 @@ class Destination extends Model
 
         return self::where("home_page", 1)->get();
     }
+
+    public static function publishedDestinations()
+    {
+
+        return self::where("release_status", "published")->get();
+    }
 }

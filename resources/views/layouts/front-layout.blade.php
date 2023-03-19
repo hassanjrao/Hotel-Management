@@ -6,93 +6,14 @@
 
     <meta charset="UTF-8">
 
-
-
-    <title>Panda Multi Resorts, web software to create and manage multi hotels platforms</title>
-
-
-
-
-
-
-    <meta name="description"
-        content="A man travels the world over in search of what he needs and returns home to find it. - George A. Moore -">
-
-
-
-    <!-- Schema.org markup for Google+ -->
-
-    <meta itemprop="name" content="Panda Multi Resorts, web software to create and manage multi hotels platforms">
-
-    <meta itemprop="description"
-        content="A man travels the world over in search of what he needs and returns home to find it. - George A. Moore -">
-
-
-
-
-    <!-- Open Graph data -->
-
-    <meta property="og:title" content="Panda Multi Resorts, web software to create and manage multi hotels platforms">
-
-    <meta property="og:type" content="article">
-
-    <meta property="og:url" content="https://www.wdfp.co.uk/">
-
-
-    <meta property="og:description"
-        content="A man travels the world over in search of what he needs and returns home to find it. - George A. Moore -">
-
-    <meta property="og:site_name" content="FREEHOTELROOMS">
-
-
-
-
-    <meta property="article:author" content="FREEHOTELROOMS">
-
-
-
-    <!-- Twitter Card data -->
-
-    <meta name="twitter:card" content="summary_large_image">
-
-    <meta name="twitter:site" content="@publisher_handle">
-
-    <meta name="twitter:title" content="Panda Multi Resorts, web software to create and manage multi hotels platforms">
-
-    <meta name="twitter:description"
-        content="A man travels the world over in search of what he needs and returns home to find it. - George A. Moore -">
-
-    <meta name="twitter:creator" content="@author_handle">
-
-
-
-
-    <meta name="robots" content="index,follow">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-
-
-
-    <meta name="autogeolocate" content="true">
-
-
-    <meta name="gmaps_api_key" content="AIzaSyDminHt06-r8n5tmd0cPtTxtkKtJkAtDNc">
-
-
-
-
+    <title>Hotel Management</title>
     <link rel="icon" type="image/png" href="/templates/default/images/favicon.png">
-
 
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
 
 
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,400,700">
-
-
-
 
     <link rel="stylesheet" href="{{ asset('front-assets/plugins/royalslider/royalslider.css') }}" media="all">
 
@@ -126,23 +47,12 @@
 
     <script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
 
-
+    @livewireStyles
 
 
 </head>
 
-<body id="page-1" itemscope itemtype="http://schema.org/WebPage">
-
-
-
-    <!-- Schema.org markup for Google+ -->
-
-    <meta itemprop="name" content="Panda Multi Resorts, web software to create and manage multi hotels platforms">
-
-    <meta itemprop="description"
-        content="A man travels the world over in search of what he needs and returns home to find it. - George A. Moore -">
-
-
+<body id="page-1">
 
 
     <!-- <div id="loader-wrapper"><div id="loader"></div></div> -->
@@ -150,462 +60,24 @@
 
 
 
-    <header class="navbar-fixed-top">
+    <header class="navbar-fixed-top fixed">
 
         <div id="mainHeader">
 
             <div class="container-fluid">
-
-                <div id="secondMenu">
-
-                    <ul class="nav navbar-nav">
-
-                        <li class="primary btn-nav">
-
-
-                            <a class="popup-modal firstLevel" href="#user-popup">
-
-                                <i class="fas fa-fw fa-power-off"></i>
-
-                            </a>
-
-
-                        </li>
-
-
-
-
-                        <li class="primary btn-nav">
-
-                            <div class="dropdown">
-
-                                <a class="firstLevel dropdown-toggle" data-toggle="dropdown" href="#">
-
-                                    <i class="fas fa-fw fa-search"></i> <span class="caret"></span>
-
-                                </a>
-
-                                <ul class="dropdown-menu dropdown-menu-right" role="menu">
-
-                                    <li>
-
-
-
-
-                                        <form method="post" action="/search" class="form-inline">
-
-                                            <input type="hidden" name="csrf_token"
-                                                value="9728705963e14779bad952.89023491">
-
-                                            <div class="input-group searchWrapper">
-
-                                                <input type="text" class="form-control" name="global-search"
-                                                    placeholder="Search">
-
-                                                <span class="input-group-btn">
-
-                                                    <button type="submit" class="btn btn-primary" name="send"><i
-                                                            class="fas fa-fw fa-search"></i></button>
-
-                                                </span>
-
-                                            </div>
-
-                                        </form>
-
-                                    </li>
-
-                                </ul>
-
-                            </div>
-
-                        </li>
-
-                    </ul>
-
-                    <div id="user-popup" class="white-popup-block mfp-hide">
-
-                        <div class="fluid-container">
-
-                            <!--<div class="row">
-
-                            <div class="col-xs-12 mb20 text-center">
-
-                                <a class="btn fblogin" href="#"><i class="fas fa-fw fa-facebook"></i> Log in with Facebook</a>
-
-                            </div>
-
-                        </div>
-
-                        <div class="row">
-
-                            <div class="col-xs-12 mb20 text-center">
-
-                                - Or -
-
-                            </div>
-
-                        </div>-->
-
-                            <div class="row">
-
-                                <div class="col-xs-12">
-
-                                    <div class="login-form">
-
-                                        <form method="post" action="/" class="ajax-form">
-
-                                            <div class="alert alert-success" style="display:none;"></div>
-
-                                            <div class="alert alert-danger" style="display:none;"></div>
-
-                                            <div class="form-group">
-
-                                                <div class="input-group">
-
-                                                    <div class="input-group-addon"><i class="fas fa-fw fa-user"></i>
-                                                    </div>
-
-                                                    <input type="text" class="form-control" name="user"
-                                                        value="" placeholder="Username or E-mail *">
-
-                                                </div>
-
-                                                <div class="field-notice" rel="user"></div>
-
-                                            </div>
-
-                                            <div class="form-group">
-
-                                                <div class="input-group">
-
-                                                    <div class="input-group-addon"><i class="fas fa-fw fa-lock"></i>
-                                                    </div>
-
-                                                    <input type="password" class="form-control" name="pass"
-                                                        value="" placeholder="Password *">
-
-                                                </div>
-
-                                                <div class="field-notice" rel="pass"></div>
-
-                                            </div>
-
-                                            <div class="row mb10">
-
-                                                <div class="col-sm-7 text-left">
-
-                                                    <a class="open-pass-form" href="#">Forgotten
-                                                        password?</a><br>
-
-                                                    <a class="open-signup-form" href="#">I sign up</a>
-
-                                                </div>
-
-                                                <div class="col-sm-5 text-right">
-
-                                                    <a href="#" class="btn btn-default sendAjaxForm"
-                                                        data-action="/templates/default/common/register/login.php"
-                                                        data-refresh="true"><i class="fas fa-fw fa-power-off"></i> Log
-                                                        in</a>
-
-                                                </div>
-
-                                            </div>
-
-                                        </form>
-
-                                    </div>
-
-                                    <div class="signup-form">
-
-                                        <form method="post" action="/" class="ajax-form">
-
-                                            <div class="alert alert-success" style="display:none;"></div>
-
-                                            <div class="alert alert-danger" style="display:none;"></div>
-
-                                            <input type="hidden" name="signup_type" value="quick" class="noreset">
-
-                                            <input type="hidden" name="signup_redirect"
-                                                value="https://www.wdfp.co.uk/account" class="noreset">
-
-                                            <div class="form-group">
-
-                                                <div class="input-group">
-
-                                                    <div class="input-group-addon"><i class="fas fa-fw fa-user"></i>
-                                                    </div>
-
-                                                    <input type="text" class="form-control" name="username"
-                                                        value="" placeholder="Username *">
-
-                                                </div>
-
-                                                <div class="field-notice" rel="username"></div>
-
-                                            </div>
-
-                                            <div class="form-group">
-
-                                                <div class="input-group">
-
-                                                    <div class="input-group-addon"><i
-                                                            class="fas fa-fw fa-envelope"></i></div>
-
-                                                    <input type="text" class="form-control" name="email"
-                                                        value="" placeholder="E-mail *">
-
-                                                </div>
-
-                                                <div class="field-notice" rel="email"></div>
-
-                                            </div>
-
-                                            <div class="form-group">
-
-                                                <div class="input-group">
-
-                                                    <div class="input-group-addon"><i class="fas fa-fw fa-lock"></i>
-                                                    </div>
-
-                                                    <input type="password" class="form-control" name="password"
-                                                        value="" placeholder="Password *">
-
-                                                </div>
-
-                                                <div class="field-notice" rel="password"></div>
-
-                                            </div>
-
-                                            <div class="form-group">
-
-                                                <div class="input-group">
-
-                                                    <div class="input-group-addon"><i class="fas fa-fw fa-lock"></i>
-                                                    </div>
-
-                                                    <input type="password" class="form-control"
-                                                        name="password_confirm" value=""
-                                                        placeholder="Confirm password *">
-
-                                                </div>
-
-                                                <div class="field-notice" rel="password_confirm"></div>
-
-                                            </div>
-
-                                            <div class="form-group">
-
-                                                <input type="radio" name="hotel_owner" id="hotel_owner_1"
-                                                    value="1"> <label for="hotel_owner_1">I am a hotel
-                                                    owner</label> &nbsp;
-
-                                                <input type="radio" name="hotel_owner" id="hotel_owner_0"
-                                                    value="0"> <label for="hotel_owner_0">I am a traveler</label>
-
-                                            </div>
-
-                                            <div class="row mb10">
-
-                                                <div class="col-sm-7 text-left">
-
-                                                    <a class="open-login-form" href="#">I already have an
-                                                        account</a>
-
-                                                </div>
-
-                                                <div class="col-sm-5 text-right">
-
-                                                    <a href="#" class="btn btn-default sendAjaxForm"
-                                                        data-action="/templates/default/common/register/signup.php"
-                                                        data-clear="true"><i class="fas fa-fw fa-power-off"></i> Sign
-                                                        up</a>
-
-                                                </div>
-
-                                            </div>
-
-                                        </form>
-
-                                    </div>
-
-                                    <div class="pass-form">
-
-                                        <form method="post" action="/" class="ajax-form">
-
-                                            <div class="alert alert-success" style="display:none;"></div>
-
-                                            <div class="alert alert-danger" style="display:none;"></div>
-
-                                            <p>Please enter your e-mail address corresponding to your account. A new
-                                                password will be sent to you by e-mail.</p>
-
-
-
-                                            <div class="form-group">
-
-                                                <div class="input-group">
-
-                                                    <div class="input-group-addon"><i
-                                                            class="fas fa-fw fa-envelope"></i></div>
-
-                                                    <input type="text" class="form-control" name="email"
-                                                        value="" placeholder="E-mail *">
-
-                                                </div>
-
-                                                <div class="field-notice" rel="email"></div>
-
-                                            </div>
-
-                                            <div class="row mb10">
-
-                                                <div class="col-sm-7 text-left">
-
-                                                    <a class="open-login-form" href="#">Log in</a><br>
-
-                                                    <a class="open-signup-form" href="#">I sign up</a>
-
-                                                </div>
-
-                                                <div class="col-sm-5 text-right">
-
-                                                    <a href="#" class="btn btn-default sendAjaxForm"
-                                                        data-action="/templates/default/common/register/reset.php"
-                                                        data-refresh="false"><i class="fas fa-fw fa-power-off"></i>
-                                                        New password</a>
-
-                                                </div>
-
-                                            </div>
-
-                                        </form>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
                 <div id="mainMenu" class="collapse navbar-collapse">
-
                     <ul class="nav navbar-nav">
-
-
                         <li class="primary nav-1">
-
-
                             <a class="firstLevel active" href="/"
                                 title="FREEHOTELROOMS WORLD WIDE Resorts, Luxury Hotels">Home</a>
-
-
                         </li>
 
 
                         <li class="primary nav-7">
-
-
-                            <a class="dropdown-toggle disabled firstLevel" href="/hotels" target="_self"
-                                title="Hotels">
-
+                            <a class="dropdown-toggle disabled firstLevel" href="/hotels" target="_self" title="Hotels">
                                 Hotels
                             </a>
-
-
                         </li>
-
-
-                        <li class="primary nav-6">
-
-
-                            <a class="dropdown-toggle disabled firstLevel" href="/gallery" target="_self"
-                                title="Gallery">
-
-                                Gallery
-                            </a>
-
-
-                        </li>
-
-
-                        <li class="primary nav-10">
-
-
-                            <a class="dropdown-toggle disabled firstLevel hasSubMenu" href="/destinations"
-                                target="_self" title="">
-
-                                Destinations
-                                <i class="fa fa-fw fa-angle-down hidden-xs"></i>
-
-
-                            </a>
-
-
-                            <span class="dropdown-btn visible-xs"></span>
-
-                            <ul class="subMenu">
-
-
-                                <li>
-
-
-                                    <a class="hasSubMenu" href="" target="_self"
-                                        title="Countries">Countries</a>
-
-
-                                    <span class="dropdown-btn visible-xs"></span>
-
-                                    <ul class="subMenu">
-
-
-                                        <li>
-
-
-                                            <a class="" href="https://wdfp.co.uk/destinations" target="_blank"
-                                                title="United Kingdom">United Kingdom</a>
-
-
-                                        </li>
-
-
-                                        <li>
-
-
-                                            <a class="" href="" target="_self"
-                                                title="Canada">Canada</a>
-
-
-                                        </li>
-
-
-                                        <li>
-
-
-                                            <a class="" href="" target="_self"
-                                                title="United States">United States</a>
-
-
-                                        </li>
-
-
-                                    </ul>
-
-
-                                </li>
-
-
-                            </ul>
-
-
-                        </li>
-
 
                         <li class="primary nav-2">
 
@@ -619,6 +91,40 @@
 
                         </li>
 
+                        @if (!Auth::check())
+                            <li class="primary nav-2">
+
+
+                                <a class="dropdown-toggle disabled firstLevel" href="/contact" target="_self"
+                                    title="Contact">
+
+                                    Sign Up
+                                </a>
+                            </li>
+                        @endif
+
+                        <li class="primary nav-2">
+
+
+                            @if (Auth::check())
+                                <a class="dropdown-toggle disabled firstLevel" style="cursor: pointer;"
+                                    onclick="document.getElementById('logout-form').submit()">
+                                    Log Out
+                                </a>
+                                <form action="{{ route('logout') }}" id="logout-form" method="POST">
+                                    @csrf
+
+                                </form>
+                            @else
+                                <a class="dropdown-toggle disabled firstLevel" href="{{ route('login') }}"
+                                    target="_self" title="Contact">
+                                    Login
+                                </a>
+                            @endif
+
+
+                        </li>
+
 
                     </ul>
 
@@ -628,8 +134,8 @@
 
                     <div class="navbar-header">
 
-                        {{-- <a class="navbar-brand" href="/" title="Panda Multi Resorts, Luxury Hotels"><img
-                                src="/templates/default/images/logo.png" alt="FREEHOTELROOMS"></a> --}}
+                        <a class="navbar-brand" href="/" title="Panda Multi Resorts, Luxury Hotels"><img
+                                src="/templates/default/images/logo.png" alt="FREEHOTELROOMS"></a>
 
                         <button type="button" class="navbar-toggle" data-toggle="collapse"
                             data-target=".navbar-collapse">
@@ -655,7 +161,13 @@
     </header>
 
 
-    @yield('content')
+
+    <div id="vue-app">
+
+        @yield('content')
+
+
+    </div>
 
     <footer>
 
@@ -774,6 +286,8 @@
                             &nbsp;&nbsp;
 
 
+
+
                             <a href="/legal-notices" title="Legal notices">Legal notices</a>
 
                             &nbsp;&nbsp;
@@ -799,14 +313,7 @@
 
 
 
-
-
-
-
-
     <a href="#" id="toTop"><i class="fas fa-fw fa-angle-up"></i></a>
-
-
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js"></script>
 
@@ -816,6 +323,8 @@
 
 
     <script src="{{ asset('js/plugins/select2/js/select2.full.min.js') }}"></script>
+
+    <script src="{{ asset('js/app.js') }}"></script>
 
     <script>
         Modernizr.load({
@@ -846,9 +355,9 @@
 
                 '//unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js',
 
-                "{{ asset('front-assets/plugins/imagefill/js/jquery-imagefill.js')}}",
+                "{{ asset('front-assets/plugins/imagefill/js/jquery-imagefill.js') }}",
 
-                "{{ asset('front-assets/plugins/toucheeffect/toucheffects.js')}}",
+                "{{ asset('front-assets/plugins/toucheeffect/toucheffects.js') }}",
 
                 '//use.fontawesome.com/releases/v5.15.3/js/all.js'
 
@@ -860,9 +369,9 @@
 
                     load: [
 
-                        "{{ asset('front-assets/js/custom.js')}}",
+                        "{{ asset('front-assets/js/custom.js') }}",
 
-                        "{{ asset('front-assets/js/custom.js')}}"
+                        "{{ asset('front-assets/js/custom.js') }}"
 
                     ]
 
@@ -873,6 +382,13 @@
         });
     </script>
 
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @include('sweetalert::alert')
+
+
+    @livewireScripts
+
+    @yield('scripts')
 
 </body>
 

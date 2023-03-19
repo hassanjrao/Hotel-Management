@@ -56,4 +56,5 @@ class Hotel extends Model
     public static function topHotels(){
         return self::where("home_page",1)->where("release_status","published")->latest()->take(6)->get();
     }
+
 }
