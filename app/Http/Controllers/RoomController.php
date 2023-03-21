@@ -264,6 +264,34 @@ class RoomController extends Controller
 
         RoomClosingDate::insert($closingDateData);
 
+        $roomImages = [];
+        if (isset($request->images) && count($request->images) > 0) {
+
+            foreach ($request->images as $image) {
+                $folderId = $image;
+
+
+                $files = Storage::files("uploads/temp/$folderId");
+
+                foreach ($files as $file) {
+                    $filename = basename($file);
+                    $path = "rooms";
+                    Storage::move($file, "$path/$filename");
+
+                    $roomImages[] = [
+                        "room_id" => $room->id,
+                        "image" => $filename,
+                        "created_at" => now(),
+                        "updated_at" => now(),
+                    ];
+                }
+
+                Storage::deleteDirectory("uploads/temp/$folderId");
+            }
+        }
+        RoomImage::insert($roomImages);
+
+
         return redirect()->route("cpanel.rooms.index")->withToastSuccess("success", "Room updated successfully");
     }
 

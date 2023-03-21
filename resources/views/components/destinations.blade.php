@@ -6,10 +6,12 @@
     'selected' => [],
     'destinations' => collect(),
     'required' => false,
+    'disabled' => '',
 ])
 
+
 <div>
-    <select {{ $required }} class="form-select js-select2" name="{{ $name }}" {{ $multiple ? "multiple" : "" }}  data-placeholder="{{ $placeholder }}" >
+    <select {{ $required }} {{ $disabled ? 'disabled' : '' }} class="form-select js-select2" name="{{ $name }}" {{ $multiple ? "multiple" : "" }}  data-placeholder="{{ $placeholder }}" >
 
 
         <option value="">Select Destination</option>

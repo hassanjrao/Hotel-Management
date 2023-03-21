@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
 use App\Models\Coupon;
 use App\Models\Destination;
 use App\Models\Facility;
@@ -35,6 +36,7 @@ class DashboardController extends Controller
             $taxes=Tax::all()->count();
             $rates=Rate::all()->count();
             $coupons=Coupon::all()->count();
+            $bookings=Booking::all()->count();
         }
         else  if(auth()->user()->hasRole("hotel")){
 
@@ -60,11 +62,15 @@ class DashboardController extends Controller
                 $q->whereIN("room_id", $userRooms->pluck("id")->toArray());
             })->count();
 
+            $bookings = Booking::whereHas("bookingDetails", function ($q) use ($userHotels) {
+                $q->whereIN("hotel_id", $userHotels);
+            })->count();
+
 
         }
 
 
-        return view("cpanel.dashboard",compact("hotels","rooms","packages","rates","coupons","users","taxes","facilities","destinations"));
+        return view("cpanel.dashboard",compact("hotels","rooms","packages","rates","coupons","users","taxes","facilities","destinations","bookings"));
     }
 
     /**

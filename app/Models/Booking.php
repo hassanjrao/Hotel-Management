@@ -16,7 +16,6 @@ class Booking extends Model
         return $this->belongsTo(User::class);
     }
 
-
     public function bookingStatus()
     {
         return $this->belongsTo(BookingStatus::class);
@@ -27,5 +26,14 @@ class Booking extends Model
         return $this->hasMany(BookingDetail::class);
     }
 
+    public function getBookingIdAttribute()
+    {
+        return 'BID-'.str_pad($this->id, 5, '0', STR_PAD_LEFT);
+    }
+
+    public function destination()
+    {
+        return $this->belongsTo(Destination::class);
+    }
 
 }

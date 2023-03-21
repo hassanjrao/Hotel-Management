@@ -212,6 +212,15 @@
                             </a>
                         </li>
 
+
+                        <li class="nav-main-item">
+                            <a class="nav-main-link{{ request()->segment(2) == 'bookings' ? ' active' : '' }}"
+                                href="{{ route('cpanel.bookings.index') }}">
+                                <i class="nav-main-link-icon fa fa-tags"></i>
+                                <span class="nav-main-link-name">Bookings</span>
+                            </a>
+                        </li>
+
                         <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->segment(2) == 'hotels' ? ' active' : '' }}"
                                 href="{{ route('cpanel.hotels.index') }}">
@@ -290,6 +299,7 @@
                                 <span class="nav-main-link-name">Coupons</span>
                             </a>
                         </li>
+
 
                         {{-- <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->segment(2) == 'activities' ? ' active' : '' }}"

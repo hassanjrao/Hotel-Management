@@ -6,6 +6,7 @@
     'selected' => [],
     'users' => collect(),
     'required' => false,
+    'disabled' => false,
 ])
 
 @if($multiple)
@@ -16,7 +17,7 @@
 @endif
 
 <div>
-    <select {{ $required ? "required": "" }} class="form-select js-select2" name="{{ $name }}" {{ $multiple ? "multiple" : "" }}  data-placeholder="{{ $placeholder }}" >
+    <select {{ $required ? "required": "" }} {{ $disabled ? 'disabled' : '' }} class="form-select js-select2" name="{{ $name }}" {{ $multiple ? "multiple" : "" }}  data-placeholder="{{ $placeholder }}" >
 
         @foreach ($users as $user)
             <option {{ in_array($user->id,$selected) ? "selected" : "" }} value="{{ $user->id }}">

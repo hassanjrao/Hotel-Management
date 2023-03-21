@@ -5303,62 +5303,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['destinations', "selected_destination", "from_date", "to_date", "entered_persons", "all_hotels"],
   data: function data() {
@@ -5367,7 +5311,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       collapseOpen: false,
       hotels: [],
       bookedRooms: [],
-      paymentSummary: []
+      paymentSummary: [],
+      loading: false
     };
   },
   methods: {
@@ -5450,9 +5395,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       console.log("bookedRooms", this.bookedRooms);
     },
     submitBooking: function submitBooking(hotel) {
+      var _this = this;
+
       // console.log(hotel)
       console.log("hotelBookings", this.bookedRooms[hotel.id]);
       var hotelBookings = this.bookedRooms[hotel.id];
+      this.loading = true;
       axios.post('/booking/store', {
         hotel_id: hotel.id,
         hotel_bookings: hotelBookings,
@@ -5479,20 +5427,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             icon: 'success',
             title: "Booking submitted successfully"
           });
+          _this.loading = false;
+          window.location.href = 'account/bookings';
         }
       })["catch"](function (error) {
         console.log(error);
+        _this.loading = false;
       });
     }
   },
   mounted: function mounted() {
-    var _this = this;
+    var _this2 = this;
 
     console.log('Component mounted.');
     console.log(this.destinations, this.selected_destination, this.from_date, this.to_date, this.entered_persons);
     this.hotels = this.all_hotels;
     this.hotels.forEach(function (hotel) {
-      _this.bookedRooms[hotel.id] = [];
+      _this2.bookedRooms[hotel.id] = [];
       hotel.total_selected_rooms = 0;
       hotel.total_selected_persons = 0;
       hotel.total_amount = 0;
@@ -28421,732 +28372,471 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "pb30", attrs: { id: "content" } }, [
-    _c("div", { staticClass: "mt20 mt20", attrs: { id: "search-page" } }, [
-      _c(
-        "div",
-        { staticClass: "container", staticStyle: { "padding-top": "140px" } },
-        [
-          _c(
-            "form",
-            {
-              staticClass: "booking-search",
-              attrs: { action: "", method: "GET" },
-            },
-            [
-              _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col-md-3 col-sm-6 col-xs-12" }, [
-                  _c("div", { staticClass: "form-group" }, [
-                    _c("div", { staticClass: "input-group" }, [
-                      _c("div", { staticClass: "input-group-addon" }, [
-                        _vm._v("Destination"),
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.selected_destination,
-                              expression: "selected_destination",
-                            },
-                          ],
-                          staticClass: "form-control",
-                          attrs: { name: "destination", id: "" },
-                          on: {
-                            change: function ($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function (o) {
-                                  return o.selected
-                                })
-                                .map(function (o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.selected_destination = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            },
-                          },
-                        },
-                        [
-                          _c("option", { attrs: { value: "" } }, [
-                            _vm._v("Select Destination"),
-                          ]),
-                          _vm._v(" "),
-                          _vm._l(_vm.destinations, function (destination) {
-                            return _c(
-                              "option",
-                              { domProps: { value: destination.id } },
-                              [
-                                _vm._v(
-                                  "\n                                        " +
-                                    _vm._s(destination.name) +
-                                    "\n                                    "
-                                ),
-                              ]
-                            )
-                          }),
-                        ],
-                        2
-                      ),
-                    ]),
-                  ]),
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-md-4 col-sm-6 col-xs-12" }, [
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "input-wrapper datepicker-wrapper form-inline",
-                    },
-                    [
-                      _c("div", { staticClass: "input-group from-date" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.from_date,
-                              expression: "from_date",
-                            },
-                          ],
-                          staticClass: "form-control hasDatepicker",
-                          attrs: {
-                            type: "date",
-                            id: "from_picker",
-                            name: "from_date",
-                            placeholder: "Check in",
-                          },
-                          domProps: { value: _vm.from_date },
-                          on: {
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.from_date = $event.target.value
-                            },
-                          },
-                        }),
-                      ]),
-                      _vm._v(" "),
-                      _c("i", {
-                        staticClass: "fas fa-fw fa-long-arrow-alt-right",
-                      }),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "input-group to-date" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.to_date,
-                              expression: "to_date",
-                            },
-                          ],
-                          staticClass: "form-control hasDatepicker",
-                          attrs: {
-                            type: "date",
-                            id: "to_picker",
-                            name: "to_date",
-                            placeholder: "Check out",
-                          },
-                          domProps: { value: _vm.to_date },
-                          on: {
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.to_date = $event.target.value
-                            },
-                          },
-                        }),
-                      ]),
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("div", {
-                    staticClass: "field-notice",
-                    attrs: { rel: "dates" },
-                  }),
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-md-2 col-sm-6 col-xs-6" }, [
-                  _c("div", { staticClass: "form-group" }, [
-                    _c("div", { staticClass: "input-group" }, [
-                      _c("div", { staticClass: "input-group-addon" }, [
-                        _vm._v("Entered Persons"),
-                      ]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.entered_persons,
-                            expression: "entered_persons",
-                          },
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text", name: "total_adults", min: "0" },
-                        domProps: { value: _vm.entered_persons },
-                        on: {
-                          input: function ($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.entered_persons = $event.target.value
-                          },
-                        },
-                      }),
-                    ]),
-                  ]),
-                ]),
-                _vm._v(" "),
-                _vm._m(0),
-              ]),
-            ]
-          ),
-        ]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "clearfix" }),
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "container pt20" }, [
       _c("div", { staticClass: "row" }, [
         _c(
           "div",
           { staticClass: "col-md-9" },
-          [
-            _vm._m(1),
-            _vm._v(" "),
-            _vm._l(_vm.hotels, function (hotel, index) {
-              return _c(
-                "div",
-                { key: index, staticClass: "boxed mb20 booking-result" },
-                [
-                  _c("div", { staticClass: "row" }, [
-                    _c("div", { staticClass: "col-sm-4 col-md-4" }, [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "img-container lazyload md",
-                          staticStyle: {
-                            overflow: "hidden",
-                            position: "relative",
-                          },
-                        },
-                        [
-                          _c("img", {
-                            staticClass: "loaded",
-                            staticStyle: {
-                              position: "absolute",
-                              width: "auto",
-                              height: "245px",
-                              top: "0px",
-                              left: "-92.5px",
-                            },
-                            attrs: {
-                              alt: "",
-                              itemprop: "photo",
-                              width: "300",
-                              height: "170",
-                              src: hotel.image,
-                            },
-                          }),
-                        ]
-                      ),
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "pt15 col-sm-4 col-md-5" },
-                      [
-                        _c("h3", [
-                          _vm._v(
-                            "\n                                " +
-                              _vm._s(hotel.title) +
-                              "\n\n                            "
-                          ),
-                        ]),
-                        _vm._v(
-                          "\n                            " +
-                            _vm._s(hotel.sub_title) +
-                            "\n                            "
-                        ),
-                        _vm._l(hotel.facilities, function (facility, index) {
-                          return _c(
-                            "div",
-                            { key: index, staticClass: "clearfix mt10" },
-                            [
-                              _c("span", { staticClass: "facility-icon" }, [
-                                _c("img", {
-                                  staticClass: "tips",
-                                  attrs: {
-                                    alt: facility.name,
-                                    title: facility.name,
-                                    src: facility.image,
-                                  },
-                                }),
-                              ]),
-                            ]
-                          )
-                        }),
-                      ],
-                      2
-                    ),
-                    _vm._v(" "),
+          _vm._l(_vm.hotels, function (hotel, index) {
+            return _c(
+              "div",
+              { key: index, staticClass: "boxed mb20 booking-result" },
+              [
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-sm-4 col-md-4" }, [
                     _c(
                       "div",
                       {
-                        staticClass:
-                          "pt15 pb15 col-sm-4 col-md-3 text-center sep",
+                        staticClass: "img-container lazyload md",
+                        staticStyle: {
+                          overflow: "hidden",
+                          position: "relative",
+                        },
                       },
                       [
-                        _c("div", { staticClass: "price text-primary" }, [
-                          _vm._v("\n                                From "),
-                          _c("span", { attrs: { itemprop: "priceRange" } }, [
-                            _vm._v(
-                              "\n                                    " +
-                                _vm._s(_vm.appCurrency) +
-                                " " +
-                                _vm._s(hotel.min_price) +
-                                "\n                                "
-                            ),
-                          ]),
-                          _vm._v("\n                                / night "),
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            staticClass:
-                              "btn btn-success btn-block mt10 anchor-toggle",
-                            attrs: { href: "#", "data-toggle": "collapse" },
-                            on: {
-                              click: function ($event) {
-                                return _vm.openHotelRooms(hotel)
-                              },
-                            },
+                        _c("img", {
+                          staticClass: "loaded",
+                          staticStyle: {
+                            position: "absolute",
+                            width: "auto",
+                            height: "245px",
+                            top: "0px",
+                            left: "-92.5px",
                           },
-                          [_vm._v("\n                                Book ")]
-                        ),
+                          attrs: {
+                            alt: "",
+                            itemprop: "photo",
+                            width: "300",
+                            height: "170",
+                            src: hotel.image,
+                          },
+                        }),
                       ]
                     ),
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "pt15 col-sm-4 col-md-5" }, [
+                    _c("h3", [
+                      _vm._v(
+                        "\n                                " +
+                          _vm._s(hotel.title) +
+                          "\n\n                            "
+                      ),
+                    ]),
+                    _vm._v(
+                      "\n                            " +
+                        _vm._s(hotel.sub_title) +
+                        "\n                            "
+                    ),
                     _c(
                       "div",
-                      {
-                        staticClass: "col-md-12 panel-collapse collapse",
-                        attrs: { id: "hotelRooms-" + hotel.id },
-                      },
-                      [
-                        _vm._m(2, true),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "row" }, [
-                          _c("div", { staticClass: "col-md-12" }, [
-                            _c(
-                              "div",
-                              { staticClass: "boxed mt10 booking-summary" },
-                              [
-                                _c("p", { staticClass: "lead mb0" }, [
-                                  _c("i", {
-                                    staticClass: "fas fa-fw fa-calendar",
-                                  }),
-                                  _vm._v(" "),
-                                  _c("b", [_vm._v(_vm._s(_vm.from_date))]),
-                                  _vm._v(" "),
-                                  _c("i", {
-                                    staticClass: "fas fa-fw fa-arrow-right",
-                                  }),
-                                  _vm._v(" "),
-                                  _c("b", [_vm._v(_vm._s(_vm.to_date))]),
-                                ]),
+                      { staticClass: "clearfix mt10" },
+                      _vm._l(hotel.facilities, function (facility, index) {
+                        return _c(
+                          "span",
+                          { key: index, staticClass: "facility-icon" },
+                          [
+                            _c("img", {
+                              staticClass: "tips",
+                              attrs: {
+                                alt: facility.name,
+                                title: facility.name,
+                                src: facility.image,
+                              },
+                            }),
+                          ]
+                        )
+                      }),
+                      0
+                    ),
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "pt15 pb15 col-sm-4 col-md-3 text-center sep",
+                    },
+                    [
+                      _c(
+                        "a",
+                        {
+                          staticClass:
+                            "btn btn-success btn-block mt10 anchor-toggle",
+                          attrs: { href: "#", "data-toggle": "collapse" },
+                          on: {
+                            click: function ($event) {
+                              return _vm.openHotelRooms(hotel)
+                            },
+                          },
+                        },
+                        [_vm._v("\n                                Book ")]
+                      ),
+                    ]
+                  ),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "col-md-12 panel-collapse collapse",
+                      attrs: { id: "hotelRooms-" + hotel.id },
+                    },
+                    [
+                      _vm._m(0, true),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-md-12" }, [
+                          _c(
+                            "div",
+                            { staticClass: "boxed mt10 booking-summary" },
+                            [
+                              _c("p", { staticClass: "lead mb0" }, [
+                                _c("i", {
+                                  staticClass: "fas fa-fw fa-calendar",
+                                }),
                                 _vm._v(" "),
-                                hotel.total_selected_rooms > 0
-                                  ? _c(
-                                      "span",
-                                      { attrs: { id: "booking-amount_2" } },
-                                      [
-                                        _c("i", {
-                                          staticClass: "fas fa-fw fa-tags",
-                                        }),
-                                        _vm._v(" "),
-                                        _c("b", [
-                                          _vm._v(
-                                            "\n\n                                                " +
-                                              _vm._s(
-                                                hotel.total_selected_rooms
-                                              ) +
-                                              "\n\n\n                                            "
-                                          ),
-                                        ]),
+                                _c("b", [_vm._v(_vm._s(_vm.from_date))]),
+                                _vm._v(" "),
+                                _c("i", {
+                                  staticClass: "fas fa-fw fa-arrow-right",
+                                }),
+                                _vm._v(" "),
+                                _c("b", [_vm._v(_vm._s(_vm.to_date))]),
+                              ]),
+                              _vm._v(" "),
+                              hotel.total_selected_rooms > 0
+                                ? _c(
+                                    "span",
+                                    { attrs: { id: "booking-amount_2" } },
+                                    [
+                                      _c("i", {
+                                        staticClass: "fas fa-fw fa-tags",
+                                      }),
+                                      _vm._v(" "),
+                                      _c("b", [
                                         _vm._v(
-                                          " Room(s)\n                                            "
+                                          "\n\n                                                " +
+                                            _vm._s(hotel.total_selected_rooms) +
+                                            "\n\n\n                                            "
                                         ),
-                                        _c("i", {
-                                          staticClass: "fas fa-fw fa-male",
-                                        }),
-                                        _vm._v(" "),
-                                        _c("b", [
-                                          _vm._v(
-                                            "\n                                                " +
-                                              _vm._s(
-                                                hotel.total_selected_persons
-                                              ) +
-                                              "\n                                            "
-                                          ),
-                                        ]),
+                                      ]),
+                                      _vm._v(
+                                        " Room(s)\n                                            "
+                                      ),
+                                      _c("i", {
+                                        staticClass: "fas fa-fw fa-male",
+                                      }),
+                                      _vm._v(" "),
+                                      _c("b", [
                                         _vm._v(
-                                          " Person(s)\n                                            "
+                                          "\n                                                " +
+                                            _vm._s(
+                                              hotel.total_selected_persons
+                                            ) +
+                                            "\n                                            "
                                         ),
-                                        _c("i", {
+                                      ]),
+                                      _vm._v(
+                                        " Person(s)\n                                            "
+                                      ),
+                                      _c("i", {
+                                        staticClass: "fas fa-fw fa-caret-right",
+                                      }),
+                                      _vm._v(" "),
+                                      _c(
+                                        "button",
+                                        {
                                           staticClass:
-                                            "fas fa-fw fa-caret-right",
-                                        }),
-                                        _vm._v(" "),
-                                        _c(
-                                          "button",
-                                          {
-                                            staticClass:
-                                              "btn btn-success btn-lg btn-block mt5",
-                                            attrs: { id: "btn-book_2" },
-                                            on: {
-                                              click: function ($event) {
-                                                return _vm.submitBooking(hotel)
-                                              },
+                                            "btn btn-success btn-lg btn-block mt5",
+                                          attrs: {
+                                            disabled: _vm.loading,
+                                            id: "btn-book_2",
+                                          },
+                                          on: {
+                                            click: function ($event) {
+                                              return _vm.submitBooking(hotel)
                                             },
                                           },
-                                          [
-                                            _c("b", [
-                                              _vm._v(
-                                                "Total US " +
-                                                  _vm._s(hotel.total_amount)
-                                              ),
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("i", {
-                                              staticClass:
-                                                "fas fa-fw fa-hand-point-right",
-                                            }),
-                                            _vm._v(
-                                              "\n                                                Book"
-                                            ),
-                                          ]
-                                        ),
-                                      ]
-                                    )
-                                  : _vm._e(),
-                              ]
-                            ),
-                          ]),
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "boxed" },
-                          _vm._l(hotel.rooms, function (room, roomIndex) {
-                            return _c(
-                              "div",
-                              { staticClass: "row room-result" },
-                              [
-                                _vm._m(3, true),
-                                _vm._v(" "),
-                                _c(
-                                  "div",
-                                  { staticClass: "col-sm-3 col-md-3 col-lg-3" },
-                                  [
-                                    _c("h4", [_vm._v(_vm._s(room.title))]),
-                                    _vm._v(" "),
-                                    _c("p", [_vm._v(_vm._s(room.sub_title))]),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      { staticClass: "clearfix mt10" },
-                                      _vm._l(
-                                        room.facilities,
-                                        function (
-                                          roomFacility,
-                                          roomFacilityIndex
-                                        ) {
-                                          return _c(
-                                            "span",
-                                            { staticClass: "facility-icon" },
-                                            [
-                                              _c("img", {
-                                                staticClass: "tips",
-                                                attrs: {
-                                                  alt: roomFacility.name,
-                                                  title: roomFacility.name,
-                                                  src: roomFacility.image,
-                                                },
-                                              }),
-                                            ]
-                                          )
-                                        }
-                                      ),
-                                      0
-                                    ),
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "div",
-                                  {
-                                    staticClass:
-                                      "col-lg-6 col-md-6 col-sm-6 text-right sep",
-                                  },
-                                  [
-                                    _c("div", { staticClass: "price" }, [
-                                      _c(
-                                        "span",
-                                        { attrs: { itemprop: "priceRange" } },
+                                        },
                                         [
+                                          _c("i", {
+                                            staticClass:
+                                              "fas fa-fw fa-hand-point-right",
+                                          }),
                                           _vm._v(
-                                            "\n                                                " +
-                                              _vm._s(_vm.appCurrency) +
-                                              "\n                                                " +
-                                              _vm._s(room.price_per_night) +
-                                              "\n                                            "
+                                            "\n                                                Book\n                                                "
+                                          ),
+                                          _vm.loading == true
+                                            ? _c("span", [
+                                                _c("i", {
+                                                  staticClass:
+                                                    "fas fa-spinner fa-pulse fa-2x",
+                                                }),
+                                              ])
+                                            : _vm._e(),
+                                        ]
+                                      ),
+                                    ]
+                                  )
+                                : _vm._e(),
+                            ]
+                          ),
+                        ]),
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "boxed" },
+                        _vm._l(hotel.rooms, function (room, roomIndex) {
+                          return _c(
+                            "div",
+                            { staticClass: "row room-result mb10" },
+                            [
+                              _c("div", { staticClass: "col-lg-3" }, [
+                                _c("div", { staticClass: "img-container" }, [
+                                  _c("img", {
+                                    staticClass: "loaded",
+                                    attrs: {
+                                      width: "286",
+                                      height: "300",
+                                      src: room.image,
+                                    },
+                                  }),
+                                ]),
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "col-sm-3 col-md-3 col-lg-3" },
+                                [
+                                  _c("h4", [_vm._v(_vm._s(room.title))]),
+                                  _vm._v(" "),
+                                  _c("p", [_vm._v(_vm._s(room.sub_title))]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    { staticClass: "clearfix mt10" },
+                                    _vm._l(
+                                      room.facilities,
+                                      function (
+                                        roomFacility,
+                                        roomFacilityIndex
+                                      ) {
+                                        return _c(
+                                          "span",
+                                          { staticClass: "facility-icon" },
+                                          [
+                                            _c("img", {
+                                              staticClass: "tips",
+                                              attrs: {
+                                                alt: roomFacility.name,
+                                                title: roomFacility.name,
+                                                src: roomFacility.image,
+                                              },
+                                            }),
+                                          ]
+                                        )
+                                      }
+                                    ),
+                                    0
+                                  ),
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "col-lg-6 col-md-6 col-sm-6 text-right sep",
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                        Capacity :\n                                        "
+                                  ),
+                                  _c("i", { staticClass: "fas fa-fw fa-male" }),
+                                  _vm._v(
+                                    "\n                                        " +
+                                      _vm._s(room.max_people) +
+                                      "\n                                        "
+                                  ),
+                                  _c(
+                                    "div",
+                                    { staticClass: "pt10 form-inline" },
+                                    [
+                                      _c("i", {
+                                        staticClass: "fas fa-fw fa-tags",
+                                      }),
+                                      _vm._v(
+                                        "\n                                            Num rooms"
+                                      ),
+                                      _c("br"),
+                                      _vm._v(" "),
+                                      _c(
+                                        "select",
+                                        {
+                                          staticClass: "form-control",
+                                          attrs: { name: "total_rooms" },
+                                          on: {
+                                            change: function ($event) {
+                                              return _vm.updateRoomCount(
+                                                room,
+                                                $event
+                                              )
+                                            },
+                                          },
+                                        },
+                                        [
+                                          _c(
+                                            "option",
+                                            { attrs: { value: "0" } },
+                                            [_vm._v("0")]
+                                          ),
+                                          _vm._v(" "),
+                                          _vm._l(
+                                            room.total_rooms,
+                                            function (n) {
+                                              return _c(
+                                                "option",
+                                                { domProps: { value: n } },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                                    " +
+                                                      _vm._s(n) +
+                                                      "\n                                                "
+                                                  ),
+                                                ]
+                                              )
+                                            }
+                                          ),
+                                        ],
+                                        2
+                                      ),
+                                    ]
+                                  ),
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "clearfix" }),
+                              _vm._v(" "),
+                              _vm._l(
+                                room.room_rows,
+                                function (roomRow, roomRowIndex) {
+                                  return _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "row mb5 bg-success py5 justify-content-space-between mt10",
+                                    },
+                                    [
+                                      _c("div", { staticClass: "col-lg-2" }, [
+                                        _c("h4", [
+                                          _c("b", [
+                                            _vm._v(
+                                              "Room " + _vm._s(roomRowIndex + 1)
+                                            ),
+                                          ]),
+                                        ]),
+                                      ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass:
+                                            "col-md-3 col-lg-2 pt5 pb5",
+                                        },
+                                        [
+                                          _c(
+                                            "div",
+                                            {
+                                              staticClass:
+                                                "input-group input-group-sm",
+                                            },
+                                            [
+                                              _c(
+                                                "span",
+                                                {
+                                                  staticClass:
+                                                    "input-group-addon",
+                                                },
+                                                [_vm._v("Persons")]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "select",
+                                                {
+                                                  staticClass: "form-control",
+                                                  attrs: {
+                                                    name: "total_persons",
+                                                  },
+                                                  on: {
+                                                    change: function ($event) {
+                                                      return _vm.updateRoomPersonCount(
+                                                        room,
+                                                        roomRowIndex,
+                                                        $event
+                                                      )
+                                                    },
+                                                  },
+                                                },
+                                                [
+                                                  _c(
+                                                    "option",
+                                                    { attrs: { value: "0" } },
+                                                    [_vm._v("0")]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _vm._l(
+                                                    room.rate.total_people,
+                                                    function (n) {
+                                                      return _c(
+                                                        "option",
+                                                        {
+                                                          domProps: {
+                                                            value: n,
+                                                          },
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                                                        " +
+                                                              _vm._s(n) +
+                                                              "\n                                                    "
+                                                          ),
+                                                        ]
+                                                      )
+                                                    }
+                                                  ),
+                                                ],
+                                                2
+                                              ),
+                                            ]
                                           ),
                                         ]
                                       ),
-                                    ]),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      { staticClass: "mb10 text-muted" },
-                                      [_vm._v("Price / night")]
-                                    ),
-                                    _vm._v(
-                                      "\n                                        Capacity :\n                                        "
-                                    ),
-                                    _c("i", {
-                                      staticClass: "fas fa-fw fa-male",
-                                    }),
-                                    _vm._v(
-                                      "\n                                        " +
-                                        _vm._s(room.max_people) +
-                                        "\n                                        "
-                                    ),
-                                    _c(
-                                      "div",
-                                      { staticClass: "pt10 form-inline" },
-                                      [
-                                        _c("i", {
-                                          staticClass: "fas fa-fw fa-tags",
-                                        }),
-                                        _vm._v(
-                                          "\n                                            Num rooms"
-                                        ),
-                                        _c("br"),
-                                        _vm._v(" "),
-                                        _c(
-                                          "select",
-                                          {
-                                            staticClass: "form-control",
-                                            attrs: { name: "total_rooms" },
-                                            on: {
-                                              change: function ($event) {
-                                                return _vm.updateRoomCount(
-                                                  room,
-                                                  $event
-                                                )
-                                              },
-                                            },
-                                          },
-                                          [
-                                            _c(
-                                              "option",
-                                              { attrs: { value: "0" } },
-                                              [_vm._v("0")]
-                                            ),
-                                            _vm._v(" "),
-                                            _vm._l(
-                                              room.total_rooms,
-                                              function (n) {
-                                                return _c(
-                                                  "option",
-                                                  { domProps: { value: n } },
-                                                  [
-                                                    _vm._v(
-                                                      "\n                                                    " +
-                                                        _vm._s(n) +
-                                                        "\n                                                "
-                                                    ),
-                                                  ]
-                                                )
-                                              }
-                                            ),
-                                          ],
-                                          2
-                                        ),
-                                      ]
-                                    ),
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "clearfix" }),
-                                _vm._v(" "),
-                                _vm._l(
-                                  room.room_rows,
-                                  function (roomRow, roomRowIndex) {
-                                    return _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "row mb5 bg-success py5 justify-content-space-between",
-                                      },
-                                      [
-                                        _c("div", { staticClass: "col-lg-2" }, [
-                                          _c("h4", [
-                                            _c("b", [
-                                              _vm._v(
-                                                "Room " +
-                                                  _vm._s(roomRowIndex + 1)
-                                              ),
-                                            ]),
-                                          ]),
-                                        ]),
-                                        _vm._v(" "),
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass:
-                                              "col-md-3 col-lg-2 pt5 pb5",
-                                          },
-                                          [
-                                            _c(
-                                              "div",
-                                              {
-                                                staticClass:
-                                                  "input-group input-group-sm",
-                                              },
-                                              [
-                                                _c(
-                                                  "span",
-                                                  {
-                                                    staticClass:
-                                                      "input-group-addon",
-                                                  },
-                                                  [_vm._v("Persons")]
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "select",
-                                                  {
-                                                    staticClass: "form-control",
-                                                    attrs: {
-                                                      name: "total_persons",
-                                                    },
-                                                    on: {
-                                                      change: function (
-                                                        $event
-                                                      ) {
-                                                        return _vm.updateRoomPersonCount(
-                                                          room,
-                                                          roomRowIndex,
-                                                          $event
-                                                        )
-                                                      },
-                                                    },
-                                                  },
-                                                  [
-                                                    _c(
-                                                      "option",
-                                                      { attrs: { value: "0" } },
-                                                      [_vm._v("0")]
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _vm._l(
-                                                      room.rate.total_people,
-                                                      function (n) {
-                                                        return _c(
-                                                          "option",
-                                                          {
-                                                            domProps: {
-                                                              value: n,
-                                                            },
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              "\n                                                        " +
-                                                                _vm._s(n) +
-                                                                "\n                                                    "
-                                                            ),
-                                                          ]
-                                                        )
-                                                      }
-                                                    ),
-                                                  ],
-                                                  2
-                                                ),
-                                              ]
-                                            ),
-                                          ]
-                                        ),
-                                      ]
-                                    )
-                                  }
-                                ),
-                              ],
-                              2
-                            )
-                          }),
-                          0
-                        ),
-                      ]
-                    ),
-                  ]),
-                ]
-              )
-            }),
-          ],
-          2
+                                    ]
+                                  )
+                                }
+                              ),
+                            ],
+                            2
+                          )
+                        }),
+                        0
+                      ),
+                    ]
+                  ),
+                ]),
+              ]
+            )
+          }),
+          0
         ),
       ]),
     ]),
   ])
 }
 var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-1 col-sm-12 col-xs-12" }, [
-      _c("div", { staticClass: "form-group" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-block btn-primary",
-            attrs: { type: "submit", name: "check_availabilities" },
-          },
-          [_vm._v("GO")]
-        ),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "boxed mb20" }, [
-      _c("h2", [_vm._v("Book on our website")]),
-      _vm._v(" "),
-      _c("p", { staticClass: "lead mb0" }, [
-        _vm._v(
-          "Hurry up! Select the your rooms, complete your booking and take advantage of\n                        our special offers and packages!"
-        ),
-        _c("br"),
-        _c("b", [_vm._v("Best price guarantee!")]),
-      ]),
-    ])
-  },
   function () {
     var _vm = this
     var _h = _vm.$createElement
@@ -29161,24 +28851,6 @@ var staticRenderFns = [
           },
           [_c("i", { staticClass: "fas fa-fw fa-angle-up" })]
         ),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-lg-3 hidden-sm hidden-xs" }, [
-      _c("div", { staticClass: "img-container lazyload md" }, [
-        _c("img", {
-          attrs: {
-            alt: "",
-            "data-src": "/medias/room/small/2/screenshot-2022-06-24-203112.png",
-            itemprop: "photo",
-            width: "286",
-            height: "300",
-          },
-        }),
       ]),
     ])
   },

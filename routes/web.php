@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AcitivityController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ClientAccountController;
 use App\Http\Controllers\CouponController;
+use App\Http\Controllers\CpanelBookingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\FacilityController;
@@ -43,10 +45,15 @@ Route::middleware(["auth"])->group(function () {
 
     Route::post("booking/rooms", [BookingController::class, "getRoom"])->name("booking.getRoom");
 
+    Route::get("account", [ClientAccountController::class, "index"])->name("account.index");
+    Route::get("account/bookings", [ClientAccountController::class, "bookings"])->name("account.bookings");
+    Route::get("account/bookings/{booking_id}", [ClientAccountController::class, "bookingDetails"])->name("account.bookingDetails");
+
 });
 
 Route::middleware(["auth","role:admin|hotel"])->prefix("cpanel")->name("cpanel.")->group(function () {
 
+    Route::get('/', [DashboardController::class, "index"]);
     Route::resource("dashboard", DashboardController::class);
 
 
@@ -91,4 +98,7 @@ Route::middleware(["auth","role:admin|hotel"])->prefix("cpanel")->name("cpanel."
 
     Route::get("services/{release_status}/{service_id}/release", [ServiceController::class, "releaseStatusUpdate"])->name("services.release");
     Route::resource("services", ServiceController::class);
+
+
+    Route::resource('bookings', CpanelBookingController::class);
 });

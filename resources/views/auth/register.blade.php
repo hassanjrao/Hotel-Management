@@ -2,7 +2,7 @@
 
 @extends('layouts.front-layout')
 
-@section('page-title', 'Booking')
+@section('page-title', 'Register')
 
 @section('content')
 
@@ -11,6 +11,7 @@
 
 
     </div> --}}
+
 
 
 
@@ -25,6 +26,7 @@
             <div class="clearfix"></div>
         </div>
 
+        
         <livewire:auth.register>
 
     </div>

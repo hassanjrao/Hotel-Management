@@ -10,11 +10,11 @@
 
             <form action="{{ route("booking.index") }}" method="GET" class="booking-search">
                 <div class="row">
-                    <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="col-md-3 col-sm-6 col-xs-12 col-md-offset-2">
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon">Destination</div>
-                                <select name="destination" id="" class="form-control">
+                                <select name="destination" id="" class="form-control" required>
                                     <option value="">Select Destination</option>
                                     @foreach ($destinations as $destination)
                                         <option value="{{ $destination->id }}">{{ $destination->name }}</option>
@@ -23,7 +23,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="col-md-5 col-sm-6 col-xs-12">
                         <div class="input-wrapper datepicker-wrapper form-inline">
                             <div class="input-group from-date">
                                 <input type="date" class="form-control text-right" id="from_picker"
@@ -44,25 +44,17 @@
                         </div>
                         <div class="field-notice" rel="dates"></div>
                     </div>
+
                     <div class="col-md-2 col-sm-6 col-xs-6">
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-addon">Adults</div>
-                                <input type="number" name="total_adults" id="" class="form-control" value="0"
+                                <div class="input-group-addon">Persons</div>
+                                <input type="number" name="total_persons" id="" class="form-control" value="0"
                                     min="0">
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2 col-sm-6 col-xs-6">
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-addon">Children</div>
-                                <input type="number" name="total_children" id="" class="form-control" value="0"
-                                    min="0">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-1 col-sm-12 col-xs-12">
+                    <div class="col-md-2 col-sm-12 col-xs-12 col-md-offset-4">
                         <div class="form-group">
                             <button class="btn btn-block btn-primary" type="submit">GO</button>
                         </div>

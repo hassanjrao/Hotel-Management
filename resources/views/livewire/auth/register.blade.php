@@ -2,10 +2,18 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 ">
+            <div class="col-lg-8 col-md-offset-2">
 
                 <form wire:submit.prevent='register'>
 
+                    <div class="mb10 ">
+                        <div class="form-check">
+                            <a class="text-muted fs-sm fw-medium d-block d-lg-inline-block"
+                            href="{{ route('login') }}">
+                            <b>Already have an account? Login</b>
+                        </a>
+                        </div>
+                    </div>
 
                     <div class="row mb10">
 
@@ -115,7 +123,7 @@
 
                     </div>
 
-                    <div class="row mb10">
+                    <div class="row mb10 mt10">
 
 
 
@@ -141,11 +149,14 @@
                                 </span>
                             @enderror
 
+                        </div>
+
                     </div>
 
 
-                    <br>
                     <div class="row mt10">
+
+                        <br><br>
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary">
                                 {{ __('Register') }}

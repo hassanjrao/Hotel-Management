@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class UserBookingNotification extends Notification
+class BookingCancelledNotification extends Notification
 {
     use Queueable;
 
@@ -42,11 +42,18 @@ class UserBookingNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('We have received your booking request.')
-                    ->line('Booking ID: '.$this->booking->booking_id)
-                    ->line('Booking Status: '.$this->booking->status_code)
-                    ->action('Login', url('/login'))
-                    ->line('Thank you for using our application!');
+            ->subject("Booking Cancelled")
+            ->greeting("Dear {$this->booking->user->name}")
+            ->line("We have received a decline email from the hotel regarding your Booking reference {$this->booking->booking_id}")
+            ->line("Reason for decline: Hotel Reason ")
+            ->line("We hope you can find alternative accommodation on our web-portal.")
+            ->line("We apologize that we were unable to assist you with this booking.")
+            ->line("If you need any assistance please email: customerservice@freehotelrooms.net")
+            ->action('Login', url('/'))
+            // kind regards
+            ->salutation("Kind Regards")
+            ->salutation("Customer Service")
+            ->salutation("FreeHotelRooms");
     }
 
     /**

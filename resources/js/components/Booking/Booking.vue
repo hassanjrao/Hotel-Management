@@ -1,81 +1,12 @@
 <template>
     <div id="content" class="pb30">
 
-        <div id="search-page" class="mt20 mt20">
-            <div class="container" style="padding-top:140px">
-
-                <form action="" method="GET" class="booking-search">
-
-                    <div class="row">
-                        <div class="col-md-3 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <div class="input-group-addon">Destination</div>
-                                    <select name="destination" id="" class="form-control" v-model="selected_destination">
-                                        <option value="">Select Destination</option>
-                                        <option v-for="destination in destinations" v-bind:value="destination.id">
-                                            {{ destination.name }}
-                                        </option>
-
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-sm-6 col-xs-12">
-                            <div class="input-wrapper datepicker-wrapper form-inline">
-                                <div class="input-group from-date">
-
-                                    <input type="date" class="form-control hasDatepicker" id="from_picker" name="from_date"
-                                        placeholder="Check in" v-model="from_date">
 
 
-                                </div>
 
-                                <i class="fas fa-fw fa-long-arrow-alt-right"></i>
-                                <div class="input-group to-date">
-
-                                    <input type="date" class="form-control hasDatepicker" id="to_picker" name="to_date"
-                                        v-model="to_date" placeholder="Check out">
-
-
-                                </div>
-                            </div>
-                            <div class="field-notice" rel="dates"></div>
-                        </div>
-                        <div class="col-md-2 col-sm-6 col-xs-6">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <div class="input-group-addon">Entered Persons</div>
-
-                                    <input type="text" name="total_adults" class="form-control" v-model="entered_persons"
-                                        min="0">
-
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-1 col-sm-12 col-xs-12">
-                            <div class="form-group">
-                                <button class="btn btn-block btn-primary" type="submit"
-                                    name="check_availabilities">GO</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-
-
-        <div class="container">
+        <div class="container pt20">
             <div class="row">
                 <div class="col-md-9">
-                    <div class="boxed mb20">
-                        <h2>Book on our website</h2>
-                        <p class="lead mb0">Hurry up! Select the your rooms, complete your booking and take advantage of
-                            our special offers and packages!<br><b>Best price guarantee!</b></p>
-                    </div>
 
 
 
@@ -94,9 +25,9 @@
 
                                 </h3>
                                 {{ hotel.sub_title }}
-                                <div class="clearfix mt10" v-for="(facility, index) in hotel.facilities" :key="index">
+                                <div class="clearfix mt10" >
 
-                                    <span class="facility-icon">
+                                    <span class="facility-icon" v-for="(facility, index) in hotel.facilities" :key="index">
                                         <img :alt="facility.name" :title="facility.name" :src="facility.image" class="tips">
                                     </span>
 
@@ -104,11 +35,11 @@
                                 </div>
                             </div>
                             <div class="pt15 pb15 col-sm-4 col-md-3 text-center sep">
-                                <div class="price text-primary">
+                                <!-- <div class="price text-primary">
                                     From <span itemprop="priceRange">
                                         {{ appCurrency }} {{ hotel.min_price }}
                                     </span>
-                                    / night </div>
+                                    / night </div> -->
 
 
                                 <a href="#" v-on:click="openHotelRooms(hotel)" data-toggle="collapse"
@@ -139,6 +70,7 @@
 
                                             <span id="booking-amount_2" v-if="hotel.total_selected_rooms > 0">
                                                 <i class="fas fa-fw fa-tags"></i>
+
                                                 <b>
 
                                                     {{ hotel.total_selected_rooms }}
@@ -151,11 +83,18 @@
                                                 </b> Person(s)
                                                 <i class="fas fa-fw fa-caret-right"></i>
 
-                                                <button v-on:click="submitBooking(hotel)" id="btn-book_2"
-                                                    class="btn btn-success btn-lg btn-block mt5"><b>Total US {{
-                                                        hotel.total_amount }}</b>
+                                                <button :disabled="loading" v-on:click="submitBooking(hotel)"
+                                                    id="btn-book_2" class="btn btn-success btn-lg btn-block mt5">
+                                                    <!-- <b>
+                                                        Total US
+                                                        {{hotel.total_amount }}
+                                                    </b> -->
                                                     <i class="fas fa-fw fa-hand-point-right"></i>
-                                                    Book</button>
+                                                    Book
+                                                    <span v-if="loading == true">
+                                                        <i class="fas fa-spinner fa-pulse fa-2x"></i>
+                                                    </span>
+                                                </button>
                                             </span>
 
                                         </div>
@@ -164,11 +103,16 @@
 
                                 <div class="boxed">
 
-                                    <div class="row room-result" v-for="(room, roomIndex) in hotel.rooms">
-                                        <div class="col-lg-3 hidden-sm hidden-xs">
-                                            <div class="img-container lazyload md">
-                                                <img alt="" data-src="/medias/room/small/2/screenshot-2022-06-24-203112.png"
-                                                    itemprop="photo" width="286" height="300">
+                                    <div class="row room-result mb10" v-for="(room, roomIndex) in hotel.rooms">
+                                        <div class="col-lg-3">
+                                            <div class="img-container">
+                                                <!-- <img alt="" :data-src="room.image" itemprop="photo" width="286"
+                                                    height="300"> -->
+
+
+
+                                                <img width="286" height="300" :src="room.image" class="loaded">
+
                                             </div>
                                         </div>
                                         <div class="col-sm-3 col-md-3 col-lg-3">
@@ -186,13 +130,13 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-6 text-right sep">
-                                            <div class="price">
+                                            <!-- <div class="price">
                                                 <span itemprop="priceRange">
                                                     {{ appCurrency }}
                                                     {{ room.price_per_night }}
                                                 </span>
-                                            </div>
-                                            <div class="mb10 text-muted">Price / night</div>
+                                            </div> -->
+                                            <!-- <div class="mb10 text-muted">Price / night</div> -->
                                             Capacity :
                                             <i class="fas fa-fw fa-male"></i>
                                             {{ room.max_people }}
@@ -214,7 +158,7 @@
 
 
 
-                                        <div class="row mb5 bg-success py5 justify-content-space-between"
+                                        <div class="row mb5 bg-success py5 justify-content-space-between mt10"
                                             v-for="(roomRow, roomRowIndex) in room.room_rows">
                                             <div class="col-lg-2">
                                                 <h4><b>Room {{ roomRowIndex + 1 }}</b></h4>
@@ -270,6 +214,7 @@ export default {
             hotels: [],
             bookedRooms: [],
             paymentSummary: [],
+            loading: false
 
         }
     },
@@ -382,6 +327,9 @@ export default {
 
             var hotelBookings = this.bookedRooms[hotel.id]
 
+            this.loading = true
+
+
             axios.post('/booking/store', {
                 hotel_id: hotel.id,
                 hotel_bookings: hotelBookings,
@@ -389,12 +337,14 @@ export default {
                 to_date: this.to_date,
                 destination_id: this.selected_destination,
             })
-                .then(function (response) {
+                .then(response => {
                     console.log(response);
+
 
                     if (response.data.status == 'success') {
 
                         console.log("success")
+
 
                         const Toast = Swal.mixin({
                             toast: true,
@@ -413,11 +363,17 @@ export default {
                             title: "Booking submitted successfully",
                         })
 
+                        this.loading = false
+
+                        window.location.href = 'account/bookings'
+
                     }
 
                 })
-                .catch(function (error) {
+                .catch(error => {
                     console.log(error);
+
+                    this.loading = false
                 });
 
         }

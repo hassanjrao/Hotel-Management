@@ -24,7 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $destinations=Destination::homePageDestinations();
+        $destinations=Destination::publishedDestinations();
 
         // get top 6 hotels
 

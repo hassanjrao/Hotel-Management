@@ -18,6 +18,7 @@ class BookingController extends Controller
     {
 
 
+
         $fromDate = $request->from_date;
         $toDate = $request->to_date;
         $selectedDestination = 1;
@@ -48,8 +49,8 @@ class BookingController extends Controller
 
         $fromDate = $request->from_date;
         $toDate = $request->to_date;
-        $selectedDestination = 1;
-        $enteredPersons=1;
+        $selectedDestination = $request->destination;
+        $enteredPersons=$request->total_persons;
 
 
 
@@ -69,7 +70,7 @@ class BookingController extends Controller
             }
 
             return [
-                "title" => $hotel->sub_title,
+                "title" => $hotel->title,
                 "sub_title" => $hotel->sub_title,
                 "id" => $hotel->id,
                 "min_price" => $hotel->rates->min("price_per_night"),
@@ -82,6 +83,12 @@ class BookingController extends Controller
                     ];
                 }),
                 "rooms"=> $hotel->rooms->map(function($room){
+
+                    $roomImage = '';
+                    if($room->roomImages->count()>0){
+                        $roomImage = $room->roomImages->last()->image;
+                    }
+
                     return [
                         "id" => $room->id,
                         "title" => $room->title,
@@ -90,6 +97,7 @@ class BookingController extends Controller
                         "max_people" => $room->max_people,
                         "total_rooms" => $room->total_rooms,
                         "hotel_id" => $room->hotel_id,
+                        "image" => asset('storage/rooms/' . $roomImage),
                         "facilities" => $room->facilities->map(function($facility){
                             return [
                                 "id" => $facility->id,

@@ -68,41 +68,49 @@
                 <div id="mainMenu" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li class="primary nav-1">
-                            <a class="firstLevel active" href="/"
+                            <a class="firstLevel {{ request()->segment(1)=='' ? ' active' : '' }}"
+                             href="/"
                                 title="FREEHOTELROOMS WORLD WIDE Resorts, Luxury Hotels">Home</a>
                         </li>
 
 
-                        <li class="primary nav-7">
+                        {{-- <li class="primary nav-7">
                             <a class="dropdown-toggle disabled firstLevel" href="/hotels" target="_self" title="Hotels">
                                 Hotels
                             </a>
-                        </li>
+                        </li> --}}
 
-                        <li class="primary nav-2">
-
-
+                        {{-- <li class="primary nav-2">
                             <a class="dropdown-toggle disabled firstLevel" href="/contact" target="_self"
                                 title="Contact">
-
                                 Contact
                             </a>
-
-
-                        </li>
+                        </li> --}}
 
                         @if (!Auth::check())
                             <li class="primary nav-2">
 
 
-                                <a class="dropdown-toggle disabled firstLevel" href="/contact" target="_self"
+                                <a class="dropdown-toggle disabled firstLevel {{ request()->segment(1)=='register' ? ' active' : '' }}" href="{{ route("register") }}" target="_self"
                                     title="Contact">
 
                                     Sign Up
                                 </a>
                             </li>
+                        @else
                         @endif
 
+
+                        @if (Auth::check())
+                            <li class="primary nav-2">
+                                <a class="dropdown-toggle disabled firstLevel {{ request()->segment(1)=='account' ? ' active' : '' }}" style="cursor: pointer;"
+                                    href="{{ route("account.index") }}">
+                                    Account
+                                </a>
+
+
+                            </li>
+                        @endif
                         <li class="primary nav-2">
 
 
@@ -116,7 +124,7 @@
 
                                 </form>
                             @else
-                                <a class="dropdown-toggle disabled firstLevel" href="{{ route('login') }}"
+                                <a class="dropdown-toggle disabled firstLevel {{ request()->segment(1)=='login' ? ' active' : '' }}" href="{{ route('login') }}"
                                     target="_self" title="Contact">
                                     Login
                                 </a>
@@ -135,7 +143,7 @@
                     <div class="navbar-header">
 
                         <a class="navbar-brand" href="/" title="Panda Multi Resorts, Luxury Hotels"><img
-                                src="/templates/default/images/logo.png" alt="FREEHOTELROOMS"></a>
+                                src="{{ asset("media/logo.png") }}" alt="FREEHOTELROOMS"></a>
 
                         <button type="button" class="navbar-toggle" data-toggle="collapse"
                             data-target=".navbar-collapse">
@@ -177,7 +185,7 @@
 
                 <div class="row">
 
-                    <div class="col-md-4">
+                    <div class="col-md-6">
 
                         <div class="widget-footer_col_1">
                             <div id="widget-1" class="widget">
@@ -192,36 +200,9 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4">
 
-                        <div class="widget-footer_col_2">
-                            <div id="widget-3" class="widget">
-                                <div class="widget-title">Latest articles</div>
-                                <div class="widget-content">
-                                    <ul class="nostyle">
 
-                                        <li>
-                                            <a href="/about-us/scuba-diving"
-                                                title="Dive into unknown waters! - About us"
-                                                class="img-container sm pull-left tips">
-                                                <img src="/medias/article/small/5/diving.jpg">
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="/gallery/first-gallery" title="First gallery - Gallery"
-                                                class="img-container sm pull-left tips">
-                                                <img src="/medias/article/small/4/sample4.jpg">
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
+                    <div class="col-md-6">
 
                         <div class="widget-footer_col_3">
                             <div id="widget-4" class="widget">

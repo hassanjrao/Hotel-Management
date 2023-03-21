@@ -88,6 +88,7 @@ class HotelController extends Controller
         ]);
 
 
+
         $hotel = Hotel::create([
             "title" => $request->title,
             "sub_title" => $request->sub_title,
@@ -174,6 +175,7 @@ class HotelController extends Controller
 
         $facilities = Facility::latest()->get();
 
+
         $destinations = Destination::latest()->get();
 
         $hotelStars = HotelStar::latest()->get();
@@ -221,9 +223,10 @@ class HotelController extends Controller
             "lng" => "required",
             "release_status" => "nullable|exists:release_statuses,code",
             "home_page" => "nullable",
-            "image" => "nullable",
+            "images" => "nullable",
             "hotel_users" => "required|array",
         ]);
+
 
         $hotel->update([
             "title" => $request->title,
@@ -245,6 +248,37 @@ class HotelController extends Controller
         $hotel->facilities()->sync($request->facilities);
 
         $hotel->users()->sync($request->hotel_users);
+
+
+        $hotelImages = [];
+        if (isset($request->images) && count($request->images) > 0) {
+
+            foreach ($request->images as $image) {
+                $folderId = $image;
+
+
+                $files = Storage::files("uploads/temp/$folderId");
+
+                foreach ($files as $file) {
+                    $filename = basename($file);
+                    $path = "hotels";
+                    Storage::move($file, "$path/$filename");
+
+                    $hotelImages[] = [
+                        "hotel_id" => $hotel->id,
+                        "image" => $filename,
+                        "created_at" => now(),
+                        "updated_at" => now(),
+                    ];
+                }
+
+                Storage::deleteDirectory("uploads/temp/$folderId");
+            }
+        }
+
+        HotelImage::insert($hotelImages);
+
+
 
 
         return redirect()->route("cpanel.hotels.index")->withToastSuccess("Hotel updated successfully");

@@ -43,7 +43,7 @@ class HotelBookingNotification extends Notification
     {
         return (new MailMessage)
                     ->line('New Booking')
-                    ->line('Booking ID: '.$this->booking->id)
+                    ->line('Booking ID: '.$this->booking->booking_id)
                     ->line('Booking Status: '.$this->booking->status_code)
                     ->line('Booking Date: '.$this->booking->created_at)
                     ->line('Booking Details:')
