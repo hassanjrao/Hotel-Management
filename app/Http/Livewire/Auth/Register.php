@@ -58,8 +58,15 @@ class Register extends Component
 
         $user->assignRole(["client"]);
 
-        $user->notify(new ClientRegister($user));
 
+
+
+
+
+
+
+
+        $user->notify(new ClientRegister($user));
 
         auth()->login($user);
 
@@ -69,6 +76,9 @@ class Register extends Component
         $this->reset();
 
     }
+
+
+
 
     public function render()
     {

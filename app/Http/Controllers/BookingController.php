@@ -7,6 +7,8 @@ use App\Models\Destination;
 use App\Models\Hotel;
 use App\Models\Room;
 use App\Notifications\HotelBookingNotification;
+use App\Notifications\NewReservationHotelNotification;
+use App\Notifications\NewReservationUserNotification;
 use App\Notifications\UserBookingNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
@@ -58,6 +60,7 @@ class BookingController extends Controller
         $hotels = Hotel::where("home_page", 1)
             ->where("release_status", "published")
             ->whereHas("rates")
+            ->where("destination_id", $selectedDestination)
             ->with(["rates", "rooms", "facilities", "images", "rooms.facilities","rooms.rate"])
             ->get();
 
@@ -204,10 +207,10 @@ class BookingController extends Controller
         $hotelUsers=Hotel::where("id", $request->hotel_id)->first()->users;
         $authUser=auth()->user();
 
-        Notification::send($hotelUsers, new HotelBookingNotification($booking));
+        Notification::send($hotelUsers, new NewReservationHotelNotification($booking));
 
 
-        $authUser->notify(new UserBookingNotification($booking));
+        $authUser->notify(new NewReservationUserNotification($booking));
 
 
         return response()->json([

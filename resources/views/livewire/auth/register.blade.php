@@ -4,14 +4,15 @@
         <div class="row">
             <div class="col-lg-8 col-md-offset-2">
 
-                <form wire:submit.prevent='register'>
+                <form wire:submit.prevent='register'
+                accept-charset="UTF-8" action="" class="require-validation" data-cc-on-file="false"
+                        data-stripe-publishable-key="{{ config('services.stripe.key') }}">
 
                     <div class="mb10 ">
                         <div class="form-check">
-                            <a class="text-muted fs-sm fw-medium d-block d-lg-inline-block"
-                            href="{{ route('login') }}">
-                            <b>Already have an account? Login</b>
-                        </a>
+                            <a class="text-muted fs-sm fw-medium d-block d-lg-inline-block" href="{{ route('login') }}">
+                                <b>Already have an account? Login</b>
+                            </a>
                         </div>
                     </div>
 
@@ -152,6 +153,9 @@
                         </div>
 
                     </div>
+
+
+
 
 
                     <div class="row mt10">

@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             ReaseStatusSeeder::class,
             HotelStartSeeder::class,
             BookingStatusSeeder::class,
+            SubscriptionPlanSeeder::class,
         ]);
     }
 }

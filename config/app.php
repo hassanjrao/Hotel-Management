@@ -182,6 +182,10 @@ return [
 
         Barryvdh\Debugbar\ServiceProvider::class,
 
+        Cartalyst\Stripe\Laravel\StripeServiceProvider::class,
+
+        Collective\Html\HtmlServiceProvider::class,
+
     ],
 
     /*
@@ -236,6 +240,10 @@ return [
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
         'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
 
+        'Stripe' => Cartalyst\Stripe\Laravel\Facades\Stripe::class,
+
+        'Form' => Collective\Html\FormFacade::class,
+      'Html' => Collective\Html\HtmlFacade::class,
 
     ],
 

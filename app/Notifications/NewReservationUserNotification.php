@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ClientRegister extends Notification
+class NewReservationUserNotification extends Notification
 {
     use Queueable;
 
@@ -16,10 +16,10 @@ class ClientRegister extends Notification
      *
      * @return void
      */
-    public $user;
-    public function __construct($user)
+    public $booking;
+    public function __construct($booking)
     {
-        $this->user = $user;
+        $this->booking = $booking;
     }
 
     /**
@@ -42,16 +42,14 @@ class ClientRegister extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject("Welcome to ". config('app.name'))
-                    ->greeting("Dear ".$this->user->name)
-                    ->line('Welome to '.config('app.name'))
-                    ->line("Thank you for registering with us and please find attached your invoice.")
-                    ->line("We will be mailing your membership card in due course, upon receiving your card we, advice you to sign on the reverse side and keep it save. You need to present the card on your arrival at the hotel.")
-                    ->line('Your membership number is: '.$this->user->member_ship_number)
-                    ->line("If you need any help, please email us on customerservice@freehotelrooms.net")
-                    ->line("We will try to answer your query with 24 hrs.")
-                    ->line("We hope you will enjoy our website and wish you happy travels.")
-                    ->action('Login', url('/login'))
+                    ->subject("Booking {$this->booking->booking_id} request received")
+                    ->greeting("Dear {$this->booking->user->name}")
+                    ->line('We have received your reservation and passed it on to the hotel for approval.')
+                    ->line("Booking Reference: {$this->booking->booking_id}")
+                    ->line("Please go to your account on our portal to find the details.")
+                    ->line("We will inform the customer of your decision by email.")
+                    ->line("If you need any assistance please email: customerservice@freehotelrooms.net")
+                    ->action('Login', url('/'))
                     ->line('Thank you for using our application!');
     }
 

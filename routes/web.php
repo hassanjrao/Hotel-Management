@@ -14,9 +14,12 @@ use App\Http\Controllers\PackageController;
 use App\Http\Controllers\RateController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\StripeController;
+use App\Http\Controllers\SubscriptionPlanController;
 use App\Http\Controllers\TaxController;
 use App\Http\Controllers\UploadFileController;
 use App\Http\Controllers\UserController;
+use App\Models\SubscriptionPlan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -35,6 +38,10 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 
+Route::get('plans', [SubscriptionPlanController::class, 'index']);
+Route::get('plans/{plan}', [SubscriptionPlanController::class, 'show'])->name("plans.show");
+Route::post('subscription', [SubscriptionPlanController::class, 'subscription'])->name("subscription.create");
+
 Route::middleware(["auth"])->group(function () {
 
     Route::get('/', [HomeController::class, "index"])->name('home');
@@ -49,9 +56,10 @@ Route::middleware(["auth"])->group(function () {
     Route::get("account/bookings", [ClientAccountController::class, "bookings"])->name("account.bookings");
     Route::get("account/bookings/{booking_id}", [ClientAccountController::class, "bookingDetails"])->name("account.bookingDetails");
 
+    Route::post("account/bookings/cancel", [ClientAccountController::class, "cancelBooking"])->name("account.cancelBooking");
 });
 
-Route::middleware(["auth","role:admin|hotel"])->prefix("cpanel")->name("cpanel.")->group(function () {
+Route::middleware(["auth", "role:admin|hotel"])->prefix("cpanel")->name("cpanel.")->group(function () {
 
     Route::get('/', [DashboardController::class, "index"]);
     Route::resource("dashboard", DashboardController::class);

@@ -7,8 +7,8 @@ use App\Models\BookingStatus;
 use App\Models\Destination;
 use App\Models\Hotel;
 use App\Models\User;
-use App\Notifications\BookingCancelledNotification;
-use App\Notifications\BookingConfirmedNotification;
+use App\Notifications\HotelBookingCancelledNotification;
+use App\Notifications\HotelBookingConfirmedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 
@@ -34,9 +34,12 @@ class CpanelBookingController extends Controller
                 $query->whereIn("hotel_id", $hotelUsers->pluck("id"));
             })
                 ->with(["bookingDetails", "destination", "user"])
+                ->latest()
                 ->get();
         } else {
-            $bookings = Booking::with(["bookingDetails", "destination", "user"])->get();
+            $bookings = Booking::with(["bookingDetails", "destination", "user"])
+                ->latest()
+                ->get();
         }
 
         return view("cpanel.bookings.index", compact("bookings"));
@@ -115,9 +118,9 @@ class CpanelBookingController extends Controller
 
 
         if ($booking->status_code == 'confirmed') {
-            Notification::send($booking->user, new BookingConfirmedNotification($booking));
+            Notification::send($booking->user, new HotelBookingConfirmedNotification($booking));
         } else if ($booking->status_code == 'cancelled') {
-            Notification::send($booking->user, new BookingCancelledNotification($booking));
+            Notification::send($booking->user, new HotelBookingCancelledNotification($booking));
         }
 
 

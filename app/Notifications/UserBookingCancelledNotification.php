@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class BookingCancelledNotification extends Notification
+class UserBookingCancelledNotification extends Notification
 {
     use Queueable;
 
@@ -21,6 +21,7 @@ class BookingCancelledNotification extends Notification
     {
         $this->booking = $booking;
     }
+
 
     /**
      * Get the notification's delivery channels.
@@ -42,18 +43,14 @@ class BookingCancelledNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject("Booking Cancelled")
-            ->greeting("Dear {$this->booking->user->name}")
-            ->line("We have received a decline email from the hotel regarding your Booking reference {$this->booking->booking_id}")
-            ->line("Reason for decline: Hotel Reason ")
-            ->line("We hope you can find alternative accommodation on our web-portal.")
-            ->line("We apologize that we were unable to assist you with this booking.")
-            ->line("If you need any assistance please email: customerservice@freehotelrooms.net")
-            ->action('Login', url('/'))
-            // kind regards
-            ->salutation("Kind Regards")
-            ->salutation("Customer Service")
-            ->salutation("FreeHotelRooms");
+                    ->subject("Booking {$this->booking->booking_id} cancellation request received")
+                    ->line('You have received a cancellation request.')
+                    ->line("Booking Reference: {$this->booking->booking_id}")
+                    ->line("Please go to your online account with us and approve the cancellation.")
+                    ->line("We will confirm your acceptance via email to the customer.")
+                    ->line("If you need any assistance please email: customerservice@freehotelrooms.net")
+                    ->action('Login', url('/'))
+                    ->line('Thank you for using our application!');
     }
 
     /**
