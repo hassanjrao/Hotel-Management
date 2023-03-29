@@ -11,7 +11,7 @@ use Laravel\Cashier\Billable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable,HasRoles, Billable;
+    use HasFactory, Notifiable, HasRoles, Billable;
 
     /**
      * The attributes that are mass assignable.
@@ -29,6 +29,7 @@ class User extends Authenticatable
         'city',
         'country',
         'mobile',
+        "plan_id"
 
     ];
 
@@ -59,6 +60,11 @@ class User extends Authenticatable
 
     public function getMemberShipNumberAttribute()
     {
-        return "M".str_pad($this->id, 5, "0", STR_PAD_LEFT);
+        return "M" . str_pad($this->id, 5, "0", STR_PAD_LEFT);
+    }
+
+    public function subscriptionPlan()
+    {
+        return $this->belongsTo(SubscriptionPlan::class, "plan_id");
     }
 }

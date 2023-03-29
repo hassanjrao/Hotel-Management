@@ -6,8 +6,8 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">
+                <div class="panel panel-default">
+                    <div class="">
                         You will be charged ${{ number_format($plan->price, 2) }} for {{ $plan->name }} Plan
                     </div>
 
@@ -95,6 +95,8 @@
             paymentMethod.setAttribute('name', 'payment_method')
             paymentMethod.setAttribute('value', setupIntent.payment_method)
             form.appendChild(paymentMethod)
+
+            @this.set("paymentMethod", setupIntent.payment_method)
 
 
 

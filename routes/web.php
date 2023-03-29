@@ -17,6 +17,7 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\SubscriptionPlanController;
 use App\Http\Controllers\TaxController;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\UploadFileController;
 use App\Http\Controllers\UserController;
 use App\Models\SubscriptionPlan;
@@ -37,6 +38,7 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
+Route::get("test", [TestController::class, "index"])->name("index");
 
 Route::get('plans', [SubscriptionPlanController::class, 'index']);
 Route::get('plans/{plan}', [SubscriptionPlanController::class, 'show'])->name("plans.show");

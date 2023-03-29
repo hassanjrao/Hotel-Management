@@ -12,6 +12,7 @@ use App\Notifications\NewReservationUserNotification;
 use App\Notifications\UserBookingNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
 
 class BookingController extends Controller
 {
@@ -207,6 +208,7 @@ class BookingController extends Controller
         $hotelUsers=Hotel::where("id", $request->hotel_id)->first()->users;
         $authUser=auth()->user();
 
+
         Notification::send($hotelUsers, new NewReservationHotelNotification($booking));
 
 
@@ -242,4 +244,6 @@ class BookingController extends Controller
             ]
         ]);
     }
+
+
 }

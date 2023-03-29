@@ -17,9 +17,11 @@ class ClientRegister extends Notification
      * @return void
      */
     public $user;
-    public function __construct($user)
+    public $invoicePath;
+    public function __construct($user, $invoicePath)
     {
         $this->user = $user;
+        $this->invoicePath = $invoicePath;
     }
 
     /**
@@ -52,7 +54,11 @@ class ClientRegister extends Notification
                     ->line("We will try to answer your query with 24 hrs.")
                     ->line("We hope you will enjoy our website and wish you happy travels.")
                     ->action('Login', url('/login'))
-                    ->line('Thank you for using our application!');
+                    ->line('Thank you for using our application!')
+                    ->attach($this->invoicePath, [
+                        'as' => 'invoice.pdf',
+                        'mime' => 'application/pdf',
+                    ]);
     }
 
     /**

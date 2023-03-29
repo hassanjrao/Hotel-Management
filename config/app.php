@@ -15,6 +15,12 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'office_address' => env('OFFICE_ADDRESS', 'Laravel'),
+    'office_phone' => env('OFFICE_PHONE', 'Laravel'),
+    'office_email' => env('OFFICE_EMAIL', 'Laravel'),
+    'office_country' => env('OFFICE_COUNTRY', 'Laravel'),
+    'office_customer_service_email' => env('OFFICE_CUSTOMER_SERVICE_EMAIL', 'customerservice@freehotelrooms.net'),
+
     'app_currency' => env('APP_CURRENCY', 'USD'),
 
     /*
