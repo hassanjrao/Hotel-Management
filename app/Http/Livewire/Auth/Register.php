@@ -203,6 +203,7 @@ class Register extends Component
     {
 
         $this->subscriptionPlans = SubscriptionPlan::all();
+
     }
 
 

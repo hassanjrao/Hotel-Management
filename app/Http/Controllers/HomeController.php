@@ -30,8 +30,8 @@ class HomeController extends Controller
 
         $hotels=Hotel::where("home_page",1)
         ->where("release_status","published")
-        ->whereHas("rates")
-        ->with(["rates"])
+        // ->whereHas("rates")
+        // ->with(["rates"])
         ->take(6)->get();
 
         $hotel=$hotels->first();

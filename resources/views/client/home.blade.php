@@ -104,7 +104,7 @@
             <div class="row">
                 <div class="col-md-12 text-center mb30">
                     <h1 itemprop="name">
-                        Panda Multi Resorts, Luxury Hotels
+                        {{ config("app.name") }}
                     </h1>
                     <blockquote class="text-center">
                         <p>A man travels the world over in search of what he needs and returns home to find it.</p>
@@ -121,7 +121,7 @@
                     <article class="col-sm-4 mb20">
                         <article itemprop="url" href="/hotels/waterfront" class="moreLink">
                             <figure class="more-link">
-                                <div class="img-container  md">
+                                <div class="">
 
                                     {{-- @dump($hotel->images->first()) --}}
 
@@ -135,7 +135,7 @@
                                 </div>
                                 <div class="more-content">
                                     <h3 itemprop="name">{{ ucWords($hotel->title) }}</h3>
-                                    <div class="more-descr">
+                                    {{-- <div class="more-descr">
                                         <div class="price">
                                             From
                                             <span itemprop="priceRange">
@@ -143,7 +143,7 @@
                                             </span>
                                         </div>
                                         <small>Price / night</small>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 <div class="more-action">
                                     <div class="more-icon">
