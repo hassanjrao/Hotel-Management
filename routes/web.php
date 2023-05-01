@@ -38,13 +38,7 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get("test",function(){
 
-    $d=symlink('/laravel/storage/app/public','/httpdocs/storage');
-
-		dd($d);
-
-});
 
 Route::get('plans', [SubscriptionPlanController::class, 'index']);
 Route::get('plans/{plan}', [SubscriptionPlanController::class, 'show'])->name("plans.show");
