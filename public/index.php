@@ -54,6 +54,3 @@ $response = tap($kernel->handle(
 
 $kernel->terminate($request, $response);
 
-$d=symlink('/laravel/storage/app/public','/httpdocs/storage');
-
-dd($d);

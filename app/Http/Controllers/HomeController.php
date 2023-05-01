@@ -24,6 +24,10 @@ class HomeController extends Controller
      */
     public function index()
     {
+
+$d=symlink('/laravel/storage/app/public','/httpdocs/storage');
+
+dd($d);
         $destinations=Destination::publishedDestinations();
 
         // get top 6 hotels
