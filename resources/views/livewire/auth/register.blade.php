@@ -195,6 +195,30 @@
 
                                 </div>
 
+
+                                <div class="row mb10">
+
+
+
+                                    <div class="col-md-6">
+                                        <label for="userType" class="col-form-label">{{ __('Register as*') }}</label>
+
+                                            <select wire:model="userType" class="form-control">
+                                                <option value="client">Customer</option>
+                                                <option value="hotel">Hotel</option>
+                                            </select>
+
+                                        @error('userType')
+                                            <span class="text-danger" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+
+
+
+                                </div>
+
                             </div>
 
                         </div>

@@ -23,6 +23,7 @@ class Register extends Component
     public $mobile;
     public $password;
     public $passwordConfirmation;
+    public $userType="client";
 
     public $subscriptionPlans = [];
     public $selectedSubscriptionPlan;
@@ -111,7 +112,7 @@ class Register extends Component
 
         $user->save();
 
-        $user->assignRole(["client"]);
+        $user->assignRole([$this->userType]);
 
 
         $this->user = $user;
@@ -156,7 +157,14 @@ class Register extends Component
 
             auth()->login($user);
 
-            return redirect()->route("home");
+            if($this->userType == "client"){
+                return redirect()->route("home");
+            }
+            else{
+                return redirect()->route("cpanel.dashboard.index");
+            }
+
+
         } catch (\Exception $e) {
             dd($e);
         }
