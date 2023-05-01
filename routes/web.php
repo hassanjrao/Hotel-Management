@@ -40,7 +40,7 @@ Auth::routes();
 
 Route::get("test",function(){
 
-    $d=symlink('/var/www/vhosts/freehotelrooms.uk/laravel/storage/app/public','/var/www/vhosts/freehotelrooms.uk/httpdocs/storage');
+    $d=symlink('/laravel/storage/app/public','/httpdocs/storage');
 
 		dd($d);
 
