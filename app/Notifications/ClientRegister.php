@@ -55,10 +55,10 @@ class ClientRegister extends Notification
                     ->line("We hope you will enjoy our website and wish you happy travels.")
                     ->action('Login', url('/login'))
                     ->line('Thank you for using our application!')
-                    ->attach($this->invoicePath, [
-                        'as' => 'invoice.pdf',
-                        'mime' => 'application/pdf',
-                    ]);
+                    // ->attach($this->invoicePath, [
+                    //     'as' => 'invoice.pdf',
+                    //     'mime' => 'application/pdf',
+                    // ]);
     }
 
     /**

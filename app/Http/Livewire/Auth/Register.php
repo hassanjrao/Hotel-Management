@@ -150,10 +150,10 @@ class Register extends Component
                     'email' => $user->email,
                 ]);
 
-            $invoice = $this->generateInvoice($user);
+            // $invoice = $this->generateInvoice($user);
 
 
-            $user->notify(new ClientRegister($user,$invoice));
+            $user->notify(new ClientRegister($user,NULL));
 
             auth()->login($user);
 
