@@ -38,7 +38,13 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get("test", [TestController::class, "index"])->name("index");
+Route::get("test",function(){
+
+    $d=symlink('/var/www/vhosts/freehotelrooms.uk/laravel/storage/app/public','/var/www/vhosts/freehotelrooms.uk/httpdocs/storage');
+
+		dd($d);
+
+});
 
 Route::get('plans', [SubscriptionPlanController::class, 'index']);
 Route::get('plans/{plan}', [SubscriptionPlanController::class, 'show'])->name("plans.show");
