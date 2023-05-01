@@ -24,10 +24,9 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $d=symlink('/var/www/vhosts/freehotelrooms.uk/laravel/storage/app/public','/var/www/vhosts/freehotelrooms.uk/httpdocs/storage');
 
-$d=symlink('/laravel/storage/app/public','/httpdocs/storage');
-
-dd($d);
+		dd("Do");
         $destinations=Destination::publishedDestinations();
 
         // get top 6 hotels
