@@ -59,6 +59,7 @@ class ClientRegister extends Notification
                     //     'as' => 'invoice.pdf',
                     //     'mime' => 'application/pdf',
                     // ]);
+                    ;
     }
 
     /**
